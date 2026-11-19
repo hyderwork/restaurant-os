@@ -17,8 +17,30 @@ export async function POST(request: Request) {
   const apiKey=process.env.RESEND_API_KEY;
   const from=process.env.RESEND_FROM_EMAIL;
   if(!apiKey || !from) return NextResponse.json({error:"The inquiry email service is not configured yet. Please contact us directly for now."},{status:503});
-  const html=`<h2>New RestaurantOS pricing inquiry</h2><p><b>Plan:</b> ${escapeHtml(plan)}</p><p><b>Name:</b> ${escapeHtml(name)}</p><p><b>Restaurant:</b> ${escapeHtml(restaurant)}</p><p><b>Email:</b> ${escapeHtml(email)}</p><p><b>Phone:</b> ${escapeHtml(phone)}</p><p><b>Message:</b><br/>${escapeHtml(message || "Not provided").replace(/\n/g,"<br/>")}</p>`;
-  const response=await fetch("https://api.resend.com/emails",{method:"POST",headers:{"Authorization":`Bearer ${apiKey}`,"Content-Type":"application/json"},body:JSON.stringify({from,to:["hyder1.work@gmail.com"],reply_to:email,subject:`RestaurantOS ${plan} pricing inquiry — ${restaurant}`,html})});
+  const templateId=process.env.RESEND_TEMPLATE_ID;
+  const html=`<h2>New RestaurantOS pricing inquiry</h2><p><b>Plan:</b> ${escapeHtml(plan)}</p><p><b>Name:</b> ${escapeHtml(name)}</p><p><b>Restaurant:</b> ${escapeHtml(restaurant)}</p><p><b>Email:</b> ${escapeHtml(email)}</p><p><b>Phone:</b> ${escapeHtml(phone)}</p><p><b>Message:</b><br/>${escapeHtml(message || "Not provided").replace(/\\n/g,"<br/>")}</p>`;
+  const emailPayload: Record<string, unknown> = {
+   from,
+   to:["hyder1.work@gmail.com"],
+   reply_to:email,
+   ...(templateId ? {
+    template:{
+     id:templateId,
+     variables:{
+      PLAN_NAME:plan,
+      CUSTOMER_NAME:name,
+      RESTAURANT_NAME:restaurant,
+      CUSTOMER_EMAIL:email,
+      CUSTOMER_PHONE:phone,
+      CUSTOMER_MESSAGE:message || "Not provided"
+     }
+    }
+   } : {
+    subject:`RestaurantOS ${plan} pricing inquiry — ${restaurant}`,
+    html
+   })
+  };
+  const response=await fetch("https://api.resend.com/emails",{method:"POST",headers:{"Authorization":`Bearer ${apiKey}`,"Content-Type":"application/json"},body:JSON.stringify(emailPayload)});
   if(!response.ok) {
    const detail=await response.text();
    console.error("Pricing inquiry email failed",response.status,detail);
