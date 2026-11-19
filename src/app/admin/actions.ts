@@ -29,16 +29,7 @@ export async function markOrderPaid(fd:FormData){
  const m=await requireRestaurant();manager(m);
  const id=val(fd,"id"),method=val(fd,"method");
  if(!id||!["CASH","CARD","BANK_TRANSFER","EASYPAISA","JAZZCASH","OTHER"].includes(method))throw new Error("Select a valid payment method.");
- const {data:order}=await m.supabase.from("orders").select("id,total").eq("id",id).eq("restaurant_id",m.restaurant_id).maybeSingle();
- if(!order)throw new Error("Order not found.");
- const {data:existing}=await m.supabase.from("payments").select("id,status").eq("order_id",id).eq("restaurant_id",m.restaurant_id).eq("status","SUCCEEDED").limit(1).maybeSingle();
- if(!existing){
-  const {data:pending}=await m.supabase.from("payments").select("id").eq("order_id",id).eq("restaurant_id",m.restaurant_id).order("created_at",{ascending:false}).limit(1).maybeSingle();
-  const paymentData={method,status:"SUCCEEDED",amount:order.total,currency:"PKR",verified_at:new Date().toISOString(),provider_reference:"MANUAL-"+id.slice(0,8).toUpperCase()};
-  const result=pending
-   ? await m.supabase.from("payments").update(paymentData).eq("id",pending.id).eq("restaurant_id",m.restaurant_id)
-   : await m.supabase.from("payments").insert({...paymentData,restaurant_id:m.restaurant_id,order_id:id,idempotency_key:"manual-"+id});
-  if(result.error)throw new Error(result.error.message);
- }
+ const {error}=await m.supabase.rpc("mark_order_payment_received",{p_order_id:id,p_method:method});
+ if(error)throw new Error(error.message);
  refresh("/admin/orders","/admin/reports","/admin");
 }
