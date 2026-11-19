@@ -4,8 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { requireRestaurant, requireUser } from "@/lib/auth/tenant";
 const val=(fd:FormData,key:string)=>String(fd.get(key)??"").trim();
-const slugify=(s:string)=>s.toLowerCase().normalize("NFKD").replace(/[\\u0300-\\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"item";
-const refresh=(...p:string[])=>p.forEach(revalidatePath);
+const slugify=(s:string)=>s.toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"item";
+const refresh=(...p:string[])=>p.forEach((path)=>revalidatePath(path));
 function manager(m:any){if(!["OWNER","MANAGER"].includes(String(m.role)))throw new Error("Only an owner or manager can change workspace settings.");}
 export async function createCategory(fd:FormData){const m=await requireRestaurant();manager(m);const name=val(fd,"name");if(!name||name.length>70)throw new Error("Enter a valid category name.");const {error}=await m.supabase.from("menu_categories").insert({restaurant_id:m.restaurant_id,name,slug:slugify(name)+"-"+randomBytes(2).toString("hex"),sort_order:0,active:true});if(error)throw new Error(error.message);refresh("/admin/menu");}
 export async function updateCategory(fd:FormData){const m=await requireRestaurant();manager(m);const id=val(fd,"id"),name=val(fd,"name");if(!id||!name)throw new Error("Category details are invalid.");const {error}=await m.supabase.from("menu_categories").update({name,active:val(fd,"active")==="true"}).eq("id",id).eq("restaurant_id",m.restaurant_id);if(error)throw new Error(error.message);refresh("/admin/menu");}
