@@ -1,0 +1,7 @@
+"use server";
+import {revalidatePath} from "next/cache";
+import {requirePlatformAdmin} from "@/lib/auth/tenant";
+const v=(f:FormData,k:string)=>String(f.get(k)||"").trim();
+export async function createRestaurant(f:FormData){const {supabase}=await requirePlatformAdmin();const name=v(f,"name"),slug=v(f,"slug").toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||name.toLowerCase().replace(/[^a-z0-9]+/g,"-"),email=v(f,"owner_email").toLowerCase(),plan=v(f,"plan_id");if(!name||!email||!plan)throw new Error("Restaurant, owner email and package are required.");const {error}=await supabase.rpc("platform_create_restaurant",{p_name:name,p_slug:slug,p_owner_email:email,p_owner_name:v(f,"owner_name"),p_plan_id:plan,p_phone:v(f,"phone")||null,p_address:v(f,"address")||null,p_trial_days:Number(v(f,"trial_days")||14)});if(error)throw new Error(error.message);revalidatePath("/superadmin");}
+export async function updateRestaurantAccess(f:FormData){const {supabase}=await requirePlatformAdmin();const {error}=await supabase.rpc("platform_update_restaurant",{p_restaurant_id:v(f,"restaurant_id"),p_status:v(f,"status"),p_plan_id:v(f,"plan_id")||null,p_subscription_status:v(f,"subscription_status")});if(error)throw new Error(error.message);revalidatePath("/superadmin");}
+export async function platformLogout(){const {supabase}=await requirePlatformAdmin();await supabase.auth.signOut();}
