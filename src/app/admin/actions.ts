@@ -26,7 +26,7 @@ export async function updateRestaurantSettings(fd:FormData){const m=await requir
 export async function logout(){const {supabase}=await requireUser();await supabase.auth.signOut();redirect("/");}
 
 export async function markOrderPaid(fd:FormData){
- const m=await requireRestaurant();manager(m);
+ const m=await requireRestaurant();if(!["OWNER","ADMIN","MANAGER","CASHIER"].includes(String(m.role)))throw new Error("Only authorised payment staff can confirm payments.");
  const id=val(fd,"id"),method=val(fd,"method");
  if(!id||!["CASH","CARD","BANK_TRANSFER","EASYPAISA","JAZZCASH","OTHER"].includes(method))throw new Error("Select a valid payment method.");
  const {error}=await m.supabase.rpc("mark_order_payment_received",{p_order_id:id,p_method:method});
