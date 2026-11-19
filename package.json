@@ -29,5 +29,8 @@
     "tailwindcss": "^4.1.0",
     "typescript": "^5.8.0",
     "@types/qrcode": "1.5.5"
+  },
+  "overrides": {
+    "@supabase/auth-js": "2.119.1"
   }
 }
