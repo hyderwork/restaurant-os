@@ -1,18 +1,5 @@
 "use server";
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
-export async function signIn(formData:FormData){
- const email=String(formData.get("email")||"").trim(),password=String(formData.get("password")||"");
- const supabase=await createClient(); const {error}=await supabase.auth.signInWithPassword({email,password});
- if(error) redirect("/login?error="+encodeURIComponent(error.message)); redirect("/admin");
-}
-export async function signUp(formData:FormData){
- const email=String(formData.get("email")||"").trim().toLowerCase(),password=String(formData.get("password")||"");
- const base=(process.env.NEXT_PUBLIC_APP_URL||"http://localhost:3000").replace(/\/$/,"");
- const supabase=await createClient();
- const {data,error}=await supabase.auth.signUp({email,password,options:{emailRedirectTo:base+"/auth/callback"}});
- if(error) redirect("/signup?error="+encodeURIComponent(error.message));
- if(data.user && data.user.identities?.length===0) redirect("/login?message="+encodeURIComponent("This email already has an account. Please sign in instead of registering again."));
- redirect("/signup?message="+encodeURIComponent("Account request received. Check your inbox and spam folder for the verification email. If it does not arrive, wait before requesting another email."));
-}
-export async function signOut(){const supabase=await createClient();await supabase.auth.signOut();redirect("/");}
+import {redirect} from "next/navigation";import {createClient} from "@/lib/supabase/server";
+export async function signIn(f:FormData){const email=String(f.get("email")||"").trim(),password=String(f.get("password")||"");const s=await createClient();const {error}=await s.auth.signInWithPassword({email,password});if(error)redirect("/login?error="+encodeURIComponent(error.message));const {data:{user}}=await s.auth.getUser();if(user){const {data:pa}=await s.from("platform_admins").select("user_id").eq("user_id",user.id).eq("is_active",true).maybeSingle();if(pa)redirect("/superadmin");const {data:m}=await s.from("memberships").select("role").eq("user_id",user.id).eq("status","ACTIVE").limit(1).maybeSingle();if(m&&["MANAGER","CASHIER","CHEF","WAITER"].includes(m.role))redirect("/staff");if(m)redirect("/admin");}redirect("/admin/setup");}
+export async function signUp(f:FormData){const email=String(f.get("email")||"").trim().toLowerCase(),password=String(f.get("password")||"");if(password.length<8)redirect("/signup?error=Password%20must%20be%20at%20least%208%20characters");const base=(process.env.NEXT_PUBLIC_APP_URL||"http://localhost:3000").replace(/\/$/,"");const s=await createClient();const {data,error}=await s.auth.signUp({email,password,options:{emailRedirectTo:base+"/auth/callback"}});if(error)redirect("/signup?error="+encodeURIComponent(error.message));if(data.user&&data.user.identities?.length===0)redirect("/login?message="+encodeURIComponent("This email already has an account. Please sign in."));redirect("/signup?message="+encodeURIComponent("Account created. Verify your email, then share this email with your RestaurantOS administrator to activate your workspace or staff access."));}
+export async function signOut(){const s=await createClient();await s.auth.signOut();redirect("/");}
