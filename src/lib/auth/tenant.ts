@@ -1,21 +1,7 @@
 import {redirect} from "next/navigation";
 import {createClient} from "@/lib/supabase/server";
-export async function requireUser(){
- const supabase=await createClient();
- const {data:{user}}=await supabase.auth.getUser();
- if(!user)redirect("/login");
- return {supabase,user};
-}
-export async function getMemberships(){
- const {supabase,user}=await requireUser();
- const {data,error}=await supabase.from("memberships").select("id,restaurant_id,role,status,restaurants(id,name,slug)").eq("user_id",user.id).eq("status","ACTIVE");
- if(error)throw new Error(error.message);
- return data||[];
-}
-export async function requireRestaurant(){
- const {supabase,user}=await requireUser();
- const {data,error}=await supabase.from("memberships").select("id,restaurant_id,role,status,restaurants(id,name,slug)").eq("user_id",user.id).eq("status","ACTIVE").limit(1).maybeSingle();
- if(error)throw new Error(error.message);
- if(!data)redirect("/admin/setup");
- return {...data,supabase,user};
-}
+export async function requireUser(){const supabase=await createClient();const {data:{user}}=await supabase.auth.getUser();if(!user)redirect("/login");return {supabase,user};}
+export async function getMemberships(){const {supabase,user}=await requireUser();const {data,error}=await supabase.from("memberships").select("id,restaurant_id,role,status,restaurants(id,name,slug,status)").eq("user_id",user.id).eq("status","ACTIVE");if(error)throw new Error(error.message);return data||[];}
+export async function requirePlatformAdmin(){const {supabase,user}=await requireUser();const {data}=await supabase.from("platform_admins").select("user_id").eq("user_id",user.id).eq("is_active",true).maybeSingle();if(!data)redirect("/login?error=Platform%20administrator%20access%20required");return {supabase,user};}
+export async function requireRestaurant(){const {supabase,user}=await requireUser();const {data,error}=await supabase.from("memberships").select("id,restaurant_id,role,status,restaurants(id,name,slug,status)").eq("user_id",user.id).eq("status","ACTIVE").limit(1).maybeSingle();if(error)throw new Error(error.message);if(!data)redirect("/admin/setup");if(!["OWNER","ADMIN"].includes(String(data.role)))redirect("/staff");const r:any=data.restaurants;if(r?.status!=="ACTIVE")redirect("/login?error=Restaurant%20workspace%20is%20not%20active");return {...data,supabase,user};}
+export async function requireStaff(){const {supabase,user}=await requireUser();const {data,error}=await supabase.from("memberships").select("id,restaurant_id,role,status,restaurants(id,name,slug,status)").eq("user_id",user.id).eq("status","ACTIVE").in("role",["MANAGER","CASHIER","CHEF","WAITER"]).limit(1).maybeSingle();if(error)throw new Error(error.message);if(!data)redirect("/login?error=Staff%20access%20required");const r:any=data.restaurants;if(r?.status!=="ACTIVE")redirect("/login?error=Restaurant%20workspace%20is%20not%20active");return {...data,supabase,user};}
