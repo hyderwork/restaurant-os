@@ -24,3 +24,21 @@ export async function updateOrderStatus(fd:FormData){const m=await requireRestau
 export async function updateRestaurant(fd:FormData){const m=await requireRestaurant();if(!["OWNER","ADMIN"].includes(String(m.role)))throw new Error("Only an owner or admin can update restaurant identity.");const name=val(fd,"name");if(!name||name.length>120)throw new Error("Restaurant name is required.");const {error}=await m.supabase.from("restaurants").update({name,phone:val(fd,"phone")||null,email:val(fd,"email")||null,address:val(fd,"address")?{line1:val(fd,"address")}:null,timezone:val(fd,"timezone")||"Asia/Karachi",updated_at:new Date().toISOString()}).eq("id",m.restaurant_id);if(error)throw new Error(error.message);refresh("/admin/settings","/admin");}
 export async function updateRestaurantSettings(fd:FormData){const m=await requireRestaurant();manager(m);const tax=Number(val(fd,"tax_rate")||0),service=Number(val(fd,"service_charge_rate")||0);if(!Number.isFinite(tax)||tax<0||tax>100||!Number.isFinite(service)||service<0||service>100)throw new Error("Tax and service charge must be between 0 and 100.");const {error}=await m.supabase.from("restaurant_settings").upsert({restaurant_id:m.restaurant_id,tax_rate:tax,service_charge_rate:service,tax_inclusive:fd.get("tax_inclusive")==="on",logo_url:val(fd,"logo_url")||null,updated_at:new Date().toISOString()},{onConflict:"restaurant_id"});if(error)throw new Error(error.message);refresh("/admin/settings","/admin");}
 export async function logout(){const {supabase}=await requireUser();await supabase.auth.signOut();redirect("/");}
+
+export async function markOrderPaid(fd:FormData){
+ const m=await requireRestaurant();manager(m);
+ const id=val(fd,"id"),method=val(fd,"method");
+ if(!id||!["CASH","CARD","BANK_TRANSFER","EASYPAISA","JAZZCASH","OTHER"].includes(method))throw new Error("Select a valid payment method.");
+ const {data:order}=await m.supabase.from("orders").select("id,total").eq("id",id).eq("restaurant_id",m.restaurant_id).maybeSingle();
+ if(!order)throw new Error("Order not found.");
+ const {data:existing}=await m.supabase.from("payments").select("id,status").eq("order_id",id).eq("restaurant_id",m.restaurant_id).eq("status","SUCCEEDED").limit(1).maybeSingle();
+ if(!existing){
+  const {data:pending}=await m.supabase.from("payments").select("id").eq("order_id",id).eq("restaurant_id",m.restaurant_id).order("created_at",{ascending:false}).limit(1).maybeSingle();
+  const paymentData={method,status:"SUCCEEDED",amount:order.total,currency:"PKR",verified_at:new Date().toISOString(),provider_reference:"MANUAL-"+id.slice(0,8).toUpperCase()};
+  const result=pending
+   ? await m.supabase.from("payments").update(paymentData).eq("id",pending.id).eq("restaurant_id",m.restaurant_id)
+   : await m.supabase.from("payments").insert({...paymentData,restaurant_id:m.restaurant_id,order_id:id,idempotency_key:"manual-"+id});
+  if(result.error)throw new Error(result.error.message);
+ }
+ refresh("/admin/orders","/admin/reports","/admin");
+}
