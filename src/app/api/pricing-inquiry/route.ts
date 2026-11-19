@@ -23,6 +23,7 @@ export async function POST(request: Request) {
    from,
    to:["hyder1.work@gmail.com"],
    reply_to:email,
+   subject:`RestaurantOS ${plan} pricing inquiry — ${restaurant}`,
    ...(templateId ? {
     template:{
      id:templateId,
@@ -36,7 +37,6 @@ export async function POST(request: Request) {
      }
     }
    } : {
-    subject:`RestaurantOS ${plan} pricing inquiry — ${restaurant}`,
     html
    })
   };
