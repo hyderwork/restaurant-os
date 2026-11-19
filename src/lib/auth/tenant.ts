@@ -8,13 +8,13 @@ export async function requireUser(){
 }
 export async function getMemberships(){
  const {supabase,user}=await requireUser();
- const {data,error}=await supabase.from("memberships").select("id,restaurant_id,role,status,restaurants(id,name,slug)").eq("user_id",user.id).eq("status","active");
+ const {data,error}=await supabase.from("memberships").select("id,restaurant_id,role,status,restaurants(id,name,slug)").eq("user_id",user.id).eq("status","ACTIVE");
  if(error)throw new Error(error.message);
  return data||[];
 }
 export async function requireRestaurant(){
  const {supabase,user}=await requireUser();
- const {data,error}=await supabase.from("memberships").select("id,restaurant_id,role,status,restaurants(id,name,slug)").eq("user_id",user.id).eq("status","active").limit(1).maybeSingle();
+ const {data,error}=await supabase.from("memberships").select("id,restaurant_id,role,status,restaurants(id,name,slug)").eq("user_id",user.id).eq("status","ACTIVE").limit(1).maybeSingle();
  if(error)throw new Error(error.message);
  if(!data)redirect("/admin/setup");
  return {...data,supabase,user};
