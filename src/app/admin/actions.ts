@@ -1,56 +1,26 @@
 "use server";
-import {createHash,randomBytes} from "node:crypto";
-import {revalidatePath} from "next/cache";
-import {redirect} from "next/navigation";
-import {requireRestaurant,requireUser} from "@/lib/auth/tenant";
-
-function slugify(value:string){return value.toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"item";}
-
-export async function createCategory(fd:FormData){
- const m=await requireRestaurant();const name=String(fd.get("name")||"").trim();
- if(!name)throw new Error("Category name is required");
- const slug=slugify(name)+"-"+randomBytes(2).toString("hex");
- const {error}=await m.supabase.from("menu_categories").insert({restaurant_id:m.restaurant_id,name,slug,sort_order:0,active:true});
- if(error)throw new Error(error.message);revalidatePath("/admin/menu");revalidatePath("/admin/qr");
-}
-export async function createProduct(fd:FormData){
- const m=await requireRestaurant();const name=String(fd.get("name")||"").trim(),price=Number(fd.get("price")),category=String(fd.get("category")||"");
- const description=String(fd.get("description")||"").trim(),imageUrl=String(fd.get("image_url")||"").trim();
- if(!name||!category||!Number.isFinite(price)||price<0)throw new Error("Enter a valid product, category and price");
- const {data:cat}=await m.supabase.from("menu_categories").select("id").eq("id",category).eq("restaurant_id",m.restaurant_id).maybeSingle();
- if(!cat)throw new Error("Select a valid category");
- const {error}=await m.supabase.from("menu_products").insert({restaurant_id:m.restaurant_id,category_id:category,name,slug:slugify(name)+"-"+randomBytes(2).toString("hex"),description:description||null,image_url:imageUrl||null,base_price:price,status:"ACTIVE"});
- if(error)throw new Error(error.message);revalidatePath("/admin/menu");revalidatePath("/admin/qr");
-}
-export async function createFloor(fd:FormData){
- const m=await requireRestaurant();const name=String(fd.get("name")||"Main Floor").trim();
- if(!name)throw new Error("Floor name is required");
- const {error}=await m.supabase.from("floors").insert({restaurant_id:m.restaurant_id,name});
- if(error)throw new Error(error.message);revalidatePath("/admin/tables");
-}
-export async function createTable(fd:FormData){
- const m=await requireRestaurant();const number=String(fd.get("label")||"").trim(),floor=String(fd.get("floor")||"");
- if(!number||!floor)throw new Error("Table number and floor are required");
- const {data:f}=await m.supabase.from("floors").select("id").eq("id",floor).eq("restaurant_id",m.restaurant_id).maybeSingle();
- if(!f)throw new Error("Select a valid floor");
- const {error}=await m.supabase.from("restaurant_tables").insert({restaurant_id:m.restaurant_id,floor_id:floor,number,name:"Table "+number,capacity:2,status:"AVAILABLE"});
- if(error)throw new Error(error.message);revalidatePath("/admin/tables");revalidatePath("/admin/qr");
-}
-export async function generateTableQR(fd:FormData){
- const m=await requireRestaurant();const tableId=String(fd.get("table_id")||"");
- const {data:table}=await m.supabase.from("restaurant_tables").select("id").eq("id",tableId).eq("restaurant_id",m.restaurant_id).maybeSingle();
- if(!table)throw new Error("Table not found");
- const token=randomBytes(32).toString("hex");
- const tokenHash=createHash("sha256").update(token).digest("hex");
- const {error}=await m.supabase.from("qr_codes").upsert({restaurant_id:m.restaurant_id,table_id:tableId,token_hash:tokenHash,token_value:token,active:true,rotated_at:new Date().toISOString()},{onConflict:"table_id"});
- if(error)throw new Error(error.message);
- revalidatePath("/admin/qr");
-}
-export async function updateOrderStatus(fd:FormData){
- const m=await requireRestaurant();const id=String(fd.get("id")||""),status=String(fd.get("status")||"");
- const allowed=["ACCEPTED","COOKING","READY","SERVED","CANCELLED"];
- if(!allowed.includes(status))throw new Error("Invalid order status");
- const {error}=await m.supabase.from("orders").update({status}).eq("id",id).eq("restaurant_id",m.restaurant_id);
- if(error)throw new Error(error.message);revalidatePath("/admin/orders");revalidatePath("/admin");
-}
+import { createHash, randomBytes } from "node:crypto";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { requireRestaurant, requireUser } from "@/lib/auth/tenant";
+const val=(fd:FormData,key:string)=>String(fd.get(key)??"").trim();
+const slugify=(s:string)=>s.toLowerCase().normalize("NFKD").replace(/[\\u0300-\\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")||"item";
+const refresh=(...p:string[])=>p.forEach(revalidatePath);
+function manager(m:any){if(!["OWNER","MANAGER"].includes(String(m.role)))throw new Error("Only an owner or manager can change workspace settings.");}
+export async function createCategory(fd:FormData){const m=await requireRestaurant();manager(m);const name=val(fd,"name");if(!name||name.length>70)throw new Error("Enter a valid category name.");const {error}=await m.supabase.from("menu_categories").insert({restaurant_id:m.restaurant_id,name,slug:slugify(name)+"-"+randomBytes(2).toString("hex"),sort_order:0,active:true});if(error)throw new Error(error.message);refresh("/admin/menu");}
+export async function updateCategory(fd:FormData){const m=await requireRestaurant();manager(m);const id=val(fd,"id"),name=val(fd,"name");if(!id||!name)throw new Error("Category details are invalid.");const {error}=await m.supabase.from("menu_categories").update({name,active:val(fd,"active")==="true"}).eq("id",id).eq("restaurant_id",m.restaurant_id);if(error)throw new Error(error.message);refresh("/admin/menu");}
+export async function deleteCategory(fd:FormData){const m=await requireRestaurant();manager(m);const id=val(fd,"id");const {count,error:ce}=await m.supabase.from("menu_products").select("id",{count:"exact",head:true}).eq("restaurant_id",m.restaurant_id).eq("category_id",id);if(ce)throw new Error(ce.message);if((count||0)>0)throw new Error("Move or archive products before deleting this category.");const {error}=await m.supabase.from("menu_categories").delete().eq("id",id).eq("restaurant_id",m.restaurant_id);if(error)throw new Error(error.message);refresh("/admin/menu");}
+export async function createProduct(fd:FormData){const m=await requireRestaurant();manager(m);const name=val(fd,"name"),category=val(fd,"category"),price=Number(val(fd,"price")),prep=Number(val(fd,"prep_minutes")||15),spice=Number(val(fd,"spice_level")||0);if(!name||!category||!Number.isFinite(price)||price<0||!Number.isInteger(prep)||prep<1||!Number.isInteger(spice)||spice<0||spice>5)throw new Error("Enter valid product details.");const {data:cat}=await m.supabase.from("menu_categories").select("id").eq("id",category).eq("restaurant_id",m.restaurant_id).maybeSingle();if(!cat)throw new Error("Select a valid category.");const {error}=await m.supabase.from("menu_products").insert({restaurant_id:m.restaurant_id,category_id:category,name,slug:slugify(name)+"-"+randomBytes(2).toString("hex"),description:val(fd,"description")||null,image_url:val(fd,"image_url")||null,base_price:price,status:"ACTIVE",vegetarian:fd.get("vegetarian")==="on",prep_minutes:prep,spice_level:spice});if(error)throw new Error(error.message);refresh("/admin/menu","/admin");}
+export async function updateProduct(fd:FormData){const m=await requireRestaurant();manager(m);const id=val(fd,"id"),name=val(fd,"name"),category=val(fd,"category"),price=Number(val(fd,"price")),prep=Number(val(fd,"prep_minutes")||15),spice=Number(val(fd,"spice_level")||0),status=val(fd,"status");if(!id||!name||!category||!Number.isFinite(price)||price<0||!["DRAFT","ACTIVE","ARCHIVED"].includes(status)||!Number.isInteger(prep)||prep<1||!Number.isInteger(spice)||spice<0||spice>5)throw new Error("Product details are invalid.");const {data:cat}=await m.supabase.from("menu_categories").select("id").eq("id",category).eq("restaurant_id",m.restaurant_id).maybeSingle();if(!cat)throw new Error("Select a valid category.");const {error}=await m.supabase.from("menu_products").update({name,category_id:category,base_price:price,description:val(fd,"description")||null,image_url:val(fd,"image_url")||null,status,vegetarian:fd.get("vegetarian")==="on",prep_minutes:prep,spice_level:spice,updated_at:new Date().toISOString()}).eq("id",id).eq("restaurant_id",m.restaurant_id);if(error)throw new Error(error.message);refresh("/admin/menu","/admin");}
+export async function archiveProduct(fd:FormData){const m=await requireRestaurant();manager(m);const {error}=await m.supabase.from("menu_products").update({status:"ARCHIVED",updated_at:new Date().toISOString()}).eq("id",val(fd,"id")).eq("restaurant_id",m.restaurant_id);if(error)throw new Error(error.message);refresh("/admin/menu");}
+export async function createFloor(fd:FormData){const m=await requireRestaurant();manager(m);const name=val(fd,"name");if(!name)throw new Error("Floor name is required.");const {error}=await m.supabase.from("floors").insert({restaurant_id:m.restaurant_id,name});if(error)throw new Error(error.message);refresh("/admin/tables");}
+export async function updateFloor(fd:FormData){const m=await requireRestaurant();manager(m);const {error}=await m.supabase.from("floors").update({name:val(fd,"name")}).eq("id",val(fd,"id")).eq("restaurant_id",m.restaurant_id);if(error)throw new Error(error.message);refresh("/admin/tables");}
+export async function deleteFloor(fd:FormData){const m=await requireRestaurant();manager(m);const id=val(fd,"id");const {count,error:ce}=await m.supabase.from("restaurant_tables").select("id",{count:"exact",head:true}).eq("restaurant_id",m.restaurant_id).eq("floor_id",id);if(ce)throw new Error(ce.message);if((count||0)>0)throw new Error("Move or delete tables on this floor first.");const {error}=await m.supabase.from("floors").delete().eq("id",id).eq("restaurant_id",m.restaurant_id);if(error)throw new Error(error.message);refresh("/admin/tables");}
+export async function createTable(fd:FormData){const m=await requireRestaurant();manager(m);const number=val(fd,"label"),floor=val(fd,"floor"),capacity=Number(val(fd,"capacity")||2);if(!number||!floor||!Number.isInteger(capacity)||capacity<1||capacity>100)throw new Error("Enter a valid table and capacity.");const {data:f}=await m.supabase.from("floors").select("id").eq("id",floor).eq("restaurant_id",m.restaurant_id).maybeSingle();if(!f)throw new Error("Select a valid floor.");const {error}=await m.supabase.from("restaurant_tables").insert({restaurant_id:m.restaurant_id,floor_id:floor,number,name:"Table "+number,capacity,status:"AVAILABLE"});if(error)throw new Error(error.message);refresh("/admin/tables","/admin/qr","/admin");}
+export async function updateTable(fd:FormData){const m=await requireRestaurant();manager(m);const id=val(fd,"id"),number=val(fd,"number"),floor=val(fd,"floor"),capacity=Number(val(fd,"capacity")),status=val(fd,"status");if(!id||!number||!floor||!Number.isInteger(capacity)||capacity<1||capacity>100||!["AVAILABLE","OCCUPIED","RESERVED","CLEANING"].includes(status))throw new Error("Table details are invalid.");const {data:f}=await m.supabase.from("floors").select("id").eq("id",floor).eq("restaurant_id",m.restaurant_id).maybeSingle();if(!f)throw new Error("Select a valid floor.");const {error}=await m.supabase.from("restaurant_tables").update({number,name:val(fd,"name")||"Table "+number,floor_id:floor,capacity,status,updated_at:new Date().toISOString()}).eq("id",id).eq("restaurant_id",m.restaurant_id);if(error)throw new Error(error.message);refresh("/admin/tables","/admin/qr");}
+export async function deleteTable(fd:FormData){const m=await requireRestaurant();manager(m);const id=val(fd,"id");const {count,error:ce}=await m.supabase.from("orders").select("id",{count:"exact",head:true}).eq("restaurant_id",m.restaurant_id).eq("table_id",id);if(ce)throw new Error(ce.message);if((count||0)>0)throw new Error("This table has order history and cannot be deleted. Rename it or mark it unavailable.");const {error:qe}=await m.supabase.from("qr_codes").delete().eq("table_id",id).eq("restaurant_id",m.restaurant_id);if(qe)throw new Error(qe.message);const {error}=await m.supabase.from("restaurant_tables").delete().eq("id",id).eq("restaurant_id",m.restaurant_id);if(error)throw new Error(error.message);refresh("/admin/tables","/admin/qr");}
+export async function generateTableQR(fd:FormData){const m=await requireRestaurant();manager(m);const tableId=val(fd,"table_id");const {data:table}=await m.supabase.from("restaurant_tables").select("id").eq("id",tableId).eq("restaurant_id",m.restaurant_id).maybeSingle();if(!table)throw new Error("Table not found.");const token=randomBytes(32).toString("hex"),tokenHash=createHash("sha256").update(token).digest("hex");const {error}=await m.supabase.from("qr_codes").upsert({restaurant_id:m.restaurant_id,table_id:tableId,token_hash:tokenHash,token_value:token,active:true,rotated_at:new Date().toISOString()},{onConflict:"table_id"});if(error)throw new Error(error.message);refresh("/admin/qr");}
+export async function updateOrderStatus(fd:FormData){const m=await requireRestaurant();manager(m);const id=val(fd,"id"),status=val(fd,"status");if(!["NEW","ACCEPTED","COOKING","READY","SERVED","CANCELLED"].includes(status))throw new Error("Invalid order status.");const {data:current}=await m.supabase.from("orders").select("status").eq("id",id).eq("restaurant_id",m.restaurant_id).maybeSingle();if(!current)throw new Error("Order not found.");const {error}=await m.supabase.from("orders").update({status,updated_at:new Date().toISOString()}).eq("id",id).eq("restaurant_id",m.restaurant_id);if(error)throw new Error(error.message);const {error:historyError}=await m.supabase.from("order_status_history").insert({order_id:id,from_status:current.status,to_status:status,actor_user_id:m.user.id,note:"Updated from restaurant dashboard"});if(historyError)throw new Error(historyError.message);refresh("/admin/orders","/admin/kitchen","/admin","/admin/reports");}
+export async function updateRestaurant(fd:FormData){const m=await requireRestaurant();manager(m);const name=val(fd,"name");if(!name||name.length>120)throw new Error("Restaurant name is required.");const {error}=await m.supabase.from("restaurants").update({name,phone:val(fd,"phone")||null,email:val(fd,"email")||null,address:val(fd,"address")?{line1:val(fd,"address")}:null,timezone:val(fd,"timezone")||"Asia/Karachi",updated_at:new Date().toISOString()}).eq("id",m.restaurant_id);if(error)throw new Error(error.message);refresh("/admin/settings","/admin");}
+export async function updateRestaurantSettings(fd:FormData){const m=await requireRestaurant();manager(m);const tax=Number(val(fd,"tax_rate")||0),service=Number(val(fd,"service_charge_rate")||0);if(!Number.isFinite(tax)||tax<0||tax>100||!Number.isFinite(service)||service<0||service>100)throw new Error("Tax and service charge must be between 0 and 100.");const {error}=await m.supabase.from("restaurant_settings").upsert({restaurant_id:m.restaurant_id,tax_rate:tax,service_charge_rate:service,tax_inclusive:fd.get("tax_inclusive")==="on",logo_url:val(fd,"logo_url")||null,updated_at:new Date().toISOString()},{onConflict:"restaurant_id"});if(error)throw new Error(error.message);refresh("/admin/settings","/admin");}
 export async function logout(){const {supabase}=await requireUser();await supabase.auth.signOut();redirect("/");}

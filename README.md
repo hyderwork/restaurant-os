@@ -1,20 +1,25 @@
 # RestaurantOS
 
-Multi-tenant restaurant operations SaaS built with Next.js, TypeScript, Tailwind CSS and Supabase.
+Multi-tenant restaurant operations and QR ordering SaaS built with Next.js 16, React 19, TypeScript, Tailwind CSS 4 and Supabase.
 
-## Local setup
-1. Use Node.js 20.9+.
-2. Run `npm install`.
-3. Copy `.env.example` to `.env.local` and fill in Supabase project values.
-4. Run `npm run dev`.
+## Current modules
+- Authentication and restaurant onboarding
+- Tenant-scoped workspace and role-aware management actions
+- Restaurant dashboard and order overview
+- Menu categories and products (create, edit, visibility, archive)
+- Floor and table management (create, edit, seating status, safe delete)
+- Secure table QR generation and rotation
+- Public QR menu and customer order placement
+- Order status workflow and kitchen display board
+- 30-day sales overview and order ledger
+- Restaurant profile, timezone, tax and service-charge settings
 
-## Environment
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
-- `NEXT_PUBLIC_APP_URL`
+## Safety
+- Products are archived rather than physically deleted to preserve historical order items.
+- Categories and floors can only be deleted when they have no dependent records.
+- Tables with order history cannot be deleted.
+- Order history is retained and status changes are written to the order status history.
+- Payment gateway settlement, automated subscription billing, staff invitations, inventory, and realtime kitchen push are not enabled until their integrations and workflows are completed.
 
-## Deployment
-Connect this repository to Vercel and configure the same environment variables for Preview and Production. Database migrations in `supabase/migrations` must be applied to the linked Supabase project.
-
-## Security
-Never commit service-role keys, database passwords, or payment secrets. All tenant data access must be enforced by PostgreSQL RLS and server-side authorization.
+## Development
+Copy .env.example to .env.local, configure the Supabase URL and publishable key, then run npm install and npm run dev.
