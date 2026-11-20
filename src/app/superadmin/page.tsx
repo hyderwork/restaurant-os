@@ -2,7 +2,8 @@ import {requirePlatformAdmin} from "@/lib/auth/tenant";
 import {createRestaurant,updateRestaurantAccess,savePackage} from "./actions";
 import DeleteRestaurantButton from "./delete-restaurant-button";
 
-export default async function Page(){
+export default async function Page({searchParams}:{searchParams:Promise<{error?:string;success?:string}>}){
+ const params=await searchParams;
  const {supabase}=await requirePlatformAdmin();
  const [a,b]=await Promise.all([
   supabase.from("restaurants").select("id,name,slug,email,status,created_at,memberships(role,users(email,full_name)),subscriptions(status,subscription_plans(id,name,monthly_price))").order("created_at",{ascending:false}),
@@ -15,6 +16,8 @@ export default async function Page(){
   <p className="text-xs font-bold tracking-widest text-orange-300">PLATFORM OVERVIEW</p>
   <h1 className="mt-2 text-3xl font-black">Super Admin</h1>
   <p className="mt-2 text-sm text-slate-400">Restaurants, client access, packages and subscription control.</p>
+  {params.error&&<div role="alert" className="mt-5 rounded-xl border border-red-500/30 bg-red-500/10 p-4 text-sm text-red-200">{params.error}</div>}
+  {params.success&&<div role="status" className="mt-5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4 text-sm text-emerald-200">{params.success}</div>}
   <div className="mt-7 grid gap-4 sm:grid-cols-3">{[["Restaurants",rs.length],["Active",rs.filter((r:any)=>r.status==="ACTIVE").length],["Suspended",rs.filter((r:any)=>r.status==="SUSPENDED").length]].map(([k,n])=><div key={String(k)} className="rounded-2xl border border-white/10 p-5"><p className="text-sm text-slate-400">{k}</p><p className="mt-2 text-3xl font-black">{n}</p></div>)}</div>
   <section className="mt-8 rounded-2xl border border-white/10 p-5">
    <h2 className="text-xl font-bold">Create restaurant & grant client access</h2>
