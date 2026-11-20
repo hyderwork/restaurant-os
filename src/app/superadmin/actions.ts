@@ -43,7 +43,8 @@ export async function resendOwnerSetupEmail(f:FormData){
  const {data:restaurant,error}=await supabase.from("restaurants").select("id,memberships(role,users(email))").eq("id",restaurantId).maybeSingle();
  if(error||!restaurant) redirect("/superadmin?error="+encodeURIComponent(error?.message||"Restaurant not found."));
  const owner=restaurant.memberships?.find((m:any)=>m.role==="OWNER");
- const ownerEmail=owner?.users?.[0]?.email?.toLowerCase();
+ const ownerUser=Array.isArray(owner?.users)?owner.users[0]:owner?.users;
+ const ownerEmail=ownerUser?.email?.toLowerCase();
  if(!ownerEmail||ownerEmail!==email) redirect("/superadmin?error="+encodeURIComponent("Owner email verification failed. Refresh the page and try again."));
  try {
   await ensureAccountForInvitation({email});
