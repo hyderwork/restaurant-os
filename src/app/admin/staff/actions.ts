@@ -14,9 +14,9 @@ export async function addStaff(f:FormData){
  if(error)throw new Error(error.message);
  revalidatePath(\"/admin/staff\");
  const message=invitation.created
-  ? \"Staff account created. Verification and password setup email sent to \"+email+\"
+  ? `Staff account created. Verification and password setup email sent to ${email}.`
   : invitation.emailSent
-   ? \"Staff member verification email resent to \"+email+\"
+   ? `Staff member verification email resent to ${email}.`
    : \"Existing account successfully added to your staff team.\";
  redirect(\"/admin/staff?success=\"+encodeURIComponent(message));
 }
