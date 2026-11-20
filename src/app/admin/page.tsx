@@ -35,12 +35,15 @@ export default async function Dashboard() {
   const rid = m.restaurant_id;
 
   const [orders, products, tables, restaurant] = await Promise.all([
-    m.supabase.from("orders").select("id,total,status,created_at").eq("restaurant_id", rid).order("created_at", { ascending: false }).limit(8),
+    m.supabase.from("orders").select("id,total,status,created_at,payments(status)").eq("restaurant_id", rid).order("created_at", { ascending: false }).limit(8),
     m.supabase.from("menu_products").select("id", { count: "exact", head: true }).eq("restaurant_id", rid),
     m.supabase.from("restaurant_tables").select("id", { count: "exact", head: true }).eq("restaurant_id", rid),
     m.supabase.from("restaurants").select("timezone").eq("id", rid).maybeSingle(),
   ]);
 
+  if (orders.error) throw new Error("Unable to load recent orders: " + orders.error.message);
+  if (products.error) throw new Error("Unable to count menu products: " + products.error.message);
+  if (tables.error) throw new Error("Unable to count restaurant tables: " + tables.error.message);
   if (restaurant.error) throw new Error("Unable to load restaurant timezone: " + restaurant.error.message);
   const timeZone = restaurant.data?.timezone || "Asia/Karachi";
   let dayStart: Date;
@@ -65,7 +68,7 @@ export default async function Dashboard() {
 
   const { data: todayOrders, error: todayOrdersError } = await m.supabase
     .from("orders")
-    .select("total,status")
+    .select("total,status,payments(status)")
     .eq("restaurant_id", rid)
     .gte("created_at", dayStart.toISOString())
     .lt("created_at", nextDayStart.toISOString());
@@ -73,7 +76,10 @@ export default async function Dashboard() {
   if (todayOrdersError) throw new Error("Unable to load today's orders: " + todayOrdersError.message);
 
   const validTodayOrders = (todayOrders || []).filter((order: any) => String(order.status).toUpperCase() !== "CANCELLED");
-  const revenue = validTodayOrders.reduce((sum: number, order: any) => sum + Number(order.total || 0), 0);
+  const revenue = validTodayOrders.reduce((sum: number, order: any) => {
+    const paymentReceived = (order.payments || []).some((payment: any) => payment.status === "SUCCEEDED");
+    return sum + (paymentReceived ? Number(order.total || 0) : 0);
+  }, 0);
   const stats = [
     ["Today's revenue", `Rs. ${revenue.toLocaleString("en-PK")}`],
     ["Today's orders", String(validTodayOrders.length)],
