@@ -1,8 +1,9 @@
 import { randomBytes } from "node:crypto";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 
-const APP_URL_RAW = process.env.NEXT_PUBLIC_APP_URL || "https://restaurant-os-custom.vercel.app";
-const APP_URL = APP_URL_RAW.endsWith("/") ? APP_URL_RAW.slice(0, -1) : APP_URL_RAW;
+// Invitation links must always use the canonical production origin. Never derive this from
+// request headers or localhost, because these emails are opened on the recipient's device.
+const APP_URL = "https://restaurant-os-custom.vercel.app";
 const SET_PASSWORD_REDIRECT = `${APP_URL}/auth/callback?next=%2Fauth%2Fset-password`;
 
 type ProvisionInput = { email: string; fullName?: string | null };
