@@ -16,16 +16,15 @@ export async function ensureAccountForInvitation({ email, fullName }: ProvisionI
     auth: { autoRefreshToken: false, persistSession: false, detectSessionInUrl: false },
   });
 
-  const resendVerification = async () => {
-    const { error: resendError } = await authClient.auth.resend({
-      type: "signup",
-      email: email.trim().toLowerCase(),
-      options: { emailRedirectTo: SET_PASSWORD_REDIRECT },
-    });
-    if (resendError && !/already confirmed/i.test(resendError.message)) {
-      throw new Error(`The account exists, but its verification email could not be resent: ${resendError.message}`);
+  const sendPasswordSetup = async () => {
+    const { error: resetError } = await authClient.auth.resetPasswordForEmail(
+      email.trim().toLowerCase(),
+      { redirectTo: SET_PASSWORD_REDIRECT },
+    );
+    if (resetError) {
+      throw new Error(`The account exists, but its password setup email could not be sent: ${resetError.message}`);
     }
-    return !resendError;
+    return true;
   };
 
   const { data, error } = await authClient.auth.signUp({
@@ -39,7 +38,7 @@ export async function ensureAccountForInvitation({ email, fullName }: ProvisionI
 
   if (error) {
     if (/already registered|already exists|user already/i.test(error.message)) {
-      return { created: false, emailSent: await resendVerification() };
+      return { created: false, emailSent: await sendPasswordSetup() };
     }
     throw new Error(`Could not create the account invitation: ${error.message}`);
   }
@@ -47,7 +46,7 @@ export async function ensureAccountForInvitation({ email, fullName }: ProvisionI
   if (!data.user) throw new Error("Supabase did not return the invited account. Please try again.");
 
   const isExistingAccount = (data.user.identities?.length ?? 1) === 0;
-  if (isExistingAccount) return { created: false, emailSent: await resendVerification() };
+  if (isExistingAccount) return { created: false, emailSent: await sendPasswordSetup() };
 
   return { created: true, emailSent: true };
 }
