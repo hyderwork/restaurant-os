@@ -132,3 +132,65 @@ html[data-theme="light"] .theme-toggle {
 @media(max-width:640px) {
   .theme-toggle { right: 14px; bottom: 14px; min-height: 42px; padding: 0 13px; }
 }
+
+
+/* Sidebar and navigation theme synchronization */
+html[data-theme="light"] .admin-sidebar,
+html[data-theme="light"] .superadmin-sidebar {
+  color: #17243b !important;
+  background: linear-gradient(180deg,#ffffff 0%,#f7f9fc 100%) !important;
+  border-color: #e2e8f0 !important;
+}
+html[data-theme="light"] .admin-sidebar a,
+html[data-theme="light"] .admin-sidebar p,
+html[data-theme="light"] .admin-sidebar span,
+html[data-theme="light"] .superadmin-sidebar a,
+html[data-theme="light"] .superadmin-sidebar p,
+html[data-theme="light"] .superadmin-sidebar span,
+html[data-theme="light"] .superadmin-sidebar button {
+  color: #334155;
+}
+html[data-theme="light"] .admin-sidebar .text-orange-200,
+html[data-theme="light"] .admin-sidebar .text-orange-300,
+html[data-theme="light"] .superadmin-sidebar .text-orange-200,
+html[data-theme="light"] .superadmin-sidebar .text-orange-300 {
+  color: #c2410c !important;
+}
+html[data-theme="light"] .admin-sidebar .text-slate-500,
+html[data-theme="light"] .admin-sidebar .text-slate-600,
+html[data-theme="light"] .admin-sidebar .text-slate-400,
+html[data-theme="light"] .superadmin-sidebar .text-slate-500,
+html[data-theme="light"] .superadmin-sidebar .text-slate-600,
+html[data-theme="light"] .superadmin-sidebar .text-slate-400 {
+  color: #64748b !important;
+}
+html[data-theme="light"] .admin-sidebar [class*="border-white"],
+html[data-theme="light"] .superadmin-sidebar [class*="border-white"] {
+  border-color: #e2e8f0 !important;
+}
+html[data-theme="light"] .admin-sidebar [class*="bg-white"],
+html[data-theme="light"] .superadmin-sidebar [class*="bg-white"] {
+  background-color: #f1f5f9 !important;
+}
+html[data-theme="light"] .admin-sidebar .nav-link:hover,
+html[data-theme="light"] .admin-sidebar .nav-link:focus-visible {
+  color: #0f172a !important;
+  background: #eef2f7 !important;
+}
+html[data-theme="light"] .superadmin-sidebar {
+  background: linear-gradient(180deg,#ffffff 0%,#f7f9fc 100%) !important;
+}
+html[data-theme="light"] .staff-topbar {
+  color: #17243b;
+  background: rgba(255,255,255,.92) !important;
+  border-color: #e2e8f0 !important;
+}
+html[data-theme="light"] .staff-topbar a,
+html[data-theme="light"] .staff-topbar p,
+html[data-theme="light"] .staff-topbar span,
+html[data-theme="light"] .staff-topbar button {
+  color: #334155;
+}
+html[data-theme="light"] .staff-topbar .text-orange-400 { color: #ea580c !important; }
+html[data-theme="light"] .staff-topbar .text-slate-400,
+html[data-theme="light"] .staff-topbar .text-slate-500 { color: #64748b !important; }
