@@ -11,7 +11,7 @@ export default async function Signup({searchParams}:{searchParams:Promise<{error
         <h1 className="mt-7 text-3xl font-black">Create your account</h1>
         <p className="mt-2 text-sm text-slate-400">Create your RestaurantOS login. Your platform administrator will assign your restaurant or staff access after verification.</p>
         {q.error && <p role="alert" className="mt-4 rounded-xl bg-red-400/10 p-3 text-sm text-red-300">{q.error}</p>}
-        {q.message && <p role="status" className="mt-4 rounded-xl bg-emerald-400/10 p-3 text-sm text-emerald-200">{q.message}</p>}
+        {q.message && <div role="status" className="mt-4 rounded-xl bg-emerald-400/10 p-3 text-sm text-emerald-200"><p>{q.message}</p><Link href="/auth/verify" className="mt-3 inline-block font-bold text-orange-200 underline">Open email verification help / resend link</Link></div>}
         <label className="mt-6 block text-sm">
           Email
           <input required name="email" type="email" autoComplete="email" className="mt-2 w-full rounded-xl border border-white/10 bg-black/20 p-3 outline-none focus:border-orange-300" />
