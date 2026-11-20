@@ -1,4 +1,3 @@
-"use server";
 import {requirePlatformAdmin} from "@/lib/auth/tenant";
 import {createRestaurant,updateRestaurantAccess,savePackage} from "./actions";
 import DeleteRestaurantButton from "./delete-restaurant-button";
