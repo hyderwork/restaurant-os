@@ -43,8 +43,9 @@ export async function savePackage(f:FormData){const {supabase}=await requirePlat
 export async function deleteRestaurant(f:FormData){
  const {supabase}=await requirePlatformAdmin();
  const id=v(f,"restaurant_id");
- if(!id) throw new Error("Restaurant ID is required.");
+ if(!id) redirect("/superadmin?error="+encodeURIComponent("Restaurant ID is missing. Please refresh the page and try again."));
  const {error}=await supabase.rpc("platform_delete_restaurant",{p_restaurant_id:id});
- if(error) throw new Error(error.message);
+ if(error) redirect("/superadmin?error="+encodeURIComponent(error.message));
  revalidatePath("/superadmin");
+ redirect("/superadmin?success="+encodeURIComponent("Restaurant account permanently deleted."));
 }
