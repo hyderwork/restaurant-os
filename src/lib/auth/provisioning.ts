@@ -15,6 +15,18 @@ export async function ensureAccountForInvitation({ email, fullName }: ProvisionI
     auth: { autoRefreshToken: false, persistSession: false, detectSessionInUrl: false },
   });
 
+  const resendVerification = async () => {
+    const { error: resendError } = await authClient.auth.resend({
+      type: "signup",
+      email: email.trim().toLowerCase(),
+      options: { emailRedirectTo: SET_PASSWORD_REDIRECT },
+    });
+    if (resendError && !/already confirmed/i.test(resendError.message)) {
+      throw new Error(`The account exists, but its verification email could not be resent: ${resendError.message}`);
+    }
+    return !resendError;
+  };
+
   const { data, error } = await authClient.auth.signUp({
     email: email.trim().toLowerCase(),
     password: randomBytes(32).toString("base64url"),
@@ -26,7 +38,7 @@ export async function ensureAccountForInvitation({ email, fullName }: ProvisionI
 
   if (error) {
     if (/already registered|already exists|user already/i.test(error.message)) {
-      return { created: false, emailSent: false };
+      return { created: false, emailSent: await resendVerification() };
     }
     throw new Error(`Could not create the account invitation: ${error.message}`);
   }
@@ -34,17 +46,7 @@ export async function ensureAccountForInvitation({ email, fullName }: ProvisionI
   if (!data.user) throw new Error("Supabase did not return the invited account. Please try again.");
 
   const isExistingAccount = (data.user.identities?.length ?? 1) === 0;
-  if (isExistingAccount) {
-    const { error: resendError } = await authClient.auth.resend({
-      type: "signup",
-      email: email.trim().toLowerCase(),
-      options: { emailRedirectTo: SET_PASSWORD_REDIRECT },
-    });
-    if (resendError && !/already confirmed/i.test(resendError.message)) {
-      throw new Error(`The account exists, but its verification email could not be resent: ${resendError.message}`);
-    }
-    return { created: false, emailSent: !resendError };
-  }
+  if (isExistingAccount) return { created: false, emailSent: await resendVerification() };
 
   return { created: true, emailSent: true };
 }
