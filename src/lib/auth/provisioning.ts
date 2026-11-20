@@ -1,7 +1,8 @@
 import { randomBytes } from "node:crypto";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 
-const APP_URL = (process.env.NEXT_PUBLIC_APP_URL || "https://restaurant-os-custom.vercel.app").replace(/\\/$/, "");
+const APP_URL_RAW = process.env.NEXT_PUBLIC_APP_URL || "https://restaurant-os-custom.vercel.app";
+const APP_URL = APP_URL_RAW.endsWith("/") ? APP_URL_RAW.slice(0, -1) : APP_URL_RAW;
 const SET_PASSWORD_REDIRECT = `${APP_URL}/auth/callback?next=%2Fauth%2Fset-password`;
 
 type ProvisionInput = { email: string; fullName?: string | null };
