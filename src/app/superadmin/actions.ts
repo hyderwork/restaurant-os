@@ -7,3 +7,12 @@ export async function updateRestaurantAccess(f:FormData){const {supabase}=await 
 export async function platformLogout(){const {supabase}=await requirePlatformAdmin();await supabase.auth.signOut();redirect("/");}
 
 export async function savePackage(f:FormData){const {supabase}=await requirePlatformAdmin();const id=v(f,"plan_id"),name=v(f,"plan_name");const price=Number(v(f,"monthly_price")),tables=Number(v(f,"max_tables")),staff=Number(v(f,"max_staff"));if(!name||!Number.isFinite(price)||price<0||!Number.isInteger(tables)||tables<1||!Number.isInteger(staff)||staff<1)throw new Error("Enter valid package limits and price.");const payload={name,monthly_price:price,max_tables:tables,max_staff:staff,active:v(f,"active")!=="false",features:{qr_ordering:true,menu_management:true,staff_roles:true,advanced_reports:name!=="Starter",priority_support:name==="Enterprise"}};const q=id?supabase.from("subscription_plans").update(payload).eq("id",id):supabase.from("subscription_plans").insert(payload);const {error}=await q;if(error)throw new Error(error.message);revalidatePath("/superadmin");}
+
+export async function deleteRestaurant(f:FormData){
+ const {supabase}=await requirePlatformAdmin();
+ const id=v(f,"restaurant_id");
+ if(!id) throw new Error("Restaurant ID is required.");
+ const {error}=await supabase.rpc("platform_delete_restaurant",{p_restaurant_id:id});
+ if(error) throw new Error(error.message);
+ revalidatePath("/superadmin");
+}
