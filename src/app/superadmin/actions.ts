@@ -45,7 +45,22 @@ export async function deleteRestaurant(f:FormData){
  const id=v(f,"restaurant_id");
  if(!id) redirect("/superadmin?error="+encodeURIComponent("Restaurant ID is missing. Please refresh the page and try again."));
  const {error}=await supabase.rpc("platform_delete_restaurant",{p_restaurant_id:id});
- if(error) redirect("/superadmin?error="+encodeURIComponent(error.message));
+ if(error){
+  const reason=error.message.toLowerCase();
+  const hasHistory=reason.includes("order")||reason.includes("payment")||reason.includes("history");
+  if(hasHistory){
+   const {error:closeError}=await supabase.rpc("platform_update_restaurant",{
+    p_restaurant_id:id,
+    p_status:"CLOSED",
+    p_plan_id:null,
+    p_subscription_status:"CANCELED"
+   });
+   if(closeError) redirect("/superadmin?error="+encodeURIComponent("Restaurant has order/payment history and could not be deleted. Automatic closure also failed: "+closeError.message));
+   revalidatePath("/superadmin");
+   redirect("/superadmin?success="+encodeURIComponent("Restaurant has historical orders/payments, so it was safely CLOSED and its subscription was canceled. Historical records have been preserved."));
+  }
+  redirect("/superadmin?error="+encodeURIComponent(error.message));
+ }
  revalidatePath("/superadmin");
  redirect("/superadmin?success="+encodeURIComponent("Restaurant account permanently deleted."));
 }
