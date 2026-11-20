@@ -194,3 +194,61 @@ html[data-theme="light"] .staff-topbar button {
 html[data-theme="light"] .staff-topbar .text-orange-400 { color: #ea580c !important; }
 html[data-theme="light"] .staff-topbar .text-slate-400,
 html[data-theme="light"] .staff-topbar .text-slate-500 { color: #64748b !important; }
+
+
+/* Light theme: normalize every high-luminance text utility across all app screens.
+   This prevents dark-mode white/near-white utility classes from disappearing on
+   light cards, tables, dialogs, dropdowns and page backgrounds. */
+html[data-theme="light"] [class*="text-white"],
+html[data-theme="light"] [class*="text-slate-50"],
+html[data-theme="light"] [class*="text-slate-100"],
+html[data-theme="light"] [class*="text-gray-50"],
+html[data-theme="light"] [class*="text-gray-100"],
+html[data-theme="light"] [class*="text-zinc-50"],
+html[data-theme="light"] [class*="text-zinc-100"],
+html[data-theme="light"] [class*="text-neutral-50"],
+html[data-theme="light"] [class*="text-neutral-100"] {
+  color: #17243b !important;
+}
+
+/* Muted light-gray text needs a darker contrast value in light mode. */
+html[data-theme="light"] [class*="text-slate-200"],
+html[data-theme="light"] [class*="text-slate-300"],
+html[data-theme="light"] [class*="text-slate-400"],
+html[data-theme="light"] [class*="text-slate-500"],
+html[data-theme="light"] [class*="text-gray-200"],
+html[data-theme="light"] [class*="text-gray-300"],
+html[data-theme="light"] [class*="text-gray-400"],
+html[data-theme="light"] [class*="text-zinc-200"],
+html[data-theme="light"] [class*="text-zinc-300"],
+html[data-theme="light"] [class*="text-zinc-400"],
+html[data-theme="light"] [class*="text-neutral-200"],
+html[data-theme="light"] [class*="text-neutral-300"],
+html[data-theme="light"] [class*="text-neutral-400"] {
+  color: #526078 !important;
+}
+
+/* Preserve semantic status colors while making them legible on pale surfaces. */
+html[data-theme="light"] [class*="text-emerald-"],
+html[data-theme="light"] [class*="text-green-"] { color: #047857 !important; }
+html[data-theme="light"] [class*="text-rose-"],
+html[data-theme="light"] [class*="text-red-"] { color: #be123c !important; }
+html[data-theme="light"] [class*="text-amber-"],
+html[data-theme="light"] [class*="text-yellow-"] { color: #a16207 !important; }
+html[data-theme="light"] [class*="text-blue-"],
+html[data-theme="light"] [class*="text-cyan-"],
+html[data-theme="light"] [class*="text-sky-"] { color: #1d4ed8 !important; }
+html[data-theme="light"] [class*="text-violet-"],
+html[data-theme="light"] [class*="text-purple-"],
+html[data-theme="light"] [class*="text-indigo-"] { color: #5b21b6 !important; }
+html[data-theme="light"] [class*="text-orange-"] { color: #c2410c !important; }
+
+/* Ensure common native controls and table content inherit readable light text. */
+html[data-theme="light"] :is(td, th, label, option, summary) { color: #334155; }
+html[data-theme="light"] input,
+html[data-theme="light"] select,
+html[data-theme="light"] textarea {
+  color: #17243b;
+}
+html[data-theme="light"] input::placeholder,
+html[data-theme="light"] textarea::placeholder { color: #94a3b8; }
