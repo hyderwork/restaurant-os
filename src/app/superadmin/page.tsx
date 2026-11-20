@@ -30,8 +30,8 @@ export default async function Page({searchParams}:{searchParams:Promise<{error?:
    </form>
   </section>
   <section className="mt-8"><h2 className="text-xl font-bold">Restaurant accounts</h2><div className="mt-4 space-y-4">
-   {rs.map((r:any)=>{const owner=r.memberships?.find((m:any)=>m.role==="OWNER"),sub=r.subscriptions?.[0];return <article key={r.id} className="rounded-2xl border border-white/10 p-5">
-    <div className="flex flex-wrap justify-between gap-3"><div><h3 className="text-lg font-bold">{r.name}</h3><p className="text-xs text-slate-500">/{r.slug} · {owner?.users?.full_name||owner?.users?.email||r.email||"Owner not linked"}</p></div><span className="text-xs text-orange-300">{r.status} · {sub?.subscription_plans?.name||"No plan"}</span></div>
+   {rs.map((r:any)=>{const owner=r.memberships?.find((m:any)=>m.role==="OWNER");const ownerUser=Array.isArray(owner?.users)?owner.users[0]:owner?.users;const sub=r.subscriptions?.[0];return <article key={r.id} className="rounded-2xl border border-white/10 p-5">
+    <div className="flex flex-wrap justify-between gap-3"><div><h3 className="text-lg font-bold">{r.name}</h3><p className="text-xs text-slate-500">/{r.slug} · {ownerUser?.full_name||ownerUser?.email||r.email||"Owner not linked"}</p></div><span className="text-xs text-orange-300">{r.status} · {sub?.subscription_plans?.name||"No plan"}</span></div>
     <form action={updateRestaurantAccess} className="mt-4 grid gap-3 border-t border-white/5 pt-4 sm:grid-cols-4">
      <input type="hidden" name="restaurant_id" value={r.id}/>
      <label className="text-xs text-slate-400">Workspace<select name="status" defaultValue={r.status} className="field mt-1 w-full"><option>ACTIVE</option><option>SUSPENDED</option><option>CLOSED</option><option>PENDING</option></select></label>
@@ -39,7 +39,7 @@ export default async function Page({searchParams}:{searchParams:Promise<{error?:
      <label className="text-xs text-slate-400">Subscription<select name="subscription_status" defaultValue={sub?.status||"ACTIVE"} className="field mt-1 w-full">{["TRIALING","ACTIVE","PAST_DUE","CANCELED","EXPIRED"].map(s=><option key={s}>{s}</option>)}</select></label>
      <button className="btn-primary self-end">Save changes</button>
     </form>
-    <div className="mt-4 flex flex-wrap justify-end gap-2 border-t border-white/5 pt-4">{owner?.users?.email&&<form action={resendOwnerSetupEmail} className="flex items-center gap-2"><input type="hidden" name="restaurant_id" value={r.id}/><input type="hidden" name="owner_email" value={owner.users.email}/><button className="rounded-xl border border-orange-400/30 px-4 py-2 text-xs font-bold text-orange-200 hover:bg-orange-400/10">Resend password setup email</button></form>}<DeleteRestaurantButton restaurantId={r.id} restaurantName={r.name}/></div>
+    <div className="mt-4 flex flex-wrap justify-end gap-2 border-t border-white/5 pt-4">{ownerUser?.email&&<form action={resendOwnerSetupEmail} className="flex items-center gap-2"><input type="hidden" name="restaurant_id" value={r.id}/><input type="hidden" name="owner_email" value={ownerUser.email}/><button className="rounded-xl border border-orange-400/30 px-4 py-2 text-xs font-bold text-orange-200 hover:bg-orange-400/10">Resend password setup email</button></form>}<DeleteRestaurantButton restaurantId={r.id} restaurantName={r.name}/></div>
    </article>})}
    {!rs.length&&<p className="rounded-xl border border-dashed border-white/10 p-8 text-center text-sm text-slate-500">No restaurants yet.</p>}
   </div></section>
