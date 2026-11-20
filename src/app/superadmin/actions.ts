@@ -35,6 +35,26 @@ export async function createRestaurant(f:FormData){
  redirect("/superadmin?success="+encodeURIComponent(message));
 }
 
+
+export async function resendOwnerSetupEmail(f:FormData){
+ const {supabase}=await requirePlatformAdmin();
+ const restaurantId=v(f,"restaurant_id"),email=v(f,"owner_email").toLowerCase();
+ if(!restaurantId||!email) redirect("/superadmin?error="+encodeURIComponent("Restaurant owner email is missing."));
+ const {data:restaurant,error}=await supabase.from("restaurants").select("id,memberships(role,users(email))").eq("id",restaurantId).maybeSingle();
+ if(error||!restaurant) redirect("/superadmin?error="+encodeURIComponent(error?.message||"Restaurant not found."));
+ const owner=restaurant.memberships?.find((m:any)=>m.role==="OWNER");
+ const ownerEmail=owner?.users?.email?.toLowerCase();
+ if(!ownerEmail||ownerEmail!==email) redirect("/superadmin?error="+encodeURIComponent("Owner email verification failed. Refresh the page and try again."));
+ try {
+  await ensureAccountForInvitation({email});
+ } catch(error) {
+  const message=error instanceof Error?error.message:"Could not send the password setup email.";
+  redirect("/superadmin?error="+encodeURIComponent(message));
+ }
+ revalidatePath("/superadmin");
+ redirect("/superadmin?success="+encodeURIComponent("Password setup email requested for "+email+". Check the recipient inbox and spam folder."));
+}
+
 export async function updateRestaurantAccess(f:FormData){const {supabase}=await requirePlatformAdmin();const {error}=await supabase.rpc("platform_update_restaurant",{p_restaurant_id:v(f,"restaurant_id"),p_status:v(f,"status"),p_plan_id:v(f,"plan_id")||null,p_subscription_status:v(f,"subscription_status")});if(error)throw new Error(error.message);revalidatePath("/superadmin");}
 export async function platformLogout(){const {supabase}=await requirePlatformAdmin();await supabase.auth.signOut();redirect("/");}
 
