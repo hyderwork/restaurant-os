@@ -11,14 +11,14 @@ export async function POST(request: Request) {
   const phone = String(body.phone ?? "").trim();
   const plan = String(body.plan ?? "Not specified").trim().slice(0,60);
   const message = String(body.message ?? "").trim().slice(0,1500);
-  if (!name || !restaurant || !email || !phone || name.length>100 || restaurant.length>120 || email.length>254 || phone.length>30 || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) {
+  if (!name || !restaurant || !email || !phone || name.length>100 || restaurant.length>120 || email.length>254 || phone.length>30 || !email.includes("@") || !email.split("@")[1]?.includes(".")) {
    return NextResponse.json({error:"Please complete all required fields with valid details."},{status:400});
   }
   const apiKey=process.env.RESEND_API_KEY;
   const from=process.env.RESEND_FROM_EMAIL;
   if(!apiKey || !from) return NextResponse.json({error:"The inquiry email service is not configured yet. Please contact us directly for now."},{status:503});
 
-  const html=`<h2>New RestaurantOS pricing inquiry</h2><p><b>Plan:</b> ${escapeHtml(plan)}</p><p><b>Name:</b> ${escapeHtml(name)}</p><p><b>Restaurant:</b> ${escapeHtml(restaurant)}</p><p><b>Email:</b> ${escapeHtml(email)}</p><p><b>Phone:</b> ${escapeHtml(phone)}</p><p><b>Message:</b><br/>${escapeHtml(message || "Not provided").replace(/\\r?\\n/g,"<br/>")}</p>`;
+  const html = "<h2>New RestaurantOS pricing inquiry</h2><p><b>Plan:</b> " + escapeHtml(plan) + "</p><p><b>Name:</b> " + escapeHtml(name) + "</p><p><b>Restaurant:</b> " + escapeHtml(restaurant) + "</p><p><b>Email:</b> " + escapeHtml(email) + "</p><p><b>Phone:</b> " + escapeHtml(phone) + "</p><p><b>Message:</b><br/>" + escapeHtml(message || "Not provided").replaceAll(String.fromCharCode(10), "<br/>") + "</p>";
   const response=await fetch("https://api.resend.com/emails",{
    method:"POST",
    headers:{"Authorization":`Bearer ${apiKey}`,"Content-Type":"application/json"},
