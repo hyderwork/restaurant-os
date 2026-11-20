@@ -1,5 +1,5 @@
 import {requirePlatformAdmin} from "@/lib/auth/tenant";
-import {createRestaurant,updateRestaurantAccess,savePackage} from "./actions";
+import {createRestaurant,updateRestaurantAccess,savePackage,resendOwnerSetupEmail} from "./actions";
 import DeleteRestaurantButton from "./delete-restaurant-button";
 
 export default async function Page({searchParams}:{searchParams:Promise<{error?:string;success?:string}>}){
@@ -39,7 +39,7 @@ export default async function Page({searchParams}:{searchParams:Promise<{error?:
      <label className="text-xs text-slate-400">Subscription<select name="subscription_status" defaultValue={sub?.status||"ACTIVE"} className="field mt-1 w-full">{["TRIALING","ACTIVE","PAST_DUE","CANCELED","EXPIRED"].map(s=><option key={s}>{s}</option>)}</select></label>
      <button className="btn-primary self-end">Save changes</button>
     </form>
-    <div className="mt-4 flex justify-end border-t border-white/5 pt-4"><DeleteRestaurantButton restaurantId={r.id} restaurantName={r.name}/></div>
+    <div className="mt-4 flex flex-wrap justify-end gap-2 border-t border-white/5 pt-4">{owner?.users?.email&&<form action={resendOwnerSetupEmail} className="flex items-center gap-2"><input type="hidden" name="restaurant_id" value={r.id}/><input type="hidden" name="owner_email" value={owner.users.email}/><button className="rounded-xl border border-orange-400/30 px-4 py-2 text-xs font-bold text-orange-200 hover:bg-orange-400/10">Resend password setup email</button></form>}<DeleteRestaurantButton restaurantId={r.id} restaurantName={r.name}/></div>
    </article>})}
    {!rs.length&&<p className="rounded-xl border border-dashed border-white/10 p-8 text-center text-sm text-slate-500">No restaurants yet.</p>}
   </div></section>
