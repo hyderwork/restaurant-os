@@ -38,7 +38,7 @@ export default function RealtimeSync({children,scope,restaurantId}:Props){
     channel.subscribe(status=>{
       if(!active)return;
       if(status==="SUBSCRIBED"){
-        if(connected)scheduleRefresh();
+        scheduleRefresh();
         connected=true;
       }
     });
