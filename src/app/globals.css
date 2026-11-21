@@ -455,3 +455,75 @@ html[data-theme="light"] .footer-bottom{border-color:#e2e8f0;color:#94a3b8}
 @media(max-width:900px){.marketing-header{padding-inline:4vw;gap:14px}.desktop-marketing-nav{gap:15px}.marketing-header nav a{font-size:11px}.header-actions{gap:12px}.marketing-hero{grid-template-columns:minmax(0,1fr);padding-inline:5vw}.hero-copy{max-width:760px}.hero-visual{max-width:760px;margin:0 auto}.hero-dashboard{transform:none!important}.orbit-ring{width:min(70vw,560px);height:min(70vw,560px);right:0}.float-one{left:0}.float-two{right:0}.experience-section,.faq-section{gap:6vw}}
 @media(max-width:680px){.marketing-header{height:auto;min-height:68px;padding:12px 5vw;flex-wrap:wrap}.marketing-brand{font-size:17px;gap:8px}.brand-symbol{width:34px;height:34px}.desktop-marketing-nav{display:none!important}.header-actions{margin-left:auto;gap:10px}.header-actions .login-link{display:none}.header-cta{padding:9px 11px;font-size:10px;white-space:nowrap}.mobile-menu-toggle{display:grid;place-items:center;width:38px;height:38px;border:1px solid #ffffff20;border-radius:10px;background:#ffffff08;color:#f5f6f8}.mobile-marketing-nav{display:flex;flex-basis:100%;flex-direction:column;gap:0;padding:7px 0 3px;border-top:1px solid #ffffff10}.mobile-marketing-nav a{padding:12px 9px;border-bottom:1px solid #ffffff0b;color:#c5ceda;font-size:13px;font-weight:650}.marketing-hero{padding:54px 5vw 50px;gap:38px;min-height:0}.hero-copy h1{font-size:clamp(40px,11vw,60px);line-height:1.02;overflow-wrap:anywhere}.hero-copy>p{font-size:14px;line-height:1.75}.hero-eyebrow{font-size:8px;line-height:1.6;letter-spacing:.12em;max-width:100%}.hero-actions{flex-direction:column;align-items:stretch;gap:9px;margin-top:25px}.primary-cta,.secondary-cta{width:100%;justify-content:center;text-align:center;min-height:46px}.hero-proof{margin-top:27px;flex-wrap:wrap;font-size:10px}.hero-dashboard{padding:13px;border-radius:14px}.dash-top{gap:8px}.live-pill{font-size:6px;padding:5px 6px;white-space:nowrap}.dash-welcome{gap:9px;align-items:flex-start}.dash-welcome h3{font-size:15px}.dash-welcome p{font-size:8px;line-height:1.5}.dash-stats{gap:7px}.dash-stats>div{padding:10px;min-height:100px}.dash-stats strong{font-size:clamp(15px,5vw,21px);overflow-wrap:anywhere}.sparkline{right:8px;bottom:10px;gap:2px}.sparkline i{width:3px}.dash-bottom{grid-template-columns:minmax(0,1fr);gap:8px}.dash-floor{display:none}.dash-orders{min-width:0}.dash-order{gap:6px}.dash-order b{font-size:7px}.dash-order label{font-size:6px}.dash-floating{max-width:70%;padding:7px 9px;gap:7px}.dash-floating>span{width:25px;height:25px;flex:none}.dash-floating b{font-size:8px}.dash-floating small{font-size:6px}.float-one{top:-4%;left:-2%}.float-two{bottom:-4%;right:-2%}.trust-strip{padding:22px 5vw;gap:15px}.trust-strip>span{text-align:center;line-height:1.7}.trust-strip>div{gap:15px 18px}.trust-strip b{font-size:8px}.marketing-section{padding:72px 5vw}.section-intro h2,.experience-copy h2,.faq-intro h2{font-size:clamp(36px,10vw,48px)}.feature-grid{grid-template-columns:minmax(0,1fr);gap:12px}.feature-card{min-height:210px;padding:20px}.feature-card-top{margin-bottom:24px}.experience-section{padding:55px 5vw 70px;grid-template-columns:minmax(0,1fr);gap:25px}.experience-art{min-height:420px;max-width:100%;overflow:clip}.phone-mock{width:min(245px,75vw)}.orbit-a{width:90%;height:300px}.orbit-b{width:98%;height:370px}.art-caption{right:0;bottom:12px;max-width:75%}.steps-grid{grid-template-columns:minmax(0,1fr);gap:30px}.steps-grid p{max-width:none}.manifesto-section{margin:0 5vw 65px;padding:35px 23px;display:block}.manifesto-section h2{font-size:clamp(34px,9.5vw,46px)}.manifesto-side{min-width:0;margin-top:28px;padding:22px 0 0;border:0;border-top:1px solid #ffffff20;display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.pricing-grid{grid-template-columns:minmax(0,1fr);gap:22px}.price-card{min-height:0;padding:23px}.price-card h3{font-size:clamp(30px,9vw,37px)}.price-card>p{min-height:0}.price-card li{font-size:12px;line-height:1.6}.price-button{min-height:45px}.popular-tag{right:14px;font-size:7px}.faq-section{padding:45px 5vw 75px;grid-template-columns:minmax(0,1fr);gap:20px}.faq-list summary{font-size:12px}.faq-list details p{padding-right:8px;font-size:12px}.marketing-footer{padding:35px 5vw 20px}.footer-main{align-items:flex-start;flex-direction:column;gap:25px}.footer-links{gap:14px 20px}.footer-bottom{flex-direction:column;gap:10px;font-size:8px}}
 @media(max-width:380px){.header-cta{padding:8px 9px}.mobile-menu-toggle{width:35px;height:35px}.hero-copy h1{font-size:40px}.hero-dashboard{padding:10px}.dash-stats strong{font-size:15px}.dash-floating{transform:scale(.82)}.float-one{transform-origin:left center}.float-two{transform-origin:right center}.dash-order label{display:none}.dash-welcome .dash-date{padding:5px 6px;font-size:7px}.phone-mock{width:225px}.art-caption b{font-size:9px}}
+
+
+/* ===== Mobile app navigation + responsive dashboard polish =====
+@media (max-width:767px){
+  .dashboard-shell{display:block!important;min-height:100dvh!important;height:auto!important;overflow:visible!important}
+  .dashboard-content{display:block!important;min-width:0!important;height:auto!important;overflow:visible!important}
+  .dashboard-main{min-width:0!important;width:100%!important;padding:16px 14px calc(108px + env(safe-area-inset-bottom))!important;overflow:visible!important}
+  .admin-sidebar,.superadmin-sidebar{
+    position:fixed!important;inset:auto 0 0!important;top:auto!important;bottom:0!important;z-index:80!important;
+    width:100%!important;height:auto!important;max-height:none!important;overflow:visible!important;
+    padding:8px 8px calc(8px + env(safe-area-inset-bottom))!important;
+    border:0!important;border-top:1px solid #cbd5e1!important;border-right:0!important;
+    background:rgba(255,255,255,.96)!important;backdrop-filter:blur(18px)!important;
+    box-shadow:0 -8px 28px rgba(15,23,42,.12)!important;
+  }
+  .admin-sidebar>a:first-child,.superadmin-sidebar>a:first-child,
+  .admin-sidebar>div:first-of-type,.superadmin-sidebar>div:first-of-type,
+  .admin-sidebar>p,.superadmin-sidebar>p,
+  .admin-sidebar>div:nth-of-type(2),.superadmin-sidebar>div:nth-of-type(2),
+  .admin-sidebar>form,.superadmin-sidebar>form{display:none!important}
+  .admin-sidebar nav,.superadmin-sidebar nav{
+    display:flex!important;flex-direction:row!important;align-items:stretch!important;justify-content:space-around!important;
+    gap:3px!important;margin:0!important;padding:0!important;overflow-x:auto!important;overflow-y:hidden!important;
+    scrollbar-width:none!important;-webkit-overflow-scrolling:touch!important;
+  }
+  .admin-sidebar nav::-webkit-scrollbar,.superadmin-sidebar nav::-webkit-scrollbar{display:none!important}
+  .admin-sidebar nav .nav-link,.superadmin-sidebar nav .nav-link{
+    flex:1 0 64px!important;min-width:60px;max-width:92px;min-height:58px!important;
+    display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+    gap:4px!important;padding:6px 3px!important;border:1px solid transparent!important;border-radius:12px!important;
+    background:transparent!important;color:#64748b!important;text-align:center!important;font-size:9px!important;font-weight:700!important;line-height:1.15!important;
+  }
+  .admin-sidebar nav .nav-link span:first-child,.superadmin-sidebar nav .nav-link span:first-child{
+    width:auto!important;display:block!important;font-size:17px!important;line-height:1!important;color:#64748b!important;
+  }
+  .admin-sidebar nav .nav-link span:last-child,.superadmin-sidebar nav .nav-link span:last-child{white-space:normal!important;max-width:100%;}
+  .admin-sidebar nav .nav-link:hover,.admin-sidebar nav .nav-link:focus-visible,
+  .superadmin-sidebar nav .nav-link:hover,.superadmin-sidebar nav .nav-link:focus-visible{background:#f1f5f9!important;color:#0f172a!important;border-color:#e2e8f0!important}
+  .admin-sidebar nav .nav-link:active,.superadmin-sidebar nav .nav-link:active{background:#ffedd5!important;color:#9a3412!important}
+  .admin-topbar{padding:12px 14px!important;gap:8px;min-width:0}
+  .admin-topbar>div:first-child{min-width:0;}
+  .admin-topbar .avatar-mark{width:32px;height:32px;flex:none}
+  .page-heading{gap:10px!important}
+  .page-heading h1{font-size:clamp(23px,7vw,30px)!important;overflow-wrap:anywhere}
+  /* Four-column and three-column dashboard tiles become compact two-column grids. */
+  .grid-cols-4,.grid-cols-3,.grid-cols-5{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .stat-card{min-width:0!important;padding:13px!important}
+  .panel,.stat-card{border-color:#d8e1ec!important}
+  .overflow-x-auto{max-width:100%;}
+  table{min-width:600px}
+  .staff-topbar{padding:10px 12px!important;gap:8px}
+  .staff-topbar form button{white-space:nowrap}
+}
+@media(max-width:390px){
+  .admin-sidebar nav .nav-link,.superadmin-sidebar nav .nav-link{flex-basis:58px!important;min-width:56px!important;min-height:56px!important;font-size:8.5px!important}
+  .dashboard-main{padding-left:11px!important;padding-right:11px!important}
+  .stat-card{padding:11px!important}
+}
+/* QR menu light theme: keep dark/orange action labels white, pale controls dark, and borders visible. */
+html[data-theme="light"] main.min-h-screen button.bg-slate-900,
+html[data-theme="light"] main.min-h-screen button.bg-orange-500,
+html[data-theme="light"] main.min-h-screen button.bg-orange-600,
+html[data-theme="light"] main.min-h-screen button.bg-orange-400,
+html[data-theme="light"] main.min-h-screen button.bg-gradient-to-r{color:#fff!important}
+html[data-theme="light"] main.min-h-screen button.bg-slate-100,
+html[data-theme="light"] main.min-h-screen button.bg-slate-50{color:#334155!important}
+html[data-theme="light"] main.min-h-screen .border-slate-100,
+html[data-theme="light"] main.min-h-screen .border-slate-200{border-color:#dbe3ed!important}
+html[data-theme="light"] main.min-h-screen input,
+html[data-theme="light"] main.min-h-screen textarea{background:#fff!important;color:#17243b!important;border-color:#cbd5e1!important}
+html[data-theme="light"] main.min-h-screen input::placeholder,
+html[data-theme="light"] main.min-h-screen textarea::placeholder{color:#64748b!important}
