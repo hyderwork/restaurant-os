@@ -60,11 +60,11 @@ export default function KitchenRealtime({restaurantId,initialOrders,updateOrderS
    try{
      await updateOrderStatus(fd);
      if(["SERVED","CANCELLED"].includes(nextStatus)){
-       setOrders(current=>current.filter(o=>o.id!==orderId));
-       setIncoming(current=>current?.id===orderId?null:current);
+       setOrders((current:Order[])=>current.filter(o=>o.id!==orderId));
+       setIncoming((current:Order|null)=>current?.id===orderId?null:current);
      }else{
-       setOrders(current=>current.map(o=>o.id===orderId?{...o,status:nextStatus}:o));
-       setIncoming(current=>current?.id===orderId?{...current,status:nextStatus}:current);
+       setOrders((current:Order[])=>current.map(o=>o.id===orderId?{...o,status:nextStatus}:o));
+       setIncoming((current:Order|null)=>current?.id===orderId?{...current,status:nextStatus}:current);
      }
    }catch(err){
      setActionError(err instanceof Error?err.message:"Could not update this ticket. Please try again.");
@@ -88,7 +88,7 @@ export default function KitchenRealtime({restaurantId,initialOrders,updateOrderS
        .eq("id",id).eq("restaurant_id",restaurantId).maybeSingle();
       if(!active||error||!data)return;
       if(!["NEW","ACCEPTED","COOKING","READY"].includes(data.status))return;
-      setOrders(current=>[data,...current.filter(o=>o.id!==data.id)]);
+      setOrders((current:Order[])=>[data,...current.filter(o=>o.id!==data.id)]);
       if(data.status==="NEW")setIncoming(data);
    })
    .on("postgres_changes",{event:"UPDATE",schema:"public",table:"orders",filter:"restaurant_id=eq."+restaurantId},async(payload:any)=>{
@@ -96,8 +96,8 @@ export default function KitchenRealtime({restaurantId,initialOrders,updateOrderS
       if(!id)return;
       const status=String(payload.new?.status||"");
       if(["SERVED","CANCELLED"].includes(status)){
-        setOrders(current=>current.filter(o=>o.id!==id));
-        setIncoming(current=>current?.id===id?null:current);
+        setOrders((current:Order[])=>current.filter(o=>o.id!==id));
+        setIncoming((current:Order|null)=>current?.id===id?null:current);
         return;
       }
       const {data,error}=await supabase.current.from("orders")
@@ -105,8 +105,8 @@ export default function KitchenRealtime({restaurantId,initialOrders,updateOrderS
        .eq("id",id).eq("restaurant_id",restaurantId).maybeSingle();
       if(!active||error||!data)return;
       if(!["NEW","ACCEPTED","COOKING","READY"].includes(data.status))return;
-      setOrders(current=>[data,...current.filter(o=>o.id!==id)]);
-      setIncoming(current=>current?.id===id?data:current);
+      setOrders((current:Order[])=>[data,...current.filter(o=>o.id!==id)]);
+      setIncoming((current:Order|null)=>current?.id===id?data:current);
    })
    .subscribe((status:string)=>{if(active)setConnection(status==="SUBSCRIBED"?"LIVE":status==="CHANNEL_ERROR"?"OFFLINE":status);});
    return()=>{active=false;stopRing();supabase.current.removeChannel(channel);};
