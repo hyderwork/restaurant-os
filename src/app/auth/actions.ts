@@ -42,7 +42,7 @@ export async function resendSignupConfirmation(f:FormData) {
 
 export async function requestPasswordReset(f:FormData) {
   const email=String(f.get("email")||"").trim().toLowerCase();
-  if(!email || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) {
+  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     redirect("/forgot-password?error="+encodeURIComponent("Please enter a valid email address."));
   }
   const s=await createClient();
