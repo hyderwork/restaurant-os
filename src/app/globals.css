@@ -288,3 +288,83 @@ html[data-theme="light"] .pricing-featured-card .bg-orange-400 {
 html[data-theme="light"] .pricing-featured-card .text-slate-950 {
   color: #17243b !important;
 }
+
+
+/* RestaurantOS visual system refresh — responsive SaaS foundation */
+:root{
+  --ro-bg:#080d18;--ro-surface:#101a2a;--ro-surface-2:#142136;
+  --ro-line:rgba(148,163,184,.14);--ro-orange:#f59e0b;--ro-orange-2:#fb923c;
+  --ro-text:#edf3fc;--ro-muted:#91a0b7;
+}
+body{letter-spacing:-.008em}
+::selection{background:rgba(251,146,60,.28);color:#fff}
+:focus-visible{outline:2px solid #fb923c;outline-offset:3px}
+.admin-sidebar,.superadmin-sidebar{
+  box-shadow:12px 0 40px rgba(0,0,0,.12);
+}
+.admin-sidebar nav,.superadmin-sidebar nav{scrollbar-width:none}
+.admin-sidebar nav::-webkit-scrollbar,.superadmin-sidebar nav::-webkit-scrollbar{display:none}
+.nav-link{min-height:42px}
+.nav-link:active{transform:scale(.985)}
+.admin-topbar,.staff-topbar{position:sticky;top:0;z-index:35}
+.panel,.stat-card{transition:border-color .2s ease,transform .2s ease,box-shadow .2s ease}
+.stat-card:hover{border-color:rgba(251,146,60,.28);transform:translateY(-2px)}
+table{width:100%;border-collapse:separate;border-spacing:0}
+th{color:#9aa9bd;font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+td,th{padding:13px 14px;border-bottom:1px solid rgba(148,163,184,.10);text-align:left}
+tbody tr:hover{background:rgba(148,163,184,.045)}
+button,a,input,select,textarea{transition-duration:.18s}
+input,select,textarea{max-width:100%}
+img{max-width:100%}
+.page-heading{margin-bottom:4px}
+.page-heading h1{line-height:1.04}
+.page-heading p:not(.eyebrow){max-width:680px;line-height:1.65}
+@media(min-width:768px){
+  .admin-sidebar,.superadmin-sidebar{box-shadow:8px 0 36px rgba(0,0,0,.12)}
+}
+@media(max-width:767px){
+  .admin-sidebar{
+    position:sticky;top:0;z-index:45;
+    padding:12px 14px 10px!important;
+    border-right:0!important;
+    box-shadow:0 12px 28px rgba(0,0,0,.22);
+  }
+  .admin-sidebar>a:first-child{font-size:17px!important}
+  .admin-sidebar .mt-8.rounded-2xl{display:none}
+  .admin-sidebar>p{display:none}
+  .admin-sidebar nav{
+    display:flex;flex-direction:row!important;gap:7px!important;
+    margin:12px -2px 0;padding:0 2px 4px;overflow-x:auto;
+    -webkit-overflow-scrolling:touch;
+  }
+  .admin-sidebar nav .nav-link{
+    flex:0 0 auto;min-height:38px;padding:8px 11px;
+    gap:7px;border:1px solid rgba(148,163,184,.13);
+    background:rgba(255,255,255,.035);font-size:11px;
+  }
+  .admin-sidebar nav .nav-link span:first-child{width:auto;font-size:13px}
+  .admin-sidebar form{margin-top:8px!important}
+  .admin-sidebar form button{min-height:34px;padding:6px 10px;font-size:11px}
+  .admin-topbar{padding:11px 15px!important}
+  .admin-topbar p:first-child{font-size:9px}
+  .admin-topbar p:last-child{font-size:12px}
+  .admin-sidebar+.min-w-0{min-width:0}
+  main{min-width:0}
+  .stat-card{padding:15px}
+  .panel{border-radius:15px}
+  table{min-width:620px}
+}
+@media(max-width:420px){
+  .admin-topbar .avatar-mark{width:30px;height:30px}
+  .page-heading h1{font-size:27px}
+  .btn-primary,.btn-secondary{font-size:11px}
+}
+
+/* Light theme adjustments for the refreshed surfaces */
+html[data-theme="light"] .admin-sidebar,html[data-theme="light"] .superadmin-sidebar{
+  box-shadow:8px 0 28px rgba(15,23,42,.05)
+}
+html[data-theme="light"] tbody tr:hover{background:#f8fafc}
+html[data-theme="light"] th{color:#64748b}
+html[data-theme="light"] td,html[data-theme="light"] th{border-color:#e8edf4}
+html[data-theme="light"] ::selection{background:#fed7aa;color:#7c2d12}
