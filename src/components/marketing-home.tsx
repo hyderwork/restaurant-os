@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import {useEffect,useRef} from "react";
-import {ArrowRight,ArrowUpRight,BarChart3,Check,ChefHat,ChevronDown,ClipboardList,Layers3,MoveUpRight,Play, QrCode,Sparkles,Store,Table2,Zap} from "lucide-react";
+import {useEffect,useRef,useState} from "react";
+import {ArrowRight,ArrowUpRight,BarChart3,Check,ChefHat,ChevronDown,ClipboardList,Layers3,MoveUpRight,Play, QrCode,Sparkles,Store,Table2,Zap,Menu,X} from "lucide-react";
 import {PricingInquiryButton} from "@/components/pricing-inquiry";
 
 const features=[
@@ -38,6 +38,7 @@ function DashboardVisual(){
 
 export default function Home(){
  const root=useRef<HTMLElement>(null);
+ const [mobileMenuOpen,setMobileMenuOpen]=useState(false);
  useEffect(()=>{
   let ctx:any;
   let alive=true;
@@ -69,8 +70,9 @@ export default function Home(){
   <div className="marketing-noise"/>
   <header className="marketing-header">
    <Link href="/" className="marketing-brand"><span className="brand-symbol"><Store size={20}/></span><span>Restaurant<span>OS</span></span></Link>
-   <nav className="hidden md:flex"><a href="#platform">Platform</a><a href="#how-it-works">How it works</a><a href="#pricing">Pricing</a><a href="#faq">FAQs</a></nav>
-   <div className="header-actions"><Link href="/login" className="login-link">Sign in</Link><Link href="/signup" className="header-cta">Get started <ArrowUpRight size={15}/></Link></div>
+   <nav className="desktop-marketing-nav"><a href="#platform">Platform</a><a href="#how-it-works">How it works</a><a href="#pricing">Pricing</a><a href="#faq">FAQs</a></nav>
+   <div className="header-actions"><Link href="/login" className="login-link">Sign in</Link><Link href="/signup" className="header-cta">Get started <ArrowUpRight size={15}/></Link><button type="button" className="mobile-menu-toggle" aria-label={mobileMenuOpen?"Close navigation":"Open navigation"} aria-expanded={mobileMenuOpen} onClick={()=>setMobileMenuOpen(v=>!v)}>{mobileMenuOpen?<X size={20}/>:<Menu size={20}/>}</button></div>
+   {mobileMenuOpen&&<nav className="mobile-marketing-nav"><a onClick={()=>setMobileMenuOpen(false)} href="#platform">Platform</a><a onClick={()=>setMobileMenuOpen(false)} href="#how-it-works">How it works</a><a onClick={()=>setMobileMenuOpen(false)} href="#pricing">Pricing</a><a onClick={()=>setMobileMenuOpen(false)} href="#faq">FAQs</a><Link onClick={()=>setMobileMenuOpen(false)} href="/login">Sign in</Link><Link onClick={()=>setMobileMenuOpen(false)} href="/signup">Get started</Link></nav>}
   </header>
   <section className="marketing-hero">
    <div className="hero-glow"/><div className="orbit-ring"><i/><i/><i/></div>
