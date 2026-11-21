@@ -38,6 +38,19 @@ function OrderTracking({slug,order,onBack,menu}:{slug:string;order:any;onBack:()
 export default function PublicMenuClient({slug,tableId,token}:{slug:string;tableId:string;token:string}){
  const [menu,setMenu]=useState<MenuData|null>(null);const [cart,setCart]=useState<Record<string,CartLine>>({});const [loading,setLoading]=useState(true);const [error,setError]=useState("");const [sending,setSending]=useState(false);const [done,setDone]=useState<any>(null);const [customer,setCustomer]=useState("");const [phone,setPhone]=useState("");const [notes,setNotes]=useState("");const [showCart,setShowCart]=useState(false);
  useEffect(()=>{let live=true;(async()=>{const supabase=createClient();const {data,error}=await supabase.rpc("get_public_menu",{p_slug:slug,p_table_id:tableId,p_token:token});if(!live)return;if(error){setError(error.message);setLoading(false);return;}setMenu(data as MenuData);setLoading(false);})();return()=>{live=false};},[slug,tableId,token]);
+ useEffect(()=>{
+   const restaurantId=menu?.restaurant?.id;
+   if(!restaurantId)return;
+   let live=true;
+   const refreshMenu=async()=>{
+     const {data,error}=await supabase.rpc("get_public_menu",{p_slug:slug,p_table_id:tableId,p_token:token});
+     if(live&&!error&&data)setMenu(data as MenuData);
+   };
+   const channel=supabase.channel("public-menu:"+restaurantId)
+     .on("broadcast",{event:"menu_changed"},()=>{void refreshMenu();})
+     .subscribe(status=>{if(live&&status==="SUBSCRIBED")void refreshMenu();});
+   return()=>{live=false;void supabase.removeChannel(channel);};
+ },[slug,tableId,token,menu?.restaurant?.id]);
  useEffect(()=>{try{const raw=sessionStorage.getItem("restaurantos:last-order:"+slug);if(raw){const saved=JSON.parse(raw);if(saved?.order&&Date.now()-saved.savedAt<4*60*60*1000)setDone(saved.order);else sessionStorage.removeItem("restaurantos:last-order:"+slug);}}catch{}},[slug]);
  useEffect(()=>{if(done){try{sessionStorage.setItem("restaurantos:last-order:"+slug,JSON.stringify({order:done,savedAt:Date.now()}));}catch{}}},[done,slug]);
  const lines=Object.values(cart);const subtotal=useMemo(()=>lines.reduce((sum,l)=>sum+Number(l.product.price)*l.quantity,0),[lines]);const count=lines.reduce((n,l)=>n+l.quantity,0);
