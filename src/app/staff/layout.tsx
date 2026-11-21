@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {requireStaff} from "@/lib/auth/tenant";
 import {signOut} from "@/app/auth/actions";
+import RealtimeSync from "@/components/realtime-sync";
 
 export default async function StaffLayout({children}:{children:React.ReactNode}) {
   const m=await requireStaff();
@@ -23,7 +24,7 @@ export default async function StaffLayout({children}:{children:React.ReactNode})
     </header>
     <main className="mx-auto max-w-[1440px] p-4 sm:p-5 md:p-8">
       <div className="mb-6"><p className="eyebrow">TEAM WORKSPACE</p><h1 className="mt-2 text-2xl font-black tracking-tight md:text-3xl">{title}</h1><p className="mt-2 text-sm text-slate-400">Your role-based tools and live service activity.</p></div>
-      {children}
+      <RealtimeSync scope="restaurant" restaurantId={m.restaurant_id}>{children}</RealtimeSync>
     </main>
   </div>;
 }
