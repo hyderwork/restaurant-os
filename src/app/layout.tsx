@@ -3,8 +3,8 @@ import "./globals.css";
 import ThemeToggle from "@/components/theme-toggle";
 
 export const metadata: Metadata = {
-  title: "RestaurantOS — Restaurant Operations",
-  description: "A unified operating system for modern restaurants."
+  title: "RestaurantOS | The Operating System for Modern Restaurants",
+  description: "Connect QR ordering, restaurant tables, kitchen workflows, staff operations and live insights in one modern restaurant management platform."
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
