@@ -2,6 +2,7 @@ import Link from "next/link";
 import {requirePlatformAdmin} from "@/lib/auth/tenant";
 import {platformLogout} from "./actions";
 import RealtimeSync from "@/components/realtime-sync";
+import ThemeToggle from "@/components/theme-toggle";
 
 export default async function Layout({children}:{children:React.ReactNode}) {
   await requirePlatformAdmin();
@@ -29,7 +30,7 @@ export default async function Layout({children}:{children:React.ReactNode}) {
     <section className="dashboard-content min-w-0 flex-1 md:flex md:h-dvh md:min-h-0 md:flex-col md:overflow-hidden">
       <header className="admin-topbar flex items-center justify-between border-b border-white/10 px-5 py-4 md:px-8">
         <div><p className="text-[10px] font-bold tracking-[.2em] text-slate-500">PLATFORM WORKSPACE</p><p className="mt-1 text-sm font-semibold text-slate-200">Global operations</p></div>
-        <span className="status-pill">● Platform secure</span>
+        <div className="flex items-center gap-3"><span className="status-pill">● Platform secure</span><ThemeToggle /></div>
       </header>
       <main className="dashboard-main mx-auto w-full max-w-[1440px] flex-1 p-5 md:min-h-0 md:overflow-y-auto md:overscroll-contain md:p-8"><RealtimeSync scope="platform">{children}</RealtimeSync></main>
     </section>
