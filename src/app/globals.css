@@ -551,3 +551,20 @@ html[data-theme="light"] main.min-h-screen button.bg-orange-400{color:#17243b!im
   .dashboard-main .grid[class*="xl:grid-cols-4"],
   .dashboard-main .grid[class*="lg:grid-cols-4"]{grid-template-columns:repeat(3,minmax(0,1fr))!important}
 }
+
+
+/* Theme switcher now lives in each workspace header instead of floating over mobile navigation. */
+.admin-topbar .theme-toggle,
+.staff-topbar .theme-toggle {
+  position:relative!important;inset:auto!important;z-index:1!important;
+  flex:0 0 auto!important;min-height:38px!important;padding:0 12px!important;
+  box-shadow:none!important;transform:none!important;
+}
+@media(max-width:767px){
+  .admin-topbar,.staff-topbar{position:relative;min-height:64px;padding-right:12px!important}
+  .admin-topbar .theme-toggle,.staff-topbar .theme-toggle{
+    min-height:36px!important;padding:0 10px!important;gap:6px!important;
+    font-size:10px!important;white-space:nowrap!important;
+  }
+  .admin-topbar .theme-toggle svg,.staff-topbar .theme-toggle svg{width:15px;height:15px}
+}
