@@ -17,35 +17,33 @@ export async function createRestaurant(f:FormData){
  if(existingRestaurant) redirect("/superadmin?error="+encodeURIComponent("This restaurant URL slug is already in use."));
  const {data:packageRow,error:planError}=await supabase.from("subscription_plans").select("id").eq("id",plan).eq("active",true).maybeSingle();
  if(planError||!packageRow) redirect("/superadmin?error="+encodeURIComponent(planError?.message||"Selected package is unavailable."));
- let invitation:{created:boolean;emailSent:boolean};
+
+ // Attempt invitation email, but email failure must never block restaurant creation.
+ let inviteSent=false;
+ let inviteWarning="";
  try {
-  invitation=await ensureAccountForInvitation({email,fullName:ownerName});
+  const invitation=await ensureAccountForInvitation({email,fullName:ownerName});
+  inviteSent=invitation.emailSent;
  } catch(error) {
-  const message=error instanceof Error?error.message:"Unable to send the client account invitation.";
-  redirect("/superadmin?error="+encodeURIComponent(message));
+  inviteWarning=error instanceof Error?error.message:"Invitation email could not be sent.";
  }
+
  const {error}=await supabase.rpc("platform_create_restaurant",{p_name:name,p_slug:slug,p_owner_email:email,p_owner_name:ownerName,p_plan_id:plan,p_phone:v(f,"phone")||null,p_address:v(f,"address")||null,p_trial_days:trialDays});
  if(error) redirect("/superadmin?error="+encodeURIComponent(error.message));
  revalidatePath("/superadmin");
- const message=invitation.created
-  ? `Restaurant created. Client account invitation and password setup email sent to ${email}.`
-  : invitation.emailSent
-   ? `Restaurant created. A fresh account verification email was sent to ${email}.`
-   : "Restaurant created and existing client account assigned as OWNER.";
+ const message=inviteSent
+  ? `Restaurant created. Owner invitation email sent to ${email}.`
+  : `Restaurant created successfully. Owner access is pending email verification for ${email}. Once this email is registered and verified, the OWNER account will be linked automatically. ${inviteWarning ? "Email delivery note: "+inviteWarning : "Email sending is unavailable right now; you can resend setup later."}`;
  redirect("/superadmin?success="+encodeURIComponent(message));
 }
-
 
 export async function resendOwnerSetupEmail(f:FormData){
  const {supabase}=await requirePlatformAdmin();
  const restaurantId=v(f,"restaurant_id"),email=v(f,"owner_email").toLowerCase();
  if(!restaurantId||!email) redirect("/superadmin?error="+encodeURIComponent("Restaurant owner email is missing."));
- const {data:restaurant,error}=await supabase.from("restaurants").select("id,memberships(role,users(email))").eq("id",restaurantId).maybeSingle();
+ const {data:restaurant,error}=await supabase.from("restaurants").select("id,email,memberships(role,users(email))").eq("id",restaurantId).maybeSingle();
  if(error||!restaurant) redirect("/superadmin?error="+encodeURIComponent(error?.message||"Restaurant not found."));
- const owner=restaurant.memberships?.find((m:any)=>m.role==="OWNER");
- const ownerUser=Array.isArray(owner?.users)?owner.users[0]:owner?.users;
- const ownerEmail=ownerUser?.email?.toLowerCase();
- if(!ownerEmail||ownerEmail!==email) redirect("/superadmin?error="+encodeURIComponent("Owner email verification failed. Refresh the page and try again."));
+ if((restaurant.email||"").toLowerCase()!==email) redirect("/superadmin?error="+encodeURIComponent("Owner email verification failed. Refresh the page and try again."));
  try {
   await ensureAccountForInvitation({email});
  } catch(error) {
