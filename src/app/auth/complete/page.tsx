@@ -1,12 +1,11 @@
 "use client";
 
 import {useEffect,useState} from "react";
-import {useRouter,useSearchParams} from "next/navigation";
+import {useRouter} from "next/navigation";
 import {createClient} from "@/lib/supabase/client";
 
 export default function AuthCompletePage() {
   const router=useRouter();
-  const params=useSearchParams();
   const [message,setMessage]=useState("Confirming your email securely…");
 
   useEffect(()=>{
@@ -31,13 +30,13 @@ export default function AuthCompletePage() {
         if(active) setMessage(sessionError.message);
         return;
       }
-      const requestedNext=params.get("next")||"/auth/set-password";
+      const requestedNext=new URLSearchParams(window.location.search).get("next")||"/auth/set-password";
       const next=requestedNext.startsWith("/")&&!requestedNext.startsWith("//")?requestedNext:"/auth/set-password";
       router.replace(next);
     };
     void complete();
     return()=>{active=false;};
-  },[params,router]);
+  },[router]);
 
   return <main className="grid min-h-screen place-items-center px-5">
     <section className="w-full max-w-md rounded-3xl border border-white/10 bg-white/[.03] p-8 text-center">
