@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import ThemeToggle from "@/components/theme-toggle";
 
 export const metadata: Metadata = {
   title: "RestaurantOS | The Operating System for Modern Restaurants",
@@ -12,7 +11,6 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en" suppressHydrationWarning>
       <body>
         {children}
-        <ThemeToggle />
       </body>
     </html>
   );
