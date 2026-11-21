@@ -20,7 +20,8 @@ export default async function Login({searchParams}:{searchParams:Promise<{error?
           Password
           <PasswordInput required name="password" autoComplete="current-password" />
         </label>
-        <button className="mt-6 w-full rounded-xl bg-orange-400 p-3 font-bold text-slate-950">Sign in</button>
+        <div className="mt-3 text-right"><Link className="text-sm text-orange-300 hover:text-orange-200" href="/forgot-password">Forgot password?</Link></div>
+        <button className="mt-5 w-full rounded-xl bg-orange-400 p-3 font-bold text-slate-950">Sign in</button>
         <p className="mt-5 text-center text-sm text-slate-400">New here? <Link className="text-orange-300" href="/signup">Create account</Link></p>
       </form>
     </main>
