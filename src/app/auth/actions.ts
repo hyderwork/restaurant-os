@@ -40,6 +40,19 @@ export async function resendSignupConfirmation(f:FormData) {
   redirect("/auth/verify?status=resent");
 }
 
+export async function requestPasswordReset(f:FormData) {
+  const email=String(f.get("email")||"").trim().toLowerCase();
+  if(!email || !/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(email)) {
+    redirect("/forgot-password?error="+encodeURIComponent("Please enter a valid email address."));
+  }
+  const s=await createClient();
+  const redirectTo=`${APP_URL}/auth/callback?next=%2Fauth%2Fset-password`;
+  const {error}=await s.auth.resetPasswordForEmail(email,{redirectTo});
+  if(error) redirect("/forgot-password?error="+encodeURIComponent(error.message));
+  // Do not disclose whether an account exists for this email.
+  redirect("/forgot-password?status=sent");
+}
+
 export async function signOut() {
   const s=await createClient();
   await s.auth.signOut();
