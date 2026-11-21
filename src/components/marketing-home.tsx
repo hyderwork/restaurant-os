@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import {useEffect,useRef} from "react";
-import {ArrowRight,ArrowUpRight,BarChart3,Check,ChefHat,ChevronDown,ClipboardList,Clock3,Layers3,Menu,MoveUpRight,Play, QrCode,ShieldCheck,Sparkles,Store,Table2,Users, X,Zap} from "lucide-react";
+import {ArrowRight,ArrowUpRight,BarChart3,Check,ChefHat,ChevronDown,ClipboardList,Layers3,MoveUpRight,Play, QrCode,Sparkles,Store,Table2,Zap} from "lucide-react";
 import {PricingInquiryButton} from "@/components/pricing-inquiry";
 
 const features=[
@@ -38,7 +38,6 @@ function DashboardVisual(){
 
 export default function Home(){
  const root=useRef<HTMLElement>(null);
- const [unused] = [null];
  useEffect(()=>{
   let ctx:any;
   let alive=true;
