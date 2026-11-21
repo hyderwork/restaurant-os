@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {requirePlatformAdmin} from "@/lib/auth/tenant";
 import {platformLogout} from "./actions";
+import RealtimeSync from "@/components/realtime-sync";
 
 export default async function Layout({children}:{children:React.ReactNode}) {
   await requirePlatformAdmin();
@@ -30,7 +31,7 @@ export default async function Layout({children}:{children:React.ReactNode}) {
         <div><p className="text-[10px] font-bold tracking-[.2em] text-slate-500">PLATFORM WORKSPACE</p><p className="mt-1 text-sm font-semibold text-slate-200">Global operations</p></div>
         <span className="status-pill">● Platform secure</span>
       </header>
-      <main className="dashboard-main mx-auto w-full max-w-[1440px] flex-1 p-5 md:min-h-0 md:overflow-y-auto md:overscroll-contain md:p-8">{children}</main>
+      <main className="dashboard-main mx-auto w-full max-w-[1440px] flex-1 p-5 md:min-h-0 md:overflow-y-auto md:overscroll-contain md:p-8"><RealtimeSync scope="platform">{children}</RealtimeSync></main>
     </section>
   </div>;
 }
