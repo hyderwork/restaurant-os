@@ -29,7 +29,7 @@ export default async function Page({searchParams}:{searchParams:Promise<{error?:
     <div className="flex items-end"><button className="w-full rounded-xl bg-orange-400 p-3 text-sm font-black text-slate-950">Create workspace & invite client</button></div>
    </form>
   </section>
-  <section className="mt-8"><h2 className="text-xl font-bold">Restaurant accounts</h2><div className="mt-4 space-y-4">
+  <section id="restaurant-accounts" className="mt-8 scroll-mt-24"><h2 className="text-xl font-bold">Restaurant accounts</h2><div className="mt-4 space-y-4">
    {rs.map((r:any)=>{const owner=r.memberships?.find((m:any)=>m.role==="OWNER");const ownerUser=Array.isArray(owner?.users)?owner.users[0]:owner?.users;const sub=r.subscriptions?.[0];return <article key={r.id} className="rounded-2xl border border-white/10 p-5">
     <div className="flex flex-wrap justify-between gap-3"><div><h3 className="text-lg font-bold">{r.name}</h3><p className="text-xs text-slate-500">/{r.slug} · {ownerUser?.full_name||ownerUser?.email||r.email||"Owner not linked"}</p></div><span className="text-xs text-orange-300">{r.status} · {sub?.subscription_plans?.name||"No plan"}</span></div>
     <form action={updateRestaurantAccess} className="mt-4 grid gap-3 border-t border-white/5 pt-4 sm:grid-cols-4">
@@ -43,7 +43,7 @@ export default async function Page({searchParams}:{searchParams:Promise<{error?:
    </article>})}
    {!rs.length&&<p className="rounded-xl border border-dashed border-white/10 p-8 text-center text-sm text-slate-500">No restaurants yet.</p>}
   </div></section>
-  <section className="mt-8 rounded-2xl border border-white/10 p-5"><h2 className="text-xl font-bold">Package management</h2><p className="mt-1 text-sm text-slate-400">Update prices and enforce table/staff limits for new assignments.</p>
+  <section id="package-management" className="mt-8 scroll-mt-24 rounded-2xl border border-white/10 p-5"><h2 className="text-xl font-bold">Package management</h2><p className="mt-1 text-sm text-slate-400">Update prices and enforce table/staff limits for new assignments.</p>
    <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">{ps.map((p:any)=><form key={p.id} action={savePackage} className="rounded-xl border border-white/10 p-4"><input type="hidden" name="plan_id" value={p.id}/><p className="mb-3 font-bold">{p.name}</p>
     <label className="text-xs text-slate-400">Package name<input name="plan_name" defaultValue={p.name} className="field mt-1 w-full"/></label>
     <label className="mt-2 block text-xs text-slate-400">Monthly price (PKR)<input name="monthly_price" type="number" min="0" step="1" defaultValue={p.monthly_price} className="field mt-1 w-full"/></label>
