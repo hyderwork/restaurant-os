@@ -527,3 +527,17 @@ html[data-theme="light"] main.min-h-screen input,
 html[data-theme="light"] main.min-h-screen textarea{background:#fff!important;color:#17243b!important;border-color:#cbd5e1!important}
 html[data-theme="light"] main.min-h-screen input::placeholder,
 html[data-theme="light"] main.min-h-screen textarea::placeholder{color:#64748b!important}
+
+/* Light-mode surface borders and responsive spacing across dashboard screens */
+html[data-theme="light"] .dashboard-main .panel,
+html[data-theme="light"] .dashboard-main .stat-card,
+html[data-theme="light"] .dashboard-main [class*="rounded-2xl"][class*="border"],
+html[data-theme="light"] .dashboard-main [class*="rounded-xl"][class*="border"]{border-color:#d9e2ee!important}
+html[data-theme="light"] .dashboard-main [class*="border-white/"]{border-color:#dbe3ed!important}
+html[data-theme="light"] .dashboard-main [class*="divide-white/"]>*+*{border-color:#dbe3ed!important}
+@media(min-width:768px) and (max-width:1023px){
+  .grid-cols-4{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+  .grid-cols-5{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+/* Maintain intentional dark-action text contrast in light QR menu. */
+html[data-theme="light"] main.min-h-screen button.bg-orange-400{color:#17243b!important}
