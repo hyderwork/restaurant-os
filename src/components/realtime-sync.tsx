@@ -11,9 +11,9 @@ const restaurantTables=[
   ["menu_categories","restaurant_id"],["menu_products","restaurant_id"],["order_feedback",null],
   ["order_items",null],["order_status_history",null],["orders","restaurant_id"],["payments","restaurant_id"],
   ["qr_codes","restaurant_id"],["restaurant_settings","restaurant_id"],["restaurant_tables","restaurant_id"],
-  ["restaurants","id"],["subscriptions","restaurant_id"]
+  ["restaurants","id"],["subscriptions","restaurant_id"],["subscription_plans",null],["users",null]
 ] as const;
-const platformTables=["restaurants","memberships","subscriptions","subscription_plans","platform_admins"] as const;
+const platformTables=["restaurants","memberships","subscriptions","subscription_plans","platform_admins","users"] as const;
 
 export default function RealtimeSync({children,scope,restaurantId}:Props){
   const router=useRouter();
