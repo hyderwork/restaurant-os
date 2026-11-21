@@ -568,3 +568,62 @@ html[data-theme="light"] main.min-h-screen button.bg-orange-400{color:#17243b!im
   }
   .admin-topbar .theme-toggle svg,.staff-topbar .theme-toggle svg{width:15px;height:15px}
 }
+
+
+/* Focused mobile layouts: Menu, Floors, QR and Settings use one column. */
+@media(max-width:767px){
+  .admin-menu-page .grid,
+  .admin-floors-page .grid,
+  .admin-qr-page .grid,
+  .admin-settings-page .grid{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+  .admin-menu-page .panel,
+  .admin-floors-page .panel,
+  .admin-qr-page article,
+  .admin-settings-page .panel{
+    min-width:0!important;
+    width:100%;
+    padding:14px!important;
+  }
+  .admin-menu-page form,
+  .admin-floors-page form,
+  .admin-settings-page form{min-width:0;max-width:100%}
+  .admin-menu-page .field,
+  .admin-floors-page .field,
+  .admin-settings-page .field{min-width:0;max-width:100%}
+  .admin-menu-page .section-heading,
+  .admin-floors-page .section-heading,
+  .admin-settings-page .section-heading{align-items:flex-start}
+  .admin-menu-page details>summary{
+    align-items:flex-start!important;
+    flex-direction:column!important;
+    gap:9px!important;
+  }
+  .admin-menu-page details>summary>div:last-child{
+    width:100%;display:flex;align-items:center;justify-content:space-between;
+    flex-wrap:wrap;gap:7px!important;
+  }
+  .admin-menu-page details form.grid,
+  .admin-menu-page form.grid{grid-template-columns:minmax(0,1fr)!important}
+  .admin-menu-page .flex.flex-wrap.items-center.gap-2{align-items:stretch}
+  .admin-floors-page form.flex{flex-wrap:wrap}
+  .admin-floors-page form.flex .field{flex:1 1 100%;width:100%}
+  .admin-floors-page form.flex button{width:100%;min-height:40px}
+  .admin-floors-page details>summary{align-items:flex-start!important;flex-direction:column!important}
+  .admin-floors-page details>summary>span{white-space:normal!important;max-width:100%}
+  .admin-qr-page article>div:first-child{align-items:flex-start;gap:8px;flex-wrap:wrap}
+  .admin-qr-page article>div.mt-4.flex{
+    flex-direction:column!important;align-items:stretch!important;gap:12px!important;
+  }
+  .admin-qr-page article>div.mt-4.flex img{
+    width: min(100%,220px);height:auto;aspect-ratio:1;align-self:center;
+  }
+  .admin-qr-page article>div.mt-4.flex>div{width:100%;min-width:0}
+  .admin-qr-page a{overflow-wrap:anywhere;word-break:break-word}
+  .admin-settings-page label{min-width:0;overflow-wrap:anywhere}
+  .admin-settings-page .grid>div{min-width:0;overflow-wrap:anywhere}
+  .admin-menu-page p,.admin-floors-page p,.admin-qr-page p,.admin-settings-page p{
+    overflow-wrap:anywhere;
+  }
+}
