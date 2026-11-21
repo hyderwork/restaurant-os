@@ -1,0 +1,88 @@
+"use client";
+
+import {useCallback,useEffect,useRef,useState} from "react";
+import {createClient} from "@/lib/supabase/client";
+import {BellRing,Check,Volume2,VolumeX,ChefHat,Clock3, X,Radio} from "lucide-react";
+
+type Order=any;
+type Props={restaurantId:string;initialOrders:Order[];updateOrderStatus:(formData:FormData)=>void|Promise<void>};
+const cols=[{key:"NEW",title:"New orders"},{key:"ACCEPTED",title:"Accepted"},{key:"COOKING",title:"Preparing"},{key:"READY",title:"Ready to serve"}];
+
+export default function KitchenRealtime({restaurantId,initialOrders,updateOrderStatus}:Props){
+ const [orders,setOrders]=useState<Order[]>(initialOrders||[]);
+ const [incoming,setIncoming]=useState<Order|null>(null);
+ const [soundEnabled,setSoundEnabled]=useState(false);
+ const [connection,setConnection]=useState("CONNECTING");
+ const [muted,setMuted]=useState(false);
+ const audioRef=useRef<AudioContext|null>(null);
+ const timerRef=useRef<ReturnType<typeof setInterval>|null>(null);
+ const seenRef=useRef(new Set<string>((initialOrders||[]).map(o=>o.id)));
+ const supabase=useRef(createClient());
+
+ const stopRing=useCallback(()=>{
+   if(timerRef.current){clearInterval(timerRef.current);timerRef.current=null;}
+ },[]);
+ const ring=useCallback(()=>{
+   const ctx=audioRef.current;
+   if(!ctx||ctx.state!=="running")return;
+   const play=(frequency:number,at:number)=>{
+     const osc=ctx.createOscillator();const gain=ctx.createGain();
+     osc.type="sine";osc.frequency.setValueAtTime(frequency,at);
+     gain.gain.setValueAtTime(0.0001,at);gain.gain.exponentialRampToValueAtTime(0.16,at+0.025);gain.gain.exponentialRampToValueAtTime(0.0001,at+0.32);
+     osc.connect(gain);gain.connect(ctx.destination);osc.start(at);osc.stop(at+0.34);
+   };
+   const now=ctx.currentTime;play(880,now);play(1174,now+0.22);
+ },[]);
+ const startRing=useCallback(()=>{
+   stopRing();ring();timerRef.current=setInterval(ring,1450);
+ },[ring,stopRing]);
+ const enableSound=async()=>{
+   try{
+     const AudioCtx=window.AudioContext||(window as any).webkitAudioContext;
+     if(!AudioCtx)return;
+     if(!audioRef.current)audioRef.current=new AudioCtx();
+     await audioRef.current.resume();setSoundEnabled(true);
+     if(incoming)startRing();
+     else {ring();}
+   }catch{setSoundEnabled(false);}
+ };
+ const acknowledge=()=>{stopRing();setIncoming(null);};
+
+ useEffect(()=>{
+   if(incoming&&soundEnabled&&!muted)startRing();else stopRing();
+   return()=>stopRing();
+ },[incoming,soundEnabled,muted,startRing,stopRing]);
+
+ useEffect(()=>{
+   let active=true;
+   const channel=supabase.current.channel("kitchen-orders-"+restaurantId)
+    .on("postgres_changes",{event:"INSERT",schema:"public",table:"orders",filter:"restaurant_id=eq."+restaurantId},async(payload:any)=>{
+      const id=String(payload.new?.id||"");
+      if(!id||seenRef.current.has(id))return;
+      seenRef.current.add(id);
+      const {data,error}=await supabase.current.from("orders")
+       .select("id,order_number,status,created_at,customer_name,notes,restaurant_tables(number,name),order_items(product_name,quantity,special_instructions,is_addon)")
+       .eq("id",id).eq("restaurant_id",restaurantId).maybeSingle();
+      if(!active||error||!data)return;
+      if(!["NEW","ACCEPTED","COOKING","READY"].includes(data.status))return;
+      setOrders(current=>[data,...current.filter(o=>o.id!==data.id)]);
+      if(data.status==="NEW")setIncoming(data);
+   })
+   .subscribe((status:string)=>{if(active)setConnection(status==="SUBSCRIBED"?"LIVE":status==="CHANNEL_ERROR"?"OFFLINE":status);});
+   return()=>{active=false;stopRing();supabase.current.removeChannel(channel);};
+ },[restaurantId,stopRing]);
+
+ const formatTime=(value:string)=>new Date(value).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});
+ return <div className="space-y-5">
+  <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/[.025] p-4">
+   <div className="flex items-center gap-3"><span className="grid h-10 w-10 place-items-center rounded-xl bg-orange-400/10 text-orange-300"><Radio size={19}/></span><div><p className="text-sm font-bold">Live kitchen connection</p><p className="mt-1 text-xs text-slate-400">New customer orders appear here instantly.</p></div></div>
+   <div className="flex flex-wrap items-center gap-2">
+    <span className="inline-flex items-center gap-2 rounded-full border border-white/10 px-3 py-2 text-[10px] font-bold tracking-wider"><i className={`h-2 w-2 rounded-full ${connection==="LIVE"?"bg-emerald-400 shadow-[0_0_10px_#34d399]":"bg-amber-400"}`}/>{connection==="LIVE"?"LIVE":connection}</span>
+    <button type="button" onClick={enableSound} className="inline-flex items-center gap-2 rounded-xl border border-white/10 px-3 py-2 text-xs font-bold hover:bg-white/5">{soundEnabled?<Volume2 size={15}/>:<VolumeX size={15}/>} {soundEnabled?"Sound enabled":"Enable ring"}</button>
+   </div>
+  </div>
+  <div className="grid gap-4 xl:grid-cols-4">{cols.map(col=>{const list=orders.filter(o=>o.status===col.key);return <section key={col.key} className="min-w-0 rounded-2xl border border-white/10 bg-white/[.02] p-3"><div className="flex items-center justify-between px-1 py-2"><h2 className="font-bold">{col.title}</h2><span className="count-pill">{list.length}</span></div><div className="mt-2 space-y-3">{list.map((o:any)=><article key={o.id} className={`rounded-xl border p-4 ${o.status==="NEW"?"border-orange-400/40 bg-orange-400/[.06]":"border-white/[.08] bg-[#111827]"}`}><div className="flex justify-between gap-2"><p className="font-bold">#{o.order_number}</p><span className="text-[10px] text-slate-500">{formatTime(o.created_at)}</span></div><p className="mt-1 text-xs text-slate-400">{o.restaurant_tables?.name||"Table "+(o.restaurant_tables?.number||"—")} · {o.customer_name||"Guest"}</p><div className="my-3 space-y-2 border-y border-white/[.06] py-3">{(o.order_items||[]).map((it:any,i:number)=><div key={i}><div className="flex flex-wrap items-center gap-2"><p className="text-sm font-medium">{it.quantity} × {it.product_name}</p>{it.is_addon&&<span className="rounded-full bg-amber-400/15 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider text-amber-300">Added later</span>}</div>{it.special_instructions&&<p className="mt-1 text-[11px] text-amber-200">{it.special_instructions}</p>}</div>)}</div>{o.notes&&<p className="mb-3 text-xs text-slate-400">Note: {o.notes}</p>}<form action={updateOrderStatus} className="space-y-2"><input type="hidden" name="id" value={o.id}/><select name="status" defaultValue={col.key==="NEW"?"ACCEPTED":col.key==="ACCEPTED"?"COOKING":col.key==="COOKING"?"READY":"SERVED"} className="field w-full">{(col.key==="NEW"?["ACCEPTED","CANCELLED"]:col.key==="ACCEPTED"?["COOKING","CANCELLED"]:col.key==="COOKING"?["READY","CANCELLED"]:["SERVED"]).map(s=><option key={s} value={s}>{s.replace("_"," ")}</option>)}</select><button className="btn-primary w-full">{col.key==="READY"?"Mark served":"Move ticket"}</button></form></article>)}{!list.length&&<p className="rounded-xl border border-dashed border-white/10 p-5 text-center text-xs text-slate-600">No tickets</p>}</div></section>})}</div>
+  {incoming&&<div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-950/80 p-4 backdrop-blur-md" role="alertdialog" aria-modal="true" aria-labelledby="incoming-order-title"><div className="kitchen-alert-ring relative w-full max-w-md overflow-hidden rounded-[28px] border border-orange-300/40 bg-[#111827] p-7 text-center shadow-[0_0_90px_rgba(249,115,22,.28)]"><div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-amber-300 via-orange-500 to-amber-300"/><button type="button" onClick={()=>setMuted(v=>!v)} className="absolute right-4 top-4 rounded-full border border-white/10 p-2 text-slate-400" aria-label={muted?"Unmute ring":"Mute ring"}>{muted?<VolumeX size={16}/>:<Volume2 size={16}/>}</button><div className="mx-auto mb-5 grid h-20 w-20 place-items-center rounded-full bg-orange-400/15 text-orange-300"><BellRing size={36} className="animate-bounce"/></div><span className="rounded-full border border-orange-300/30 bg-orange-300/10 px-3 py-1 text-[9px] font-black tracking-[.2em] text-orange-200">NEW CUSTOMER ORDER</span><h2 id="incoming-order-title" className="mt-4 text-3xl font-black text-white">Order #{incoming.order_number}</h2><p className="mt-2 text-sm text-slate-300">{incoming.restaurant_tables?.name||"Table "+(incoming.restaurant_tables?.number||"—")} · {incoming.customer_name||"Guest"}</p><div className="my-6 rounded-2xl border border-white/10 bg-black/20 p-4 text-left"><div className="mb-3 flex items-center justify-between text-xs text-slate-400"><span>ORDER ITEMS</span><span>{formatTime(incoming.created_at)}</span></div>{(incoming.order_items||[]).map((it:any,i:number)=><div key={i} className="flex justify-between gap-3 py-1.5 text-sm"><span className="text-white">{it.quantity} × {it.product_name}</span>{it.special_instructions&&<span className="text-right text-xs text-amber-300">{it.special_instructions}</span>}</div>)}{incoming.notes&&<p className="mt-3 border-t border-white/10 pt-3 text-xs text-amber-200">Note: {incoming.notes}</p>}</div><button type="button" onClick={acknowledge} className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-300 to-orange-500 px-5 py-4 text-sm font-black text-slate-950 shadow-lg shadow-orange-500/20 hover:brightness-110"><Check size={18}/> Acknowledge order</button><p className="mt-3 text-[10px] text-slate-500">The ticket will remain in the New Orders column until your team accepts it.</p></div></div>}
+  <style jsx>{`@keyframes kitchenPulse{0%,100%{box-shadow:0 0 0 0 rgba(251,146,60,.35),0 0 60px rgba(249,115,22,.15)}50%{box-shadow:0 0 0 14px rgba(251,146,60,0),0 0 95px rgba(249,115,22,.35)}}.kitchen-alert-ring{animation:kitchenPulse 1.25s ease-in-out infinite}`}</style>
+ </div>;
+}
