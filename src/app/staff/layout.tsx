@@ -1,2 +1,29 @@
-import Link from "next/link";import {requireStaff} from "@/lib/auth/tenant";import {signOut} from "@/app/auth/actions";
-export default async function StaffLayout({children}:{children:React.ReactNode}){const m=await requireStaff();const links=m.role==="CHEF"?[["/staff","Kitchen tickets"]]:m.role==="WAITER"?[["/staff","Tables & orders"]]:m.role==="CASHIER"?[["/staff","Payments"]]:[["/staff","Operations"]];return <div className="min-h-screen"><header className="staff-topbar flex flex-wrap items-center justify-between gap-4 border-b border-white/10 bg-[#090d17] px-5 py-4 md:px-8"><div><Link href="/staff" className="text-lg font-black">Restaurant<span className="text-orange-400">OS</span> <span className="ml-2 text-xs font-semibold text-slate-400">STAFF</span></Link><p className="mt-1 text-xs text-slate-500">{(m.restaurants as any)?.name} · {m.role}</p></div><form action={signOut}><button className="rounded-lg border border-white/10 px-3 py-2 text-xs text-slate-300">Sign out</button></form></header><main className="mx-auto max-w-[1400px] p-5 md:p-8">{children}</main></div>}
+import Link from "next/link";
+import {requireStaff} from "@/lib/auth/tenant";
+import {signOut} from "@/app/auth/actions";
+
+export default async function StaffLayout({children}:{children:React.ReactNode}) {
+  const m=await requireStaff();
+  const role=String(m.role);
+  const restaurant=(m.restaurants as any)?.name||"Restaurant workspace";
+  const title=role==="CHEF"?"Kitchen display":role==="WAITER"?"Service workspace":role==="CASHIER"?"Cashier desk":"Restaurant operations";
+  return <div className="min-h-screen">
+    <header className="staff-topbar sticky top-0 z-40 flex flex-wrap items-center justify-between gap-3 border-b border-white/10 bg-[#090d17]/95 px-4 py-3 backdrop-blur-xl md:px-8 md:py-4">
+      <div className="flex min-w-0 items-center gap-3">
+        <span className="brand-mark">R</span>
+        <div className="min-w-0">
+          <Link href="/staff" className="block truncate text-base font-black md:text-lg">Restaurant<span className="text-orange-400">OS</span><span className="ml-2 text-[10px] font-bold tracking-widest text-slate-400">STAFF</span></Link>
+          <p className="mt-1 truncate text-[11px] text-slate-500">{restaurant} · {role}</p>
+        </div>
+      </div>
+      <div className="flex items-center gap-3">
+        <span className="hidden rounded-full border border-emerald-400/15 bg-emerald-400/10 px-3 py-1.5 text-[10px] font-bold text-emerald-300 sm:inline-flex">● On duty</span>
+        <form action={signOut}><button className="rounded-xl border border-white/10 px-3 py-2 text-xs font-bold text-slate-300 hover:border-orange-300/40 hover:text-white">Sign out</button></form>
+      </div>
+    </header>
+    <main className="mx-auto max-w-[1440px] p-4 sm:p-5 md:p-8">
+      <div className="mb-6"><p className="eyebrow">TEAM WORKSPACE</p><h1 className="mt-2 text-2xl font-black tracking-tight md:text-3xl">{title}</h1><p className="mt-2 text-sm text-slate-400">Your role-based tools and live service activity.</p></div>
+      {children}
+    </main>
+  </div>;
+}
