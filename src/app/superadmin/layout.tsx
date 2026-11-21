@@ -4,8 +4,8 @@ import {platformLogout} from "./actions";
 
 export default async function Layout({children}:{children:React.ReactNode}) {
   await requirePlatformAdmin();
-  return <div className="min-h-screen md:flex">
-    <aside className="admin-sidebar superadmin-sidebar w-full shrink-0 border-b border-white/10 bg-[#090d17] p-5 md:sticky md:top-0 md:h-screen md:w-[260px] md:border-b-0 md:border-r">
+  return <div className="dashboard-shell min-h-screen md:flex md:h-dvh md:min-h-0 md:overflow-hidden">
+    <aside className="admin-sidebar superadmin-sidebar w-full shrink-0 border-b border-white/10 bg-[#090d17] p-5 md:sticky md:top-0 md:h-dvh md:w-[260px] md:overflow-y-auto md:overscroll-contain md:border-b-0 md:border-r">
       <Link href="/superadmin" className="flex items-center gap-3 text-xl font-black"><span className="brand-mark">R</span><span>Restaurant<span className="text-orange-400">OS</span></span></Link>
       <p className="mt-2 text-[10px] font-bold tracking-[.2em] text-orange-300">PLATFORM CONTROL CENTER</p>
       <div className="mt-8 rounded-2xl border border-white/10 bg-white/[.04] p-3">
@@ -25,12 +25,12 @@ export default async function Layout({children}:{children:React.ReactNode}) {
       </div>
       <form action={platformLogout} className="mt-6"><button className="nav-link w-full text-left text-slate-400">↪ Sign out</button></form>
     </aside>
-    <section className="min-w-0 flex-1">
+    <section className="dashboard-content min-w-0 flex-1 md:flex md:h-dvh md:min-h-0 md:flex-col md:overflow-hidden">
       <header className="admin-topbar flex items-center justify-between border-b border-white/10 px-5 py-4 md:px-8">
         <div><p className="text-[10px] font-bold tracking-[.2em] text-slate-500">PLATFORM WORKSPACE</p><p className="mt-1 text-sm font-semibold text-slate-200">Global operations</p></div>
         <span className="status-pill">● Platform secure</span>
       </header>
-      <main className="mx-auto max-w-[1440px] p-5 md:p-8">{children}</main>
+      <main className="dashboard-main mx-auto w-full max-w-[1440px] flex-1 p-5 md:min-h-0 md:overflow-y-auto md:overscroll-contain md:p-8">{children}</main>
     </section>
   </div>;
 }
