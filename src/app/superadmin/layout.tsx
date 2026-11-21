@@ -1,2 +1,36 @@
-import Link from "next/link";import {requirePlatformAdmin} from "@/lib/auth/tenant";import {platformLogout} from "./actions";
-export default async function Layout({children}:{children:React.ReactNode}){await requirePlatformAdmin();return <div className="min-h-screen md:flex"><aside className="admin-sidebar superadmin-sidebar w-full border-b border-white/10 bg-[#090d17] p-5 md:sticky md:top-0 md:h-screen md:w-[250px] md:border-b-0 md:border-r"><Link href="/superadmin" className="text-xl font-black">Restaurant<span className="text-orange-400">OS</span></Link><p className="mt-2 text-[10px] font-bold tracking-widest text-orange-300">PLATFORM CONTROL</p><Link href="/superadmin" className="mt-10 block rounded-xl bg-white/5 p-3 text-sm">▦ Overview & Restaurants</Link><div className="mt-8 rounded-xl border border-orange-400/20 p-4 text-xs text-orange-200">Super Admin · Global authority</div><form action={platformLogout} className="mt-8"><button className="text-sm text-slate-400">Sign out</button></form></aside><main className="min-w-0 flex-1 p-5 md:p-9"><div className="mx-auto max-w-[1400px]">{children}</div></main></div>}
+import Link from "next/link";
+import {requirePlatformAdmin} from "@/lib/auth/tenant";
+import {platformLogout} from "./actions";
+
+export default async function Layout({children}:{children:React.ReactNode}) {
+  await requirePlatformAdmin();
+  return <div className="min-h-screen md:flex">
+    <aside className="admin-sidebar superadmin-sidebar w-full shrink-0 border-b border-white/10 bg-[#090d17] p-5 md:sticky md:top-0 md:h-screen md:w-[260px] md:border-b-0 md:border-r">
+      <Link href="/superadmin" className="flex items-center gap-3 text-xl font-black"><span className="brand-mark">R</span><span>Restaurant<span className="text-orange-400">OS</span></span></Link>
+      <p className="mt-2 text-[10px] font-bold tracking-[.2em] text-orange-300">PLATFORM CONTROL CENTER</p>
+      <div className="mt-8 rounded-2xl border border-white/10 bg-white/[.04] p-3">
+        <p className="text-[10px] font-bold uppercase tracking-[.18em] text-slate-500">Access level</p>
+        <p className="mt-1 text-sm font-bold">Super Administrator</p>
+        <p className="mt-1 text-[11px] text-slate-500">Global platform management</p>
+      </div>
+      <p className="mb-2 mt-8 px-3 text-[10px] font-bold uppercase tracking-[.2em] text-slate-600">Platform</p>
+      <nav className="flex gap-2 overflow-x-auto md:flex-col">
+        <Link href="/superadmin" className="nav-link"><span className="w-5 text-center">▦</span><span>Overview & restaurants</span></Link>
+        <a href="/superadmin#restaurant-accounts" className="nav-link"><span className="w-5 text-center">⌂</span><span>Restaurant accounts</span></a>
+        <a href="/superadmin#package-management" className="nav-link"><span className="w-5 text-center">◇</span><span>Package management</span></a>
+      </nav>
+      <div className="mt-8 hidden rounded-2xl border border-orange-400/15 bg-orange-400/[.06] p-4 md:block">
+        <p className="text-xs font-bold text-orange-200">RestaurantOS Platform</p>
+        <p className="mt-1 text-[11px] leading-5 text-slate-500">Manage workspaces, access and subscriptions from one place.</p>
+      </div>
+      <form action={platformLogout} className="mt-6"><button className="nav-link w-full text-left text-slate-400">↪ Sign out</button></form>
+    </aside>
+    <section className="min-w-0 flex-1">
+      <header className="admin-topbar flex items-center justify-between border-b border-white/10 px-5 py-4 md:px-8">
+        <div><p className="text-[10px] font-bold tracking-[.2em] text-slate-500">PLATFORM WORKSPACE</p><p className="mt-1 text-sm font-semibold text-slate-200">Global operations</p></div>
+        <span className="status-pill">● Platform secure</span>
+      </header>
+      <main className="mx-auto max-w-[1440px] p-5 md:p-8">{children}</main>
+    </section>
+  </div>;
+}
