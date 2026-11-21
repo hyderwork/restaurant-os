@@ -627,3 +627,77 @@ html[data-theme="light"] main.min-h-screen button.bg-orange-400{color:#17243b!im
     overflow-wrap:anywhere;
   }
 }
+
+
+/* Final mobile override: these data-heavy admin tabs must never inherit the dashboard's 2-column grid rule. */
+@media (max-width: 767px) {
+  .dashboard-main .admin-menu-page .grid,
+  .dashboard-main .admin-floors-page .grid,
+  .dashboard-main .admin-qr-page .grid,
+  .dashboard-main .admin-settings-page .grid,
+  .dashboard-main .admin-menu-page .grid[class*="grid-cols-"],
+  .dashboard-main .admin-floors-page .grid[class*="grid-cols-"],
+  .dashboard-main .admin-qr-page .grid[class*="grid-cols-"],
+  .dashboard-main .admin-settings-page .grid[class*="grid-cols-"] {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .dashboard-main .admin-menu-page,
+  .dashboard-main .admin-floors-page,
+  .dashboard-main .admin-qr-page,
+  .dashboard-main .admin-settings-page {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .dashboard-main .admin-menu-page > *,
+  .dashboard-main .admin-floors-page > *,
+  .dashboard-main .admin-qr-page > *,
+  .dashboard-main .admin-settings-page > * {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .dashboard-main .admin-menu-page .panel,
+  .dashboard-main .admin-floors-page .panel,
+  .dashboard-main .admin-settings-page .panel,
+  .dashboard-main .admin-qr-page article {
+    width: 100%;
+    min-width: 0;
+    padding: 13px !important;
+  }
+
+  .dashboard-main .admin-menu-page .field,
+  .dashboard-main .admin-floors-page .field,
+  .dashboard-main .admin-settings-page .field,
+  .dashboard-main .admin-menu-page input,
+  .dashboard-main .admin-floors-page input,
+  .dashboard-main .admin-settings-page input,
+  .dashboard-main .admin-menu-page select,
+  .dashboard-main .admin-floors-page select,
+  .dashboard-main .admin-settings-page select,
+  .dashboard-main .admin-menu-page textarea,
+  .dashboard-main .admin-floors-page textarea,
+  .dashboard-main .admin-settings-page textarea {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+  }
+
+  .dashboard-main .admin-menu-page details,
+  .dashboard-main .admin-floors-page details,
+  .dashboard-main .admin-qr-page article,
+  .dashboard-main .admin-settings-page section {
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+
+  .dashboard-main .admin-menu-page button,
+  .dashboard-main .admin-floors-page button,
+  .dashboard-main .admin-qr-page button,
+  .dashboard-main .admin-settings-page button {
+    max-width: 100%;
+    white-space: normal;
+  }
+}
