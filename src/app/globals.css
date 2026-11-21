@@ -457,7 +457,7 @@ html[data-theme="light"] .footer-bottom{border-color:#e2e8f0;color:#94a3b8}
 @media(max-width:380px){.header-cta{padding:8px 9px}.mobile-menu-toggle{width:35px;height:35px}.hero-copy h1{font-size:40px}.hero-dashboard{padding:10px}.dash-stats strong{font-size:15px}.dash-floating{transform:scale(.82)}.float-one{transform-origin:left center}.float-two{transform-origin:right center}.dash-order label{display:none}.dash-welcome .dash-date{padding:5px 6px;font-size:7px}.phone-mock{width:225px}.art-caption b{font-size:9px}}
 
 
-/* ===== Mobile app navigation + responsive dashboard polish =====
+/* ===== Mobile app navigation + responsive dashboard polish ===== */
 @media (max-width:767px){
   .dashboard-shell{display:block!important;min-height:100dvh!important;height:auto!important;overflow:visible!important}
   .dashboard-content{display:block!important;min-width:0!important;height:auto!important;overflow:visible!important}
