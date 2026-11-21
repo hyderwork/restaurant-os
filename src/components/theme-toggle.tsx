@@ -1,11 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { Moon, Sun } from "lucide-react";
 
 type Theme = "dark" | "light";
 
 export default function ThemeToggle() {
+  const pathname = usePathname();
   const [theme, setTheme] = useState<Theme>("dark");
 
   useEffect(() => {
@@ -21,6 +23,9 @@ export default function ThemeToggle() {
     document.documentElement.dataset.theme = next;
     window.localStorage.setItem("restaurantos-theme", next);
   }
+
+  // Customer-facing QR menus always use the light theme and should not show this control.
+  if (pathname.startsWith("/menu/")) return null;
 
   return (
     <button
