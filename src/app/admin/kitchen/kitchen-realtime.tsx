@@ -22,6 +22,23 @@ export default function KitchenRealtime({restaurantId,initialOrders,updateOrderS
  const seenRef=useRef(new Set<string>((initialOrders||[]).map(o=>o.id)));
  const supabase=useRef(createClient());
 
+ useEffect(()=>{
+   const fresh:Order[]=[];
+   for(const order of initialOrders||[]){
+     if(!seenRef.current.has(order.id)){
+       seenRef.current.add(order.id);
+       if(order.status==="NEW")fresh.push(order);
+     }
+   }
+   setOrders((current:Order[])=>{
+     const merged=new Map<string,Order>();
+     for(const order of current)merged.set(order.id,order);
+     for(const order of initialOrders||[])merged.set(order.id,order);
+     return Array.from(merged.values()).filter(order=>!["SERVED","CANCELLED"].includes(order.status));
+   });
+   if(fresh.length)setIncoming(fresh[fresh.length-1]);
+ },[initialOrders]);
+
  const stopRing=useCallback(()=>{
    if(timerRef.current){clearInterval(timerRef.current);timerRef.current=null;}
  },[]);
