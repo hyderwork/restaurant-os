@@ -63,28 +63,6 @@ export default function KitchenRealtime({restaurantId,initialOrders,updateOrderS
 
  useEffect(()=>{incomingRef.current=incoming;},[incoming]);
 
- // Realtime is the fast path; poll as a recovery path so a dropped socket/event
- // can never leave the kitchen unaware of a newly placed QR order.
- useEffect(()=>{
-   let active=true;
-   const checkForNewOrders=async()=>{
-     const {data,error}=await supabase.current.from("orders")
-       .select("id,order_number,status,created_at,customer_name,notes,restaurant_tables(number,name),order_items(product_name,quantity,special_instructions,is_addon)")
-       .eq("restaurant_id",restaurantId).eq("status","NEW")
-       .order("created_at",{ascending:false}).limit(30);
-     if(!active||error||!data)return;
-     for(const order of [...data].reverse()){
-       if(seenRef.current.has(order.id))continue;
-       seenRef.current.add(order.id);
-       setOrders((current:Order[])=>[order,...current.filter(o=>o.id!==order.id)]);
-       setIncoming(order);
-     }
-   };
-   void checkForNewOrders();
-   const poll=setInterval(()=>void checkForNewOrders(),2500);
-   return()=>{active=false;clearInterval(poll);};
- },[restaurantId]);
-
  // Keep the alert ring enabled. Browsers require a user gesture before audio can play,
  // so unlock audio on the first click/tap/key press and ring automatically thereafter.
  useEffect(()=>{
@@ -131,6 +109,21 @@ export default function KitchenRealtime({restaurantId,initialOrders,updateOrderS
       if(!["NEW","ACCEPTED","COOKING","READY"].includes(data.status))return;
       setOrders((current:Order[])=>[data,...current.filter(o=>o.id!==data.id)]);
       if(data.status==="NEW")setIncoming(data);
+   })
+   .on("postgres_changes",{event:"*",schema:"public",table:"order_items"},async(payload:any)=>{
+      const id=String(payload.new?.order_id||payload.old?.order_id||"");
+      if(!id)return;
+      const {data,error}=await supabase.current.from("orders")
+       .select("id,order_number,status,created_at,customer_name,notes,restaurant_tables(number,name),order_items(product_name,quantity,special_instructions,is_addon)")
+       .eq("id",id).eq("restaurant_id",restaurantId).maybeSingle();
+      if(!active||error||!data)return;
+      if(["SERVED","CANCELLED"].includes(data.status)){
+        setOrders((current:Order[])=>current.filter(o=>o.id!==id));
+        setIncoming((current:Order|null)=>current?.id===id?null:current);
+        return;
+      }
+      setOrders((current:Order[])=>[data,...current.filter(o=>o.id!==id)]);
+      setIncoming((current:Order|null)=>current?.id===id?data:current);
    })
    .on("postgres_changes",{event:"UPDATE",schema:"public",table:"orders",filter:"restaurant_id=eq."+restaurantId},async(payload:any)=>{
       const id=String(payload.new?.id||"");
