@@ -74,7 +74,6 @@ export default async function Dashboard() {
     {label:"Today's revenue",value:"Rs. "+revenue.toLocaleString("en-PK"),note:"Confirmed payments only",tone:"green",symbol:"₨"},
   ];
   return <div className="restaurant-dashboard">
-    <div className="dash-topline"><div className="dash-brand"><span className="dash-brand-icon">R</span><div><h2>RestaurantOS</h2><p>{restaurantName} · Restaurant workspace</p></div></div><span className="dash-live-pill"><span className="dash-live-dot"/>LIVE OVERVIEW</span></div>
     <div className="dash-date-label">{dateLabel.toUpperCase()}</div>
     <div className="dash-welcome-row"><div><h1>{greeting}, <span>{restaurantName}</span> <i>✦</i></h1><p>Here’s what’s happening in your restaurant today.</p></div><span className="dash-today-chip">Today <span>⌄</span></span></div>
     <div className="dash-metrics-grid">{metrics.map((metric)=><article key={metric.label} className="dash-metric-card"><div className="dash-metric-top"><span>{metric.label}</span><span className={"dash-metric-icon "+metric.tone}>{metric.symbol}</span></div><strong>{metric.value}</strong><p>{metric.note}</p><div className={"dash-spark "+metric.tone} aria-hidden="true">{[3,5,4,7,6,8,10].map((v,i)=><span key={i} style={{height:(v*3+5)+"px"}}/>)}</div></article>)}</div>
