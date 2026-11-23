@@ -18,35 +18,82 @@ const platformTables=["restaurants","memberships","subscriptions","subscription_
 export default function RealtimeSync({children,scope,restaurantId}:Props){
   const router=useRouter();
   const refreshTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
+  const reconnectTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
+  const channelRef=useRef<ReturnType<ReturnType<typeof createClient>["channel"]>|null>(null);
+  const retryCount=useRef(0);
+  const activeRef=useRef(false);
+
   useEffect(()=>{
     if(scope==="restaurant"&&!restaurantId)return;
     const supabase=createClient();
-    let active=true;
+    activeRef.current=true;
     let connected=false;
-    const channel=supabase.channel(scope==="platform"?"platform-live-sync":"restaurant-live-sync-"+restaurantId);
+
     const scheduleRefresh=()=>{
-      if(!active)return;
+      if(!activeRef.current)return;
       if(refreshTimer.current)clearTimeout(refreshTimer.current);
-      refreshTimer.current=setTimeout(()=>{if(active)router.refresh();},120);
+      refreshTimer.current=setTimeout(()=>{if(activeRef.current)router.refresh();},160);
     };
-    const tables=scope==="platform"
-      ?platformTables.map(table=>({table,filter:undefined as string|undefined}))
-      :restaurantTables.map(([table,column])=>({table,filter:column?(column==="id"?"id=eq."+restaurantId:"restaurant_id=eq."+restaurantId):undefined}));
-    for(const item of tables){
-      channel.on("postgres_changes",{event:"*",schema:"public",table:item.table,...(item.filter?{filter:item.filter}:{})},scheduleRefresh);
-    }
-    channel.subscribe(status=>{
-      if(!active)return;
-      if(status==="SUBSCRIBED"){
-        scheduleRefresh();
-        connected=true;
+
+    const clearReconnect=()=>{if(reconnectTimer.current){clearTimeout(reconnectTimer.current);reconnectTimer.current=null;}};
+
+    const subscribe=()=>{
+      if(!activeRef.current)return;
+      clearReconnect();
+      const old=channelRef.current;
+      if(old){channelRef.current=null;void supabase.removeChannel(old);}
+      const channel=supabase.channel(scope==="platform"?"platform-live-sync":"restaurant-live-sync-"+restaurantId,{
+        config:{broadcast:{self:false},presence:{key:restaurantId||"platform"}}
+      });
+      channelRef.current=channel;
+      const tables=scope==="platform"
+        ?platformTables.map(table=>({table,filter:undefined as string|undefined}))
+        :restaurantTables.map(([table,column])=>({table,filter:column?(column==="id"?"id=eq."+restaurantId:"restaurant_id=eq."+restaurantId):undefined}));
+      for(const item of tables){
+        channel.on("postgres_changes",{event:"*",schema:"public",table:item.table,...(item.filter?{filter:item.filter}:{})},(payload)=>{
+          // Every committed row event is a signal to refresh the server-rendered dashboard.
+          scheduleRefresh();
+        });
       }
-    });
+      channel.subscribe(status=>{
+        if(!activeRef.current)return;
+        if(status==="SUBSCRIBED"){
+          connected=true;
+          retryCount.current=0;
+          scheduleRefresh();
+        }else if(status==="CHANNEL_ERROR"||status==="TIMED_OUT"||status==="CLOSED"){
+          connected=false;
+          retryCount.current=Math.min(retryCount.current+1,8);
+          const delay=Math.min(1000*Math(2**(retryCount.current-1)),30000);
+          clearReconnect();
+          reconnectTimer.current=setTimeout(()=>{if(activeRef.current)subscribe();},delay);
+        }
+      });
+    };
+
+    const onVisible=()=>{
+      if(document.visibilityState==="visible"){
+        scheduleRefresh();
+        if(!connected&&!reconnectTimer.current)subscribe();
+      }
+    };
+    const onFocus=()=>scheduleRefresh();
+
+    subscribe();
+    window.addEventListener("focus",onFocus);
+    document.addEventListener("visibilitychange",onVisible);
+
     return()=>{
-      active=false;
-      if(refreshTimer.current)clearTimeout(refreshTimer.current);
-      void supabase.removeChannel(channel);
+      activeRef.current=false;
+      clearReconnect();
+      if(refreshTimer.current){clearTimeout(refreshTimer.current);refreshTimer.current=null;}
+      window.removeEventListener("focus",onFocus);
+      document.removeEventListener("visibilitychange",onVisible);
+      const current=channelRef.current;
+      channelRef.current=null;
+      if(current)void supabase.removeChannel(current);
     };
   },[router,scope,restaurantId]);
+
   return <>{children}</>;
 }
