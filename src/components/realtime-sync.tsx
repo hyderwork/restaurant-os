@@ -50,13 +50,14 @@ export default function RealtimeSync({children,scope,restaurantId}:Props){
         ?platformTables.map(table=>({table,filter:undefined as string|undefined}))
         :restaurantTables.map(([table,column])=>({table,filter:column?(column==="id"?"id=eq."+restaurantId:"restaurant_id=eq."+restaurantId):undefined}));
       for(const item of tables){
-        channel.on("postgres_changes",{event:"*",schema:"public",table:item.table,...(item.filter?{filter:item.filter}:{})},(payload)=>{
+        channel.on("postgres_changes",{event:"*",schema:"public",table:item.table,...(item.filter?{filter:item.filter}:{})},()=>{
+          if(!activeRef.current||channelRef.current!==channel)return;
           // Every committed row event is a signal to refresh the server-rendered dashboard.
           scheduleRefresh();
         });
       }
       channel.subscribe(status=>{
-        if(!activeRef.current)return;
+        if(!activeRef.current||channelRef.current!==channel)return;
         if(status==="SUBSCRIBED"){
           connected=true;
           retryCount.current=0;
