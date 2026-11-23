@@ -19,7 +19,7 @@ export default function RealtimeSync({children,scope,restaurantId}:Props){
   const router=useRouter();
   const refreshTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
   const reconnectTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
-  const channelRef=useRef<ReturnType<ReturnType<typeof createClient>["channel"]>|null>(null);
+  const channelRef=useRef<any>(null);
   const retryCount=useRef(0);
   const activeRef=useRef(false);
 
@@ -64,7 +64,7 @@ export default function RealtimeSync({children,scope,restaurantId}:Props){
         }else if(status==="CHANNEL_ERROR"||status==="TIMED_OUT"||status==="CLOSED"){
           connected=false;
           retryCount.current=Math.min(retryCount.current+1,8);
-          const delay=Math.min(1000*Math(2**(retryCount.current-1)),30000);
+          const delay=Math.min(1000*(2**(retryCount.current-1)),30000);
           clearReconnect();
           reconnectTimer.current=setTimeout(()=>{if(activeRef.current)subscribe();},delay);
         }
