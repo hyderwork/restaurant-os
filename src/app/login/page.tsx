@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {signIn} from "@/app/auth/actions";
 import PasswordInput from "@/components/password-input";
+import AuthSubmitButton from "@/components/auth-submit-button";
 
 export default async function Login({searchParams}:{searchParams:Promise<{error?:string;message?:string}>}) {
   const q = await searchParams;
@@ -19,7 +20,7 @@ export default async function Login({searchParams}:{searchParams:Promise<{error?
           <PasswordInput required name="password" autoComplete="current-password" />
         </label>
         <div className="mt-3 text-right"><Link className="inline-block py-1 text-sm text-orange-300 hover:text-orange-200" href="/forgot-password">Forgot password?</Link></div>
-        <button className="mt-5 min-h-12 w-full rounded-xl bg-orange-400 p-3 font-bold text-slate-950 hover:bg-orange-300">Sign in</button>
+        <AuthSubmitButton idle="Sign in" pending="Signing in…" className="mt-5 min-h-12 w-full rounded-xl bg-orange-400 p-3 font-bold text-slate-950 hover:bg-orange-300 disabled:opacity-70"/>
         <p className="mt-5 text-center text-sm leading-6 text-slate-400">New here? <Link className="text-orange-300 hover:text-orange-200" href="/signup">Create account</Link></p>
       </form>
     </main>
