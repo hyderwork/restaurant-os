@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {signUp} from "@/app/auth/actions";
 import PasswordInput from "@/components/password-input";
+import AuthSubmitButton from "@/components/auth-submit-button";
 
 export default async function Signup({searchParams}:{searchParams:Promise<{error?:string;message?:string}>}) {
   const q = await searchParams;
@@ -20,7 +21,7 @@ export default async function Signup({searchParams}:{searchParams:Promise<{error
           Password
           <PasswordInput required minLength={8} name="password" autoComplete="new-password" />
         </label>
-        <button className="mt-6 w-full rounded-xl bg-orange-400 p-3 font-bold text-slate-950">Create account</button>
+        <AuthSubmitButton idle="Create account" pending="Creating account…" className="mt-6 w-full rounded-xl bg-orange-400 p-3 font-bold text-slate-950 hover:bg-orange-300 disabled:opacity-70"/>
         <p className="mt-5 text-center text-sm text-slate-400">Already registered? <Link className="text-orange-300" href="/login">Sign in</Link></p>
       </form>
     </main>
