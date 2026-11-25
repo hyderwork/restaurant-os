@@ -30,7 +30,7 @@ export default function SalesReportClient({orders}:{orders:Order[]}){
  const revenue=completed.reduce((sum,o)=>sum+Number(o.total||0),0);
  const average=completed.length?revenue/completed.length:0;
  const cancelled=filtered.filter(o=>o.status==="CANCELLED").length;
- const daily=useMemo(()=>{const map=new Map<string,{orders:number;revenue:number}>();for(const o of completed){const d=new Date(o.created_at);const key=dayKey(d);const v=map.get(key)||{orders:0,revenue:0};v.orders++;v.revenue+=Number(o.total||0);map.set(key,v)}return Array.from(map.entries()).sort((a,b)=>a[0].localeCompare(b[0])),[completed]);
+ const daily=useMemo(()=>{const map=new Map<string,{orders:number;revenue:number}>();for(const o of completed){const d=new Date(o.created_at);const key=dayKey(d);const v=map.get(key)||{orders:0,revenue:0};v.orders++;v.revenue+=Number(o.total||0);map.set(key,v)}return Array.from(map.entries()).sort((a,b)=>a[0].localeCompare(b[0]));},[completed]);
  const fmt=(n:number)=>"PKR "+Math.round(n).toLocaleString("en-PK");
  const choose=(value:string)=>{setPreset(value);if(value==="custom"){setCustomReady(true);setCustomFrom(from);setCustomTo(to)}else if(value==="today"){setFrom(today());setTo(today())}else if(value==="yesterday"){const d=new Date();d.setDate(d.getDate()-1);setFrom(dayKey(d));setTo(dayKey(d))}else if(value==="7"){setFrom(startDays(6));setTo(today())}else if(value==="30"){setFrom(startDays(29));setTo(today())}else if(value==="month"){setFrom(monthStart());setTo(today())}};
  const updateCustom=()=>{setFrom(customFrom);setTo(customTo);setPreset("custom");setCustomReady(true)};
