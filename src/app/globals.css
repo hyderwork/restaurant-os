@@ -721,3 +721,40 @@ html[data-theme="dark"] .restaurant-dashboard{--dash-bg:#101827;--dash-card:#111
 /* Dashboard starts directly beneath the existing workspace header */
 .restaurant-dashboard .dash-date-label{margin-top:22px}
 @media(max-width:640px){.restaurant-dashboard .dash-date-label{margin-top:16px}}
+
+/* Landing page theme switcher placement */
+.marketing-header .theme-toggle{position:static;right:auto;bottom:auto;z-index:auto;min-height:38px;padding:0 12px;gap:7px;font-size:10px;box-shadow:none;white-space:nowrap}
+.marketing-header .theme-toggle:hover{transform:translateY(-1px)}
+.marketing-header .header-actions{gap:14px}
+@media(max-width:900px){.marketing-header .theme-toggle{min-height:35px;padding:0 10px;font-size:9px}.marketing-header .header-actions{gap:10px}}
+@media(max-width:640px){.marketing-header .theme-toggle{min-height:32px;padding:0 9px;gap:5px}.marketing-header .theme-toggle svg{width:14px;height:14px}.marketing-header .header-actions{gap:8px}}
+/* Landing page light theme variables and key surfaces */
+html[data-theme="light"] .marketing-page{--mk-bg:#f5f7fb;--mk-panel:#fff;--mk-line:#dfe6ef;--mk-muted:#65758e;background:var(--mk-bg);color:#17243b}
+html[data-theme="light"] .marketing-header{border-bottom-color:#e2e8f0}
+html[data-theme="light"] .marketing-header nav a,html[data-theme="light"] .login-link{color:#52627b}
+html[data-theme="light"] .marketing-header nav a:hover,html[data-theme="light"] .login-link:hover{color:#17243b}
+html[data-theme="light"] .marketing-header .theme-toggle{background:#fff;color:#17243b;border-color:#dbe3ed}
+html[data-theme="light"] .hero-copy h1 i{color:#34445c}
+html[data-theme="light"] .hero-copy>p{color:#5d6d83}
+html[data-theme="light"] .secondary-cta{color:#33445c}
+html[data-theme="light"] .secondary-cta>span{border-color:#cbd5e1;color:#e8873b}
+html[data-theme="light"] .hero-proof{color:#63738b}
+html[data-theme="light"] .proof-avatars i{border-color:#f5f7fb}
+html[data-theme="light"] .hero-dashboard{background:linear-gradient(145deg,#fff 0%,#f2f6fb 100%);border-color:#dce5ef;box-shadow:0 28px 75px #33415518,0 0 0 6px #0f172a04}
+html[data-theme="light"] .dash-top,html[data-theme="light"] .dash-order,html[data-theme="light"] .dash-section-head{border-color:#e4eaf2}
+html[data-theme="light"] .dash-top b,html[data-theme="light"] .dash-welcome h3,html[data-theme="light"] .dash-stats strong,html[data-theme="light"] .dash-order b,html[data-theme="light"] .dash-section-head b{color:#19283e}
+html[data-theme="light"] .dash-top small,html[data-theme="light"] .dash-welcome small,html[data-theme="light"] .dash-welcome p,html[data-theme="light"] .dash-stats small,html[data-theme="light"] .dash-stats em span,html[data-theme="light"] .dash-order small{color:#71819a}
+html[data-theme="light"] .dash-stats>div,html[data-theme="light"] .dash-orders,html[data-theme="light"] .dash-floor{background:#fff;border-color:#dfe6ef}
+html[data-theme="light"] .dash-date{background:#fff;color:#52627b;border-color:#dfe6ef}
+html[data-theme="light"] .floor-grid i{background:#edf3fa;border-color:#d8e3ef}
+html[data-theme="light"] .dash-floating{background:#fff;color:#1a2a40;border-color:#dce5ef;box-shadow:0 20px 45px #33415518}
+html[data-theme="light"] .dash-floating small{color:#71819a}
+html[data-theme="light"] .marketing-section{color:#17243b}
+html[data-theme="light"] .marketing-section h2,html[data-theme="light"] .marketing-section h3{color:#17243b}
+html[data-theme="light"] .marketing-section p{color:#5e6f86}
+html[data-theme="light"] .marketing-section .section-kicker{color:#d97724}
+html[data-theme="light"] .trust-strip{border-color:#e1e8f0;background:#eef3f9;color:#51627b}
+html[data-theme="light"] .trust-strip b{color:#34445c}
+html[data-theme="light"] .marketing-page footer{background:#eef3f9;border-color:#e1e8f0;color:#51627b}
+.auth-submit-spinner{animation:auth-spin .85s linear infinite;flex-shrink:0}
+@keyframes auth-spin{to{transform:rotate(360deg)}}
