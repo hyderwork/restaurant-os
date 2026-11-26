@@ -1187,3 +1187,52 @@ html[data-theme="light"] .superadmin-page .sa-primary-btn{color:#fff!important}
  .pos-workspace:fullscreen .pos-order-column{order:2}
  .pos-workspace:fullscreen .pos-menu-column{order:1}
 }
+
+
+/* Compact typography and density for counter-sized POS displays */
+.pos-workspace:fullscreen{font-size:13px;line-height:1.35;gap:12px;padding:clamp(10px,1.1vw,18px)}
+.pos-workspace:fullscreen .pos-header{padding:10px 16px;min-height:64px}
+.pos-workspace:fullscreen .pos-header h1{font-size:20px;line-height:1.15}
+.pos-workspace:fullscreen .pos-header p{font-size:10px;line-height:1.35}
+.pos-workspace:fullscreen .pos-header .grid{width:38px;height:38px;border-radius:12px;font-size:17px}
+.pos-workspace:fullscreen .pos-columns{grid-template-columns:minmax(0,1fr) minmax(340px,380px);gap:14px}
+.pos-workspace:fullscreen .pos-menu-column{gap:10px}
+.pos-workspace:fullscreen .pos-menu-toolbar{gap:9px;padding-top:8px;padding-bottom:8px}
+.pos-workspace:fullscreen .pos-menu-toolbar>div:first-child{padding:4px;gap:5px;border-radius:13px}
+.pos-workspace:fullscreen .pos-menu-toolbar>div:first-child button{min-height:36px;padding:7px 10px;font-size:11px;border-radius:9px}
+.pos-workspace:fullscreen .pos-menu-toolbar input{min-height:36px;padding:8px 11px;font-size:12px;border-radius:10px}
+.pos-workspace:fullscreen .pos-menu-toolbar span{font-size:10px}
+.pos-workspace:fullscreen .pos-category-strip{gap:6px;padding-bottom:2px}
+.pos-workspace:fullscreen .pos-category-strip button{padding:6px 11px;font-size:10px}
+.pos-workspace:fullscreen .pos-menu-column>div.grid{grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.pos-workspace:fullscreen .pos-menu-column article{border-radius:14px}
+.pos-workspace:fullscreen .pos-menu-column article>div:first-child{height:clamp(88px,10vh,128px)}
+.pos-workspace:fullscreen .pos-menu-column article>div:last-child{padding:9px 11px 10px}
+.pos-workspace:fullscreen .pos-menu-column article h3{font-size:12px;line-height:1.3}
+.pos-workspace:fullscreen .pos-menu-column article span{font-size:10px}
+.pos-workspace:fullscreen .pos-menu-column article button{min-height:30px;margin-top:7px;padding:5px 8px;font-size:10px}
+.pos-workspace:fullscreen .pos-order-column{gap:10px}
+.pos-workspace:fullscreen .pos-order-column>section{padding:12px 14px;border-radius:15px}
+.pos-workspace:fullscreen .pos-order-column h2{font-size:14px;line-height:1.25}
+.pos-workspace:fullscreen .pos-order-column p,
+.pos-workspace:fullscreen .pos-order-column label,
+.pos-workspace:fullscreen .pos-order-column span{font-size:11px;line-height:1.35}
+.pos-workspace:fullscreen .pos-order-column input,
+.pos-workspace:fullscreen .pos-order-column select,
+.pos-workspace:fullscreen .pos-order-column textarea{margin-top:4px;padding:7px 10px;font-size:11px;line-height:1.35;border-radius:9px}
+.pos-workspace:fullscreen .pos-order-column textarea{min-height:52px}
+.pos-workspace:fullscreen .pos-order-column>section:first-child>div.mt-4{margin-top:10px}
+.pos-workspace:fullscreen .pos-order-column>section:first-child>div.mt-5{margin-top:12px}
+.pos-workspace:fullscreen .pos-order-column button{font-size:11px}
+.pos-workspace:fullscreen .pos-order-column button.w-full{min-height:38px;padding:9px 12px}
+@media(min-width:1600px){
+ .pos-workspace:fullscreen .pos-columns{grid-template-columns:minmax(0,1fr) 400px}
+ .pos-workspace:fullscreen .pos-menu-column>div.grid{grid-template-columns:repeat(auto-fill,minmax(190px,1fr))}
+}
+@media(max-height:760px) and (min-width:900px){
+ .pos-workspace:fullscreen{gap:8px;padding:10px}
+ .pos-workspace:fullscreen .pos-header{min-height:54px;padding:7px 12px}
+ .pos-workspace:fullscreen .pos-menu-column article>div:first-child{height:84px}
+ .pos-workspace:fullscreen .pos-order-column>section{padding:9px 11px}
+ .pos-workspace:fullscreen .pos-order-column>section+section{gap:8px}
+}
