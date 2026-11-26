@@ -17,7 +17,7 @@ export default async function Page({searchParams}:{searchParams:Promise<{error?:
  const trialing=rs.filter((r:any)=>r.subscriptions?.[0]?.status==="TRIALING").length;
  const mrr=rs.reduce((n:number,r:any)=>{const s=r.subscriptions?.[0];return n+(s?.status==="ACTIVE"?Number(s?.subscription_plans?.monthly_price||0):0)},0);
  const stats=[["Workspaces",rs.length,"Registered accounts"],["Active",active,"Operational"],["On trial",trialing,"Trial subscriptions"],["Monthly revenue",`PKR ${mrr.toLocaleString("en-PK")}`,"From active plans"]];
- return <div className="space-y-7 text-slate-800">
+ return <div className="superadmin-page space-y-7 text-slate-800">
   <section className="flex flex-wrap items-end justify-between gap-4 border-b border-slate-200 pb-6">
    <div><div className="mb-2 flex items-center gap-2 text-[10px] font-extrabold uppercase tracking-[.2em] text-orange-600"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500"/> Platform overview</div><h1 className="text-3xl font-black tracking-[-.045em] text-slate-950 md:text-4xl">Good to see you.</h1><p className="mt-2 text-sm text-slate-500">Here’s what’s happening across your restaurant network.</p></div>
    <a href="#create-workspace" className="inline-flex items-center gap-2 rounded-xl bg-orange-500 px-4 py-3 text-xs font-bold text-white shadow-sm transition hover:bg-orange-600">＋ Add restaurant</a>
