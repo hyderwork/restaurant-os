@@ -30,6 +30,7 @@ export default function AdminSidebar({ restaurant, role, logoUrl }: { restaurant
   const pathname = usePathname();
 
   return (
+    <>
     <aside className={`admin-sidebar group/sidebar relative flex h-auto w-full shrink-0 flex-col border-b border-white/10 p-4 transition-[width,padding] duration-300 ease-out md:sticky md:top-0 md:h-dvh md:border-b-0 md:border-r ${collapsed ? "md:w-[84px] md:px-3" : "md:w-[272px] md:px-4"}`}>
       <div className={`flex min-h-11 items-center ${collapsed ? "justify-center" : "justify-between gap-2"}`}>
         <Link href="/admin" title="RestaurantOS" className={`flex min-w-0 items-center gap-3 text-lg font-extrabold tracking-[-.055em] ${collapsed ? "md:justify-center" : ""}`}>
@@ -70,7 +71,7 @@ export default function AdminSidebar({ restaurant, role, logoUrl }: { restaurant
         <button title={collapsed ? "Sign out" : undefined} className={`nav-link w-full text-left text-slate-400 ${collapsed ? "md:justify-center md:px-0" : ""}`}>
           <LogOut className="h-[17px] w-[17px] shrink-0" strokeWidth={1.9}/><span className={collapsed ? "md:hidden" : ""}>Sign out</span>
         </button>
-      </form>      </div>
+      </form>
 
       <div className={`sidebar-live-note mt-2 flex items-center gap-2 px-3 py-2 ${collapsed ? "md:justify-center md:px-0" : ""}`} title="Orders, tables and kitchen updates are live">
         <span className="sidebar-live-spark"><Sparkles size={12}/></span>
@@ -97,5 +98,6 @@ export default function AdminSidebar({ restaurant, role, logoUrl }: { restaurant
         <button type="submit" aria-label="Sign out" title="Sign out"><LogOut size={19}/></button>
       </form>
     </div>
+    </>
   );
 }
