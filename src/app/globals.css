@@ -110,8 +110,11 @@ html[data-theme="light"] [class*="bg-[#151"] {
   z-index: 1000;
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  min-height: 44px;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  min-height: 42px;
+  padding: 0;
   border: 1px solid rgba(148,163,184,.28);
   border-radius: 999px;
   padding: 0 16px;
@@ -130,7 +133,7 @@ html[data-theme="light"] .theme-toggle {
   box-shadow: 0 8px 28px rgba(15,23,42,.12);
 }
 @media(max-width:640px) {
-  .theme-toggle { right: 14px; bottom: 14px; min-height: 42px; padding: 0 13px; }
+  .theme-toggle { right: 14px; bottom: 14px; width: 40px; height: 40px; min-height: 40px; padding: 0; }
 }
 
 
