@@ -1414,3 +1414,125 @@ html[data-theme="light"] .pos-workspace .pos-submit-button {
   .pos-workspace:fullscreen .pos-menu-toolbar .pos-search-row{grid-template-columns:minmax(0,1fr);gap:7px!important}
   .pos-workspace:fullscreen .pos-menu-toolbar .pos-search-row>span{justify-self:start}
 }
+
+
+/* ===== RestaurantOS motion system: subtle, consistent and performance-safe ===== */
+@keyframes ro-route-enter {
+  from { opacity: 0; transform: translate3d(0, 10px, 0); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+@keyframes ro-soft-enter {
+  from { opacity: 0; transform: translate3d(0, 12px, 0) scale(.992); }
+  to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+}
+@keyframes ro-pop-in {
+  0% { opacity: 0; transform: scale(.96); }
+  70% { opacity: 1; transform: scale(1.012); }
+  100% { opacity: 1; transform: scale(1); }
+}
+@keyframes ro-status-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(52,211,153,.20); }
+  50% { box-shadow: 0 0 0 5px rgba(52,211,153,0); }
+}
+@keyframes ro-shimmer {
+  from { background-position: 140% 0; }
+  to { background-position: -140% 0; }
+}
+.route-motion {
+  min-width: 0;
+  animation: ro-route-enter .34s cubic-bezier(.2,.7,.25,1) both;
+  transform-origin: 50% 0;
+}
+.route-motion .page-heading,
+.route-motion .restaurant-dashboard,
+.route-motion > main,
+.route-motion > section {
+  animation: ro-soft-enter .42s cubic-bezier(.2,.7,.25,1) both;
+}
+.route-motion .page-heading { animation-delay: .025s; }
+.route-motion .stat-card,
+.route-motion .dash-metric-card,
+.route-motion .dash-card,
+.route-motion .panel {
+  animation: ro-soft-enter .42s cubic-bezier(.2,.7,.25,1) both;
+}
+.route-motion .stat-card:nth-child(2),
+.route-motion .dash-metric-card:nth-child(2) { animation-delay: .045s; }
+.route-motion .stat-card:nth-child(3),
+.route-motion .dash-metric-card:nth-child(3) { animation-delay: .09s; }
+.route-motion .stat-card:nth-child(4),
+.route-motion .dash-metric-card:nth-child(4) { animation-delay: .135s; }
+.route-motion .dash-main-grid .dash-card:nth-child(2) { animation-delay: .07s; }
+.route-motion .panel:hover,
+.route-motion .dash-card:hover,
+.route-motion .dash-foot-stats>a:hover {
+  border-color: rgba(251,146,60,.32);
+  box-shadow: 0 18px 42px rgba(15,23,42,.10);
+  transform: translateY(-2px);
+}
+.route-motion .nav-link {
+  transition: color .2s ease, background .2s ease, border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+}
+.route-motion .nav-link:hover .nav-icon { transform: translateX(2px) scale(1.06); }
+.route-motion .nav-icon { transition: transform .2s ease, color .2s ease; }
+.route-motion button,
+.route-motion a,
+.route-motion [role="button"] {
+  -webkit-tap-highlight-color: transparent;
+}
+.route-motion button:not(:disabled):active,
+.route-motion [role="button"]:active {
+  transform: translateY(1px) scale(.985);
+}
+.route-motion .btn-primary:hover,
+.route-motion button.bg-orange-500:hover,
+.route-motion button.bg-orange-600:hover {
+  box-shadow: 0 8px 22px rgba(249,115,22,.20);
+}
+.route-motion input,
+.route-motion select,
+.route-motion textarea {
+  transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
+}
+.route-motion [role="dialog"],
+.route-motion [role="alertdialog"],
+.route-motion [data-state="open"][data-radix-popper-content-wrapper],
+.route-motion [role="menu"] {
+  animation: ro-pop-in .18s cubic-bezier(.2,.8,.2,1) both;
+  transform-origin: top center;
+}
+.route-motion details[open] > :not(summary) {
+  animation: ro-route-enter .2s ease both;
+}
+.route-motion .status-pill,
+.route-motion .dash-live-dot {
+  animation: ro-status-pulse 2.4s ease-in-out infinite;
+}
+.route-motion .skeleton,
+.route-motion [data-loading="true"] {
+  background-image: linear-gradient(100deg, transparent 20%, rgba(148,163,184,.10) 45%, transparent 70%);
+  background-size: 220% 100%;
+  animation: ro-shimmer 1.8s ease-in-out infinite;
+}
+.route-motion .dash-table,
+.route-motion .product-thumb,
+.route-motion .brand-mark {
+  transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+.route-motion .dash-table:hover,
+.route-motion .product-thumb:hover {
+  transform: translateY(-2px) scale(1.035);
+}
+.route-motion .brand-mark:hover {
+  transform: rotate(-5deg) scale(1.06);
+  box-shadow: 0 10px 28px rgba(249,115,22,.28);
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    scroll-behavior: auto !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+  }
+  .route-motion { animation: none !important; }
+}
