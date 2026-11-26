@@ -1538,110 +1538,102 @@ html[data-theme="light"] .pos-workspace .pos-submit-button {
 }
 
 
-/* Mobile workspace navigation is docked to the bottom, never sticky at the top. */
-
-/* Mobile workspace menu: fixed bottom dock with an always-visible sign-out action. */
-.admin-mobile-dock { min-width:0; }
+/* Mobile navigation is rendered outside the sidebar so fixed positioning is viewport-based. */
 @media (max-width: 1023px) {
-  /* Keep the brand/workspace header in the page header area, not above it. */
-  .admin-sidebar {
-    position:static !important;
-    top:auto !important;
-    z-index:auto !important;
-    width:0 !important;
-    height:0 !important;
-    min-height:0 !important;
-    padding:0 !important;
-    margin:0 !important;
-    overflow:visible !important;
-    border:0 !important;
-  }
-  .admin-sidebar > .flex:first-child,
-  .admin-sidebar .workspace-switcher,
-  .admin-sidebar .sidebar-section-label,
-  .admin-sidebar .sidebar-live-note { display:none !important; }
+  .admin-sidebar { display:none !important; }
   .admin-mobile-dock {
     position:fixed !important;
-    top:auto !important;
+    display:flex !important;
+    align-items:stretch;
+    gap:8px;
     right:0 !important;
     bottom:0 !important;
     left:0 !important;
-    z-index:9999 !important;
-    display:flex;
-    align-items:center;
-    gap:8px;
-    padding:9px 10px calc(9px + env(safe-area-inset-bottom));
-    border-top:1px solid rgba(148,163,184,.2);
-    background:rgba(9,15,26,.97);
+    top:auto !important;
+    z-index:2147483000 !important;
+    width:100%;
+    min-height:68px;
+    padding:7px 9px calc(7px + env(safe-area-inset-bottom));
+    border-top:1px solid rgba(148,163,184,.22);
+    background:rgba(9,15,26,.98);
     -webkit-backdrop-filter:blur(20px);
     backdrop-filter:blur(20px);
-    box-shadow:0 -12px 34px rgba(2,6,23,.2);
+    box-shadow:0 -10px 30px rgba(2,6,23,.22);
+    isolation:isolate;
   }
   html[data-theme="light"] .admin-mobile-dock {
     border-color:#e2e8f0;
-    background:rgba(255,255,255,.97);
-    box-shadow:0 -12px 34px rgba(15,23,42,.09);
+    background:rgba(255,255,255,.98);
+    box-shadow:0 -10px 30px rgba(15,23,42,.10);
   }
-  .admin-mobile-dock .admin-sidebar-nav {
+  .admin-mobile-tabs {
     display:flex;
     flex:1 1 auto;
     min-width:0;
-    gap:5px;
+    align-items:stretch;
+    gap:3px;
     overflow-x:auto;
     overflow-y:hidden;
-    padding:0 0 2px;
     scrollbar-width:none;
     overscroll-behavior-x:contain;
   }
-  .admin-mobile-dock .admin-sidebar-nav::-webkit-scrollbar { display:none; }
-  .admin-mobile-dock .admin-sidebar-nav .nav-link {
+  .admin-mobile-tabs::-webkit-scrollbar { display:none; }
+  .admin-mobile-tab {
     display:flex;
-    flex:0 0 auto;
+    flex:1 0 58px;
+    min-width:58px;
+    max-width:84px;
     flex-direction:column;
+    align-items:center;
     justify-content:center;
     gap:4px;
-    min-width:57px;
-    min-height:52px;
-    padding:6px 7px;
-    border-radius:11px;
+    padding:5px 3px;
+    border:1px solid transparent;
+    border-radius:10px;
+    color:#94a3b8;
     font-size:9px;
-    line-height:1.1;
-    text-align:center;
+    font-weight:650;
+    line-height:1;
     white-space:nowrap;
+    -webkit-tap-highlight-color:transparent;
   }
-  .admin-mobile-dock .admin-sidebar-nav .nav-link .nav-icon {
-    width:17px;
-    height:17px;
+  .admin-mobile-tab.is-active {
+    border-color:rgba(251,146,60,.20);
+    background:rgba(249,115,22,.13);
+    color:#fdba74;
   }
-  .admin-mobile-dock .admin-sidebar-nav .nav-active-dot { display:none !important; }
-  .admin-mobile-dock .admin-sidebar-logout {
-    flex:0 0 auto;
-    margin:0;
-    padding-left:8px;
-    border-left:1px solid rgba(148,163,184,.2);
+  html[data-theme="light"] .admin-mobile-tab { color:#64748b; }
+  html[data-theme="light"] .admin-mobile-tab.is-active {
+    border-color:#fed7aa;
+    background:#fff7ed;
+    color:#c2410c;
   }
-  .admin-mobile-dock .admin-sidebar-logout button {
+  .admin-mobile-logout {
     display:flex;
-    width:56px;
-    min-height:52px;
-    flex-direction:column;
+    flex:0 0 42px;
+    align-items:center;
     justify-content:center;
-    gap:4px;
-    padding:6px 3px;
-    border:1px solid rgba(248,113,113,.18);
-    border-radius:11px;
-    color:#fca5a5;
-    font-size:9px;
-    line-height:1.1;
-    text-align:center;
+    border-left:1px solid rgba(148,163,184,.2);
+    padding-left:7px;
   }
-  .admin-mobile-dock .admin-sidebar-logout button svg { margin:0 auto; }
-  html[data-theme="light"] .admin-mobile-dock .admin-sidebar-logout button {
+  .admin-mobile-logout button {
+    display:grid;
+    width:38px;
+    height:42px;
+    place-items:center;
+    border:1px solid rgba(248,113,113,.24);
+    border-radius:10px;
+    color:#fca5a5;
+  }
+  html[data-theme="light"] .admin-mobile-logout { border-color:#e2e8f0; }
+  html[data-theme="light"] .admin-mobile-logout button {
     border-color:#fecaca;
     color:#b91c1c;
   }
-  .dashboard-main { padding-bottom:calc(88px + env(safe-area-inset-bottom)) !important; }
+  .dashboard-main {
+    padding-bottom:calc(92px + env(safe-area-inset-bottom)) !important;
+  }
 }
 @media (min-width: 1024px) {
-  .admin-mobile-dock { display:contents; }
+  .admin-mobile-dock { display:none !important; }
 }
