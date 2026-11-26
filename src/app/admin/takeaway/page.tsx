@@ -5,7 +5,7 @@ import QRCode from "qrcode";
 export default async function TakeawayDashboard(){
   const m=await requireRestaurant();
   const slug=(m.restaurants as unknown as {slug:string})?.slug;
-  const base=(process.env.NEXT_PUBLIC_APP_URL||"https://restaurant-os-custom.vercel.app").replace(/\\/$/,"");
+  const base=(process.env.NEXT_PUBLIC_APP_URL||"https://restaurant-os-custom.vercel.app").replace(/\/$/,"");
   const url=base+"/menu/"+slug+"?mode=takeaway";
   const qr=await QRCode.toDataURL(url,{width:420,margin:2,errorCorrectionLevel:"H"});
   return <div className="space-y-6">
