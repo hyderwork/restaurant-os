@@ -106,17 +106,17 @@ export default function POSClient({ categories, products, tables, restaurantId, 
           {categories.map((c) => <button key={c.id} onClick={() => setActiveCategory(c.id)} className={"shrink-0 rounded-full px-4 py-2 text-xs font-bold " + (activeCategory === c.id ? "bg-white text-slate-950" : "border border-white/10 text-slate-400")}>{c.name}</button>)}
         </div>
 
-        {visibleProducts.length ? <div className="grid grid-cols-2 gap-2.5 sm:gap-3 lg:grid-cols-2 2xl:grid-cols-3">
-          {visibleProducts.map((p) => <article key={p.id} className="group min-w-0 overflow-hidden rounded-2xl border border-white/10 bg-white/[.025] transition hover:border-orange-400/30 hover:bg-white/[.045]">
-            <div className="relative h-24 overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900 sm:h-32">
+        {visibleProducts.length ? <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-3 2xl:grid-cols-3">
+          {visibleProducts.map((p) => <article key={p.id} className="group flex min-w-0 items-stretch overflow-hidden rounded-2xl border border-white/10 bg-white/[.025] transition hover:border-orange-400/30 hover:bg-white/[.045] sm:block">
+            <div className="relative h-auto min-h-[112px] w-[104px] shrink-0 overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900 sm:h-32 sm:min-h-0 sm:w-auto">
               {p.image_url ? <img src={p.image_url} alt={p.name} className="h-full w-full object-cover transition duration-300 group-hover:scale-105" /> : <div className="grid h-full place-items-center text-3xl text-slate-600">✦</div>}
               {p.vegetarian && <span className="absolute left-3 top-3 rounded-full bg-emerald-500/90 px-2 py-1 text-[9px] font-black text-white">VEG</span>}
               <span className="absolute bottom-2 right-2 rounded-full bg-black/65 px-2 py-1 text-[10px] text-white">{p.prep_minutes} min</span>
             </div>
-            <div className="p-2.5 sm:p-3.5">
-              <div className="flex min-h-0 flex-col items-start justify-between gap-1.5 sm:min-h-10 sm:flex-row sm:gap-2"><h3 className="line-clamp-2 text-xs font-bold leading-4 sm:text-sm sm:leading-5">{p.name}</h3><span className="shrink-0 text-xs font-black text-orange-300 sm:text-sm">Rs. {Number(p.base_price).toLocaleString("en-PK")}</span></div>
+            <div className="flex min-w-0 flex-1 flex-col justify-between p-3 sm:block sm:p-3.5">
+              <div className="flex min-w-0 flex-col items-start justify-between gap-1 sm:min-h-10 sm:flex-row sm:gap-2"><h3 className="line-clamp-2 text-sm font-bold leading-5">{p.name}</h3><span className="shrink-0 text-xs font-black text-orange-300 sm:text-sm">Rs. {Number(p.base_price).toLocaleString("en-PK")}</span></div>
               {p.description && <p className="mt-1 hidden min-h-8 line-clamp-2 text-[11px] leading-4 text-slate-500 sm:block">{p.description}</p>}
-              <button onClick={() => changeQty(p.id, 1)} className="mt-2.5 min-h-9 w-full rounded-lg border border-orange-400/25 bg-orange-400/10 py-2 text-[10px] font-extrabold text-orange-200 transition hover:bg-orange-400 hover:text-slate-950 sm:mt-3 sm:text-xs">+ Add to order</button>
+              <button onClick={() => changeQty(p.id, 1)} className="mt-2 min-h-9 w-full rounded-lg border border-orange-400/25 bg-orange-400/10 py-2 text-[10px] font-extrabold text-orange-200 transition hover:bg-orange-400 hover:text-slate-950 sm:mt-3 sm:text-xs">+ Add to order</button>
             </div>
           </article>)}
         </div> : <div className="rounded-2xl border border-dashed border-white/10 p-12 text-center text-sm text-slate-500">No matching products found.</div>}
