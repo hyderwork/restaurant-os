@@ -7,13 +7,13 @@ const today=()=>dayKey(new Date());
 function startDays(n:number){const d=new Date();d.setDate(d.getDate()-n);return dayKey(d)}
 function monthStart(){const d=new Date();d.setDate(1);return dayKey(d)}
 const presets=[["Today","today"],["Yesterday","yesterday"],["Last 7 days","7"],["Last 30 days","30"],["This month","month"],["Custom range","custom"]] as const;
-export default function SalesReportClient({orders}:{orders:Order[]}){
- const [preset,setPreset]=useState("30");
- const [from,setFrom]=useState(startDays(29));
+export default function SalesReportClient({orders,starter=false}:{orders:Order[];starter?:boolean}){
+ const [preset,setPreset]=useState("7");
+ const [from,setFrom]=useState(startDays(6));
  const [to,setTo]=useState(today());
- const [customFrom,setCustomFrom]=useState(startDays(29));
+ const [customFrom,setCustomFrom]=useState(startDays(6));
  const [customTo,setCustomTo]=useState(today());
- const [customReady,setCustomReady]=useState(false);
+ const [customReady,setCustomReady]=useState(false);\n const availablePresets=starter?presets.filter(([,value])=>["today","yesterday","7"].includes(value)):presets;
  const dateRange=useMemo(()=>{
   const t=today();
   if(preset==="today")return [t,t];
@@ -21,7 +21,7 @@ export default function SalesReportClient({orders}:{orders:Order[]}){
   if(preset==="7")return [startDays(6),t];
   if(preset==="30")return [startDays(29),t];
   if(preset==="month")return [monthStart(),t];
-  return [customReady?customFrom:startDays(29),customReady?customTo:t];
+  return [customReady?customFrom:startDays(6),customReady?customTo:t];
  },[preset,customFrom,customTo,customReady]);
  const [fromDate,toDate]=dateRange;
  const filtered=useMemo(()=>orders.filter(o=>{const d=dayKey(new Date(o.created_at));return d>=fromDate&&d<=toDate}),[orders,fromDate,toDate]);
@@ -32,13 +32,13 @@ export default function SalesReportClient({orders}:{orders:Order[]}){
  const cancelled=filtered.filter(o=>o.status==="CANCELLED").length;
  const daily=useMemo(()=>{const map=new Map<string,{orders:number;revenue:number}>();for(const o of completed){const d=new Date(o.created_at);const key=dayKey(d);const v=map.get(key)||{orders:0,revenue:0};v.orders++;v.revenue+=Number(o.total||0);map.set(key,v)}return Array.from(map.entries()).sort((a,b)=>a[0].localeCompare(b[0]));},[completed]);
  const fmt=(n:number)=>"PKR "+Math.round(n).toLocaleString("en-PK");
- const choose=(value:string)=>{setPreset(value);if(value==="custom"){setCustomReady(true);setCustomFrom(from);setCustomTo(to)}else if(value==="today"){setFrom(today());setTo(today())}else if(value==="yesterday"){const d=new Date();d.setDate(d.getDate()-1);setFrom(dayKey(d));setTo(dayKey(d))}else if(value==="7"){setFrom(startDays(6));setTo(today())}else if(value==="30"){setFrom(startDays(29));setTo(today())}else if(value==="month"){setFrom(monthStart());setTo(today())}};
+ const choose=(value:string)=>{if(starter&&!["today","yesterday","7"].includes(value))return;setPreset(value);if(value==="custom"){setCustomReady(true);setCustomFrom(from);setCustomTo(to)}else if(value==="today"){setFrom(today());setTo(today())}else if(value==="yesterday"){const d=new Date();d.setDate(d.getDate()-1);setFrom(dayKey(d));setTo(dayKey(d))}else if(value==="7"){setFrom(startDays(6));setTo(today())}else if(value==="30"){setFrom(startDays(29));setTo(today())}else if(value==="month"){setFrom(monthStart());setTo(today())}};
  const updateCustom=()=>{setFrom(customFrom);setTo(customTo);setPreset("custom");setCustomReady(true)};
  const exportCsv=()=>{const headers=["Order number","Order date","Order type","Status","Amount (PKR)"];const escapeCell=(v:any)=>'"'+String(v??"").replaceAll('"','""')+'"';const body=filtered.map(o=>[o.order_number,new Date(o.created_at).toLocaleString("en-PK"),o.order_type||"",o.status,Number(o.total||0)].map(escapeCell).join(","));const csv=[headers.map(escapeCell).join(","),...body].join("\r\n");const blob=new Blob(["\uFEFF"+csv],{type:"text/csv;charset=utf-8"});const url=URL.createObjectURL(blob);const a=document.createElement("a");a.href=url;a.download="sales-report-"+fromDate+"-to-"+toDate+".csv";document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url)};
 
  return <><div className="page-heading"><div><p className="eyebrow">BUSINESS INTELLIGENCE</p><h1>Sales analytics</h1><p>Analyze revenue, order volume, and trends for your selected period.</p></div><span className="count-pill">Sales report</span></div>
- <section className="panel mt-6 p-4 sm:p-5"><div className="flex flex-col gap-4"><div className="flex items-center gap-2"><span className="grid h-9 w-9 place-items-center rounded-xl bg-orange-400/10 text-orange-300"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></span><div><h2 className="text-sm font-extrabold">Date range</h2><p className="text-xs text-slate-500">Filter all report metrics and transactions by date.</p></div></div>
- <div className="flex flex-wrap gap-2">{presets.map(([label,value])=><button key={value} onClick={()=>choose(value)} className={"rounded-xl border px-3 py-2 text-xs font-bold transition "+(preset===value?"border-orange-400/50 bg-orange-400/10 text-orange-300":"border-white/10 bg-white/[.03] text-slate-400 hover:bg-white/[.06]")}>{label}</button>)}</div>
+ <section className="panel mt-6 p-4 sm:p-5"><div className="flex flex-col gap-4"><div className="flex items-center gap-2"><span className="grid h-9 w-9 place-items-center rounded-xl bg-orange-400/10 text-orange-300"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></span><div><h2 className="text-sm font-extrabold">Date range</h2><p className="text-xs text-slate-500">Filter all report metrics and transactions by date.{starter?" Starter includes the last 7 days only.":""}</p></div></div>
+ <div className="flex flex-wrap gap-2">{availablePresets.map(([label,value])=><button key={value} onClick={()=>choose(value)} className={"rounded-xl border px-3 py-2 text-xs font-bold transition "+(preset===value?"border-orange-400/50 bg-orange-400/10 text-orange-300":"border-white/10 bg-white/[.03] text-slate-400 hover:bg-white/[.06]")}>{label}</button>)}</div>
  {preset==="custom"&&<div className="flex flex-col gap-3 sm:flex-row sm:items-end"><div className="flex-1"><label className="field-label mb-1.5">From</label><input className="field" type="date" value={customFrom} max={customTo||today()} onChange={e=>setCustomFrom(e.target.value)}/></div><div className="flex-1"><label className="field-label mb-1.5">To</label><input className="field" type="date" value={customTo} min={customFrom} max={today()} onChange={e=>setCustomTo(e.target.value)}/></div><button onClick={updateCustom} disabled={!customFrom||!customTo||customFrom>customTo} className="btn-primary disabled:opacity-40">Apply dates</button></div>}
  <div className="flex flex-wrap items-center justify-between gap-2 text-xs text-slate-500"><span className="flex items-center gap-1.5"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>{fromDate} — {toDate}</span><span>{filtered.length} orders in range</span><button onClick={exportCsv} className="btn-secondary" disabled={!filtered.length}>Export CSV</button></div>
  </div></section>
