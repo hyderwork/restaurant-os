@@ -104,7 +104,7 @@ export default function POSClient({ categories, products, tables, restaurantId, 
     </div>
 
     <div className="pos-columns grid min-w-0 gap-4 lg:gap-5 xl:min-h-0 xl:flex-1 xl:grid-cols-[minmax(0,1fr)_360px] 2xl:grid-cols-[minmax(0,1fr)_390px]">
-      <section className="pos-menu-column order-2 min-w-0 space-y-3.5 sm:space-y-4 xl:order-1">
+      <section className="pos-menu-column order-1 min-w-0 space-y-3.5 sm:space-y-4 xl:order-1">
         <div className="pos-menu-toolbar sticky top-0 z-30 -mx-2 mb-1 space-y-2.5 border-b border-slate-200/80 bg-slate-50/95 px-2 pb-3 pt-2 backdrop-blur-xl sm:space-y-3 sm:pb-3.5">
         <div className="pos-order-type-switch flex w-full max-w-[520px] gap-1 rounded-xl border border-slate-200 bg-white p-1 shadow-sm sm:gap-1.5">
           {([["DINE_IN","Dine in",UtensilsCrossed],["TAKEAWAY","Takeaway",ShoppingBag],["DELIVERY","Delivery",Bike]] as const).map(([value,label,Icon]) =>
@@ -140,7 +140,7 @@ export default function POSClient({ categories, products, tables, restaurantId, 
         </div> : <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-12 text-center text-sm text-slate-500">No matching products found.</div>}
       </section>
 
-      <aside className="pos-order-column order-1 h-fit min-w-0 space-y-3.5 xl:order-2 xl:space-y-4">
+      <aside className="pos-order-column order-2 h-fit min-w-0 space-y-3.5 xl:order-2 xl:space-y-4">
         <section className="pos-order-summary rounded-2xl border border-orange-100 bg-gradient-to-br from-white via-white to-orange-50/60 p-3.5 shadow-[0_8px_24px_rgba(15,23,42,.055)] sm:p-5">
           <div className="flex items-center justify-between"><h2 className="text-lg font-black">Current order</h2><span className="rounded-full border border-orange-100 bg-orange-50 px-2.5 py-1 text-[10px] font-bold text-orange-700">{selected.reduce((n,p)=>n+cart[p.id],0)} items</span></div>
           {selected.length ? <div className="mt-4 max-h-64 space-y-3 overflow-y-auto pr-1">
@@ -162,7 +162,7 @@ export default function POSClient({ categories, products, tables, restaurantId, 
 
         <section className="pos-order-details space-y-3 rounded-2xl border border-slate-200 bg-white p-3.5 shadow-[0_8px_24px_rgba(15,23,42,.045)] sm:p-5">
           <h2 className="font-bold">Order details</h2>
-          {orderType === "DINE_IN" && <div><label className={labelClass}>Dining table *</label><select value={tableId} onChange={(e)=>setTableId(e.target.value)} className={inputClass}><option value="">Select available table</option>{tables.map((t)=><option key={t.id} value={t.id}>{t.name || "Table "+t.number} · {t.status}</option>)}</select>{!tables.length&&<p className="mt-1 text-[11px] text-amber-300">No available tables right now.</p>}</div>}
+          {orderType === "DINE_IN" && <div><label className={labelClass}>Dining table *</label><select value={tableId} onChange={(e)=>setTableId(e.target.value)} className={inputClass}><option value="">Select available table</option>{tables.map((t)=><option key={t.id} value={t.id}>{t.name || "Table "+t.number} · {t.status}</option>)}</select>{!tables.length&&<p className="mt-1 rounded-lg bg-amber-50 px-2.5 py-2 text-[11px] font-medium text-amber-800">No available tables right now.</p>}</div>}
           <div><label className={labelClass}>Customer name *</label><input value={customerName} onChange={(e)=>setCustomerName(e.target.value)} maxLength={120} placeholder="Customer name" className={inputClass}/></div>
           <div><label className={labelClass}>Phone number *</label><input value={customerPhone} onChange={(e)=>setCustomerPhone(e.target.value)} maxLength={40} placeholder="03XX XXXXXXX" className={inputClass}/></div>
           {orderType === "DELIVERY" && <>
