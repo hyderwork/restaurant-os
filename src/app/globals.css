@@ -1003,3 +1003,12 @@ html[data-theme="light"] .restaurant-dashboard .dash-foot-stats>a:hover{box-shad
 html[data-theme="light"] .sidebar-live-note{border-top-color:rgba(100,116,139,.14)}
 html[data-theme="light"] .sidebar-live-note .text-slate-300{color:#334155}
 html[data-theme="light"] .sidebar-live-note .text-slate-500{color:#8290a3}
+
+
+/* Superadmin: preserve high-contrast labels on filled action buttons in light mode.
+   The global light-theme text normalization otherwise turns white button labels dark. */
+html[data-theme="light"] .superadmin-page :is(button, a)[class*="bg-slate-900"],
+html[data-theme="light"] .superadmin-page :is(button, a)[class*="bg-orange-500"],
+html[data-theme="light"] .superadmin-page :is(button, a)[class*="bg-orange-600"] {
+  color: #ffffff !important;
+}
