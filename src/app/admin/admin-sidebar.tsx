@@ -25,7 +25,7 @@ const nav = [
   { href: "/admin/staff", label: "Staff accounts", icon: UserRoundCog }
 ];
 
-export default function AdminSidebar({ restaurant, role }: { restaurant: string; role: string }) {
+export default function AdminSidebar({ restaurant, role, logoUrl }: { restaurant: string; role: string; logoUrl: string | null }) {
   const [collapsed, setCollapsed] = useState(false);
   const pathname = usePathname();
 
@@ -41,11 +41,15 @@ export default function AdminSidebar({ restaurant, role }: { restaurant: string;
         </button>
       </div>
 
-      <div className={`workspace-switcher mt-7 rounded-2xl border border-white/10 bg-white/[.045] p-3.5 ${collapsed ? "md:mx-auto md:w-12 md:p-2 md:text-center" : ""}`}>
-        <p className={`text-[9px] font-extrabold uppercase tracking-[.19em] text-slate-500 ${collapsed ? "md:hidden" : ""}`}>Workspace</p>
-        <p className={`mt-1.5 truncate text-[13px] font-bold ${collapsed ? "md:hidden" : ""}`}>{restaurant}</p>
-        <p className={`mt-1 text-[10px] font-medium text-slate-500 ${collapsed ? "md:hidden" : ""}`}>{role} account</p>
-        {collapsed && <span className="hidden text-xs font-black text-orange-300 md:inline" title={restaurant}>{restaurant.slice(0,1).toUpperCase()}</span>}
+      <div className={`workspace-switcher mt-7 flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[.045] p-3.5 ${collapsed ? "md:mx-auto md:w-12 md:justify-center md:p-2" : ""}`}>
+        <span className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-xl border border-white/10 bg-white/5 text-sm font-black text-orange-300">
+          {logoUrl ? <img src={logoUrl} alt={restaurant+" logo"} className="h-full w-full object-contain p-1"/> : restaurant.slice(0,1).toUpperCase()}
+        </span>
+        <div className={`min-w-0 flex-1 ${collapsed ? "md:hidden" : ""}`}>
+          <p className="text-[9px] font-extrabold uppercase tracking-[.19em] text-slate-500">Workspace</p>
+          <p className="mt-1 truncate text-[13px] font-bold">{restaurant}</p>
+          <p className="mt-1 text-[10px] font-medium text-slate-500">{role} account</p>
+        </div>
       </div>
 
       <div className={`sidebar-section-label mb-2 mt-8 px-3 text-[9px] font-extrabold uppercase tracking-[.2em] text-slate-600 ${collapsed ? "md:hidden" : ""}`}>Workspace menu</div>
