@@ -11,9 +11,9 @@ import {
 import { logout } from "@/app/admin/actions";
 
 const nav = [
+  { href: "/admin/pos", label: "POS / New order", icon: Monitor },
   { href: "/admin", label: "Overview", icon: LayoutDashboard },
   { href: "/admin/orders", label: "Orders", icon: ClipboardList },
-  { href: "/admin/pos", label: "POS / New order", icon: Monitor },
   { href: "/admin/kitchen", label: "Kitchen display", icon: ChefHat },
   { href: "/admin/menu", label: "Menu & products", icon: Utensils },
   { href: "/admin/tables", label: "Floors & tables", icon: Armchair },
