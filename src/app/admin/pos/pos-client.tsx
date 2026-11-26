@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { createPosOrder } from "@/app/admin/actions";
 
@@ -13,6 +13,21 @@ export default function POSClient({ categories, products, tables, restaurantId, 
   taxRate: number; serviceRate: number; taxInclusive: boolean;
 }) {
   const router = useRouter();
+  const posRootRef = useRef<HTMLDivElement>(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+
+  useEffect(() => {
+    const syncFullscreen = () => setIsFullscreen(document.fullscreenElement === posRootRef.current);
+    document.addEventListener("fullscreenchange", syncFullscreen);
+    return () => document.removeEventListener("fullscreenchange", syncFullscreen);
+  }, []);
+
+  async function toggleFullscreen() {
+    try {
+      if (document.fullscreenElement === posRootRef.current) await document.exitFullscreen();
+      else if (posRootRef.current?.requestFullscreen) await posRootRef.current.requestFullscreen();
+    } catch { setError("Fullscreen mode is not available in this browser."); }
+  }
   const [orderType, setOrderType] = useState<"DINE_IN" | "TAKEAWAY" | "DELIVERY">("DINE_IN");
   const [activeCategory, setActiveCategory] = useState("all");
   const [search, setSearch] = useState("");
@@ -81,10 +96,10 @@ export default function POSClient({ categories, products, tables, restaurantId, 
   const inputClass = "mt-1.5 w-full rounded-xl border border-white/10 bg-[#101827] px-3 py-2.5 text-sm text-white outline-none transition focus:border-orange-400/60";
   const labelClass = "text-[11px] font-bold uppercase tracking-wider text-slate-400";
 
-  return <div className="pos-workspace flex min-w-0 flex-col gap-4 md:h-full md:min-h-0 sm:gap-6">
-    <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
-      <div className="min-w-0"><p className="text-[10px] font-extrabold uppercase tracking-[.2em] text-orange-300">Point of sale</p><h1 className="mt-1.5 text-[clamp(26px,5vw,34px)] font-black tracking-tight">Create order</h1><p className="mt-1.5 max-w-xl text-xs leading-5 text-slate-400 sm:text-sm">Counter orders, table orders and home delivery — all in one place.</p></div>
-      <a href="/admin/orders" className="inline-flex min-h-10 w-fit items-center rounded-xl border border-white/10 px-3.5 py-2 text-xs font-bold text-slate-200 transition hover:bg-white/5 sm:text-sm">View all orders <span className="ml-2 text-orange-300">↗</span></a>
+  return <div ref={posRootRef} className="pos-workspace flex min-w-0 flex-col gap-4 md:h-full md:min-h-0 sm:gap-6">
+    <div className="pos-header flex flex-col gap-3 rounded-2xl border border-white/[.08] bg-gradient-to-r from-[#111c2e] via-[#101a2b] to-[#172235] p-3.5 shadow-[0_12px_36px_rgba(0,0,0,.16)] sm:flex-row sm:items-center sm:justify-between sm:px-5 sm:py-4">
+      <div className="flex min-w-0 items-center gap-3"><div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-orange-300/20 bg-orange-400/10 text-xl text-orange-300 shadow-inner">▦</div><div className="min-w-0"><div className="flex flex-wrap items-center gap-2"><p className="text-[10px] font-black uppercase tracking-[.2em] text-orange-300">Restaurant counter</p><span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-emerald-300">POS ready</span></div><h1 className="mt-0.5 text-xl font-black tracking-tight sm:text-2xl">Point of sale</h1><p className="mt-0.5 hidden text-xs text-slate-400 sm:block">Fast order entry · Dine in · Takeaway · Delivery</p></div></div>
+      <div className="flex flex-wrap items-center gap-2"><a href="/admin/orders" className="inline-flex min-h-10 flex-1 items-center justify-center rounded-xl border border-white/10 px-3.5 py-2 text-xs font-bold text-slate-200 transition hover:bg-white/5 sm:flex-none sm:text-sm">Order history <span className="ml-2 text-orange-300">↗</span></a><button type="button" onClick={toggleFullscreen} className="inline-flex min-h-10 flex-1 items-center justify-center gap-2 rounded-xl border border-orange-300/25 bg-orange-400 px-4 py-2 text-xs font-black text-slate-950 shadow-lg shadow-orange-500/10 transition hover:bg-orange-300 sm:flex-none sm:text-sm"><span className="text-base">{isFullscreen ? "⤢" : "⛶"}</span>{isFullscreen ? "Exit fullscreen" : "Full screen"}</button></div>
     </div>
 
     <div className="pos-columns grid min-w-0 gap-4 lg:gap-5 xl:min-h-0 xl:flex-1 xl:grid-cols-[minmax(0,1fr)_360px] 2xl:grid-cols-[minmax(0,1fr)_390px]">
