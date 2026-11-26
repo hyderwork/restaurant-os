@@ -81,13 +81,13 @@ export default function POSClient({ categories, products, tables, restaurantId, 
   const inputClass = "mt-1.5 w-full rounded-xl border border-white/10 bg-[#101827] px-3 py-2.5 text-sm text-white outline-none transition focus:border-orange-400/60";
   const labelClass = "text-[11px] font-bold uppercase tracking-wider text-slate-400";
 
-  return <div className="pos-workspace space-y-4 sm:space-y-6">
+  return <div className="pos-workspace flex min-w-0 flex-col gap-4 md:h-full md:min-h-0 sm:gap-6">
     <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
       <div className="min-w-0"><p className="text-[10px] font-extrabold uppercase tracking-[.2em] text-orange-300">Point of sale</p><h1 className="mt-1.5 text-[clamp(26px,5vw,34px)] font-black tracking-tight">Create order</h1><p className="mt-1.5 max-w-xl text-xs leading-5 text-slate-400 sm:text-sm">Counter orders, table orders and home delivery — all in one place.</p></div>
       <a href="/admin/orders" className="inline-flex min-h-10 w-fit items-center rounded-xl border border-white/10 px-3.5 py-2 text-xs font-bold text-slate-200 transition hover:bg-white/5 sm:text-sm">View all orders <span className="ml-2 text-orange-300">↗</span></a>
     </div>
 
-    <div className="grid min-w-0 gap-4 lg:gap-5 xl:grid-cols-[minmax(0,1fr)_360px] 2xl:grid-cols-[minmax(0,1fr)_390px]">
+    <div className="pos-columns grid min-w-0 gap-4 lg:gap-5 xl:min-h-0 xl:flex-1 xl:grid-cols-[minmax(0,1fr)_360px] 2xl:grid-cols-[minmax(0,1fr)_390px]">
       <section className="pos-menu-column order-2 min-w-0 space-y-3.5 sm:space-y-4 xl:order-1">
         <div className="flex gap-1.5 rounded-2xl border border-white/10 bg-white/[.025] p-1.5 sm:gap-2 sm:p-2">
           {([["DINE_IN","Dine in","▦"],["TAKEAWAY","Takeaway","↗"],["DELIVERY","Delivery","⌁"]] as const).map(([value,label,icon]) =>
