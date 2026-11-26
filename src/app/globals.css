@@ -1385,3 +1385,106 @@ html[data-theme="light"] .superadmin-page .sa-primary-btn{color:#fff!important}
  .pos-workspace .pos-order-type-switch button{padding:8px 5px!important;font-size:10px!important}
  .pos-workspace .pos-category-strip button{padding:7px 10px!important}
 }
+
+/* POS contrast correction: light surfaces must never inherit dark-theme text colors */
+.pos-workspace,
+.pos-workspace:fullscreen {
+  color:#1e293b!important;
+  color-scheme:light!important;
+}
+.pos-workspace .pos-header,
+.pos-workspace .pos-menu-column,
+.pos-workspace .pos-order-column {
+  color:#1e293b!important;
+}
+.pos-workspace .pos-header [class*="text-white"],
+.pos-workspace .pos-menu-column [class*="text-white"],
+.pos-workspace .pos-order-column [class*="text-white"] {
+  color:#1e293b!important;
+}
+/* Keep white foreground only on intentionally dark, high-contrast controls */
+.pos-workspace .pos-header button[class*="bg-\\[\\#17263d\\]"],
+.pos-workspace .pos-header .bg-\\[\\#17263d\\],
+.pos-workspace .pos-order-type-switch button[class*="bg-slate-900"] {
+  color:#fff!important;
+}
+.pos-workspace .pos-header .bg-\\[\\#17263d\\] svg,
+.pos-workspace .pos-order-type-switch button[class*="bg-slate-900"] svg {
+  color:currentColor!important;
+}
+.pos-workspace .pos-menu-column [class*="text-slate-"],
+.pos-workspace .pos-order-column [class*="text-slate-"],
+.pos-workspace .pos-header [class*="text-slate-"] {
+  color:#64748b!important;
+}
+.pos-workspace .pos-menu-column [class*="text-slate-900"],
+.pos-workspace .pos-order-column [class*="text-slate-900"],
+.pos-workspace .pos-menu-column [class*="text-slate-950"],
+.pos-workspace .pos-order-column [class*="text-slate-950"] {
+  color:#172033!important;
+}
+.pos-workspace .pos-header [class*="text-slate-900"],
+.pos-workspace .pos-header [class*="text-slate-950"] {
+  color:#172033!important;
+}
+.pos-workspace .pos-menu-column [class*="text-orange-"],
+.pos-workspace .pos-order-column [class*="text-orange-"] {
+  color:#c2410c!important;
+}
+.pos-workspace .pos-menu-column button[class*="bg-orange-"],
+.pos-workspace .pos-order-column button[class*="bg-orange-"] {
+  color:#fff!important;
+}
+.pos-workspace .pos-menu-column button[class*="bg-orange-"] svg,
+.pos-workspace .pos-order-column button[class*="bg-orange-"] svg {
+  color:currentColor!important;
+}
+.pos-workspace .pos-menu-column article,
+.pos-workspace .pos-order-column>section,
+.pos-workspace .pos-menu-toolbar {
+  background-color:#fff!important;
+}
+.pos-workspace .pos-menu-column article [class*="text-slate-500"],
+.pos-workspace .pos-order-column [class*="text-slate-500"],
+.pos-workspace .pos-menu-toolbar [class*="text-slate-500"] {
+  color:#64748b!important;
+}
+.pos-workspace .pos-order-column input,
+.pos-workspace .pos-order-column select,
+.pos-workspace .pos-order-column textarea,
+.pos-workspace .pos-menu-toolbar input {
+  background:#fff!important;
+  color:#172033!important;
+}
+.pos-workspace .pos-order-column input:focus,
+.pos-workspace .pos-order-column select:focus,
+.pos-workspace .pos-order-column textarea:focus,
+.pos-workspace .pos-menu-toolbar input:focus {
+  color:#172033!important;
+}
+.pos-workspace .pos-header .bg-\\[\\#17263d\\] {
+  background:#17263d!important;
+  color:#fff!important;
+}
+.pos-workspace .pos-order-type-switch button[class*="bg-slate-900"] {
+  background:#172033!important;
+  color:#fff!important;
+}
+.pos-workspace .pos-order-type-switch button:not([class*="bg-slate-900"]) {
+  color:#64748b!important;
+}
+.pos-workspace .pos-order-column .text-emerald-300,
+.pos-workspace .pos-order-column .text-emerald-400 {
+  color:#047857!important;
+}
+.pos-workspace .pos-order-column .text-red-300,
+.pos-workspace .pos-order-column .text-red-400 {
+  color:#b91c1c!important;
+}
+.pos-workspace:fullscreen .pos-header {
+  background:linear-gradient(110deg,#fff 0%,#f8fafc 58%,#fff7ed 100%)!important;
+  color:#172033!important;
+}
+.pos-workspace:fullscreen .pos-menu-toolbar {
+  background:rgba(248,250,252,.97)!important;
+}
