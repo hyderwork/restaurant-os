@@ -1325,3 +1325,63 @@ html[data-theme="light"] .superadmin-page .sa-primary-btn{color:#fff!important}
   .pos-workspace .pos-menu-column::-webkit-scrollbar-thumb,
   .pos-workspace .pos-order-column::-webkit-scrollbar-thumb{background:#cbd5e1}
 }
+
+
+/* Refined POS sticky menu toolbar */
+.pos-workspace .pos-menu-toolbar{
+  margin-left:-8px!important;margin-right:-8px!important;
+  padding:10px 8px 12px!important;
+  border:0!important;border-bottom:1px solid #e2e8f0!important;
+  border-radius:0 0 16px 16px!important;
+  background:rgba(248,250,252,.97)!important;
+  box-shadow:0 8px 18px rgba(15,23,42,.035)!important;
+  backdrop-filter:blur(14px);
+}
+.pos-workspace .pos-order-type-switch{
+  max-width:520px;border:1px solid #e2e8f0!important;
+  border-radius:12px!important;background:#fff!important;
+  padding:4px!important;box-shadow:0 2px 7px rgba(15,23,42,.035)!important;
+}
+.pos-workspace .pos-order-type-switch button{
+  min-height:34px;border-radius:8px!important;
+  font-size:11px!important;letter-spacing:.005em;
+}
+.pos-workspace .pos-order-type-switch button[class*="bg-slate-900"]{
+  background:#172033!important;color:#fff!important;
+  box-shadow:0 2px 5px rgba(15,23,42,.16)!important;
+}
+.pos-workspace .pos-order-type-switch button:not([class*="bg-slate-900"]){
+  background:transparent!important;color:#64748b!important;
+}
+.pos-workspace .pos-order-type-switch button:not([class*="bg-slate-900"]):hover{
+  background:#f1f5f9!important;color:#172033!important;
+}
+.pos-workspace .pos-search-row input{
+  min-height:40px!important;border-radius:11px!important;
+  border-color:#dbe2ea!important;background:#fff!important;
+  box-shadow:0 1px 3px rgba(15,23,42,.025);
+}
+.pos-workspace .pos-category-strip{
+  gap:6px!important;padding:2px 0 1px!important;
+  scrollbar-width:none!important;
+}
+.pos-workspace .pos-category-strip::-webkit-scrollbar{display:none}
+.pos-workspace .pos-category-strip button{
+  min-height:31px;padding:7px 11px!important;
+  border:1px solid transparent!important;border-radius:8px!important;
+  background:transparent!important;color:#64748b!important;
+  white-space:nowrap;line-height:1!important;
+}
+.pos-workspace .pos-category-strip button[class*="bg-orange-50"]{
+  border-color:#fed7aa!important;background:#fff7ed!important;
+  color:#c2410c!important;box-shadow:0 1px 2px rgba(194,65,12,.05);
+}
+.pos-workspace .pos-category-strip button:not([class*="bg-orange-50"]):hover{
+  border-color:#e2e8f0!important;background:#fff!important;color:#1e293b!important;
+}
+@media(max-width:639px){
+ .pos-workspace .pos-menu-toolbar{margin-left:-8px!important;margin-right:-8px!important;padding:8px 8px 10px!important;gap:8px!important}
+ .pos-workspace .pos-order-type-switch{max-width:none}
+ .pos-workspace .pos-order-type-switch button{padding:8px 5px!important;font-size:10px!important}
+ .pos-workspace .pos-category-strip button{padding:7px 10px!important}
+}
