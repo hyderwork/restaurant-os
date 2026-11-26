@@ -3,7 +3,7 @@ import {requirePlatformAdmin} from "@/lib/auth/tenant";
 import {platformLogout} from "./actions";
 import RealtimeSync from "@/components/realtime-sync";
 import ThemeToggle from "@/components/theme-toggle";
-import {Activity,Building2,Layers3,LogOut,Store,Command} from "lucide-react";
+import {Activity,Building2,LayoutDashboard,LogOut,Store,Command,CreditCard} from "lucide-react";
 
 export default async function Layout({children}:{children:React.ReactNode}) {
   await requirePlatformAdmin();
@@ -19,12 +19,12 @@ export default async function Layout({children}:{children:React.ReactNode}) {
         </div>
       </div>
       <p className="mb-2 mt-8 px-3 text-[10px] font-bold uppercase tracking-[.2em] text-slate-600">Platform</p>
-      <nav className="flex gap-2 overflow-x-auto md:flex-col">
-        <Link href="/superadmin" className="nav-link"><span className="nav-icon w-5"><Layers3 size={17}/></span><span>Overview & restaurants</span></Link>
-        <a href="/superadmin#restaurant-accounts" className="nav-link"><span className="nav-icon w-5"><Store size={17}/></span><span>Restaurant accounts</span></a>
-        <a href="/superadmin#package-management" className="nav-link"><span className="nav-icon w-5"><Building2 size={17}/></span><span>Package management</span></a>
+      <nav className="sa-sidebar-nav flex gap-2 overflow-x-auto md:flex-col">
+        <Link href="/superadmin" className="sa-nav-link is-current"><span className="sa-nav-icon"><LayoutDashboard size={18}/></span><span className="sa-nav-copy"><strong>Overview</strong><small>Platform summary</small></span><span className="sa-nav-arrow">↗</span></Link>
+        <a href="/superadmin#restaurant-accounts" className="sa-nav-link"><span className="sa-nav-icon"><Store size={18}/></span><span className="sa-nav-copy"><strong>Restaurant accounts</strong><small>Manage workspaces</small></span><span className="sa-nav-arrow">↗</span></a>
+        <a href="/superadmin#package-management" className="sa-nav-link"><span className="sa-nav-icon"><CreditCard size={18}/></span><span className="sa-nav-copy"><strong>Package management</strong><small>Plans & subscriptions</small></span><span className="sa-nav-arrow">↗</span></a>
       </nav>
-      <form action={platformLogout} className="mt-6"><button className="nav-link w-full text-left text-slate-400"><span className="nav-icon w-5"><LogOut size={16}/></span><span>Sign out</span></button></form>
+      <form action={platformLogout} className="sa-signout-wrap mt-6"><button className="sa-signout w-full"><span className="sa-signout-icon"><LogOut size={16}/></span><span>Sign out</span><span className="sa-signout-arrow">↗</span></button></form>
     </aside>
     <section className="dashboard-content min-w-0 flex-1 md:flex md:h-dvh md:min-h-0 md:flex-col md:overflow-hidden">
       <header className="admin-topbar flex items-center justify-between border-b border-white/10 px-5 py-4 md:px-8">
