@@ -104,22 +104,22 @@ export default function POSClient({ categories, products, tables, restaurantId, 
 
     <div className="pos-columns grid min-w-0 gap-4 lg:gap-5 xl:min-h-0 xl:flex-1 xl:grid-cols-[minmax(0,1fr)_360px] 2xl:grid-cols-[minmax(0,1fr)_390px]">
       <section className="pos-menu-column order-2 min-w-0 space-y-3.5 sm:space-y-4 xl:order-1">
-        <div className="pos-menu-toolbar sticky top-0 z-30 -mx-1 space-y-3 bg-[#0b1220]/95 px-1 py-2 backdrop-blur-xl sm:space-y-4">
-        <div className="flex gap-1.5 rounded-2xl border border-white/10 bg-white/[.025] p-1.5 sm:gap-2 sm:p-2">
+        <div className="pos-menu-toolbar sticky top-0 z-30 -mx-2 mb-1 space-y-2.5 border-b border-slate-200/80 bg-slate-50/95 px-2 pb-3 pt-2 backdrop-blur-xl sm:space-y-3 sm:pb-3.5">
+        <div className="pos-order-type-switch flex w-full max-w-[520px] gap-1 rounded-xl border border-slate-200 bg-white p-1 shadow-sm sm:gap-1.5">
           {([["DINE_IN","Dine in","▦"],["TAKEAWAY","Takeaway","↗"],["DELIVERY","Delivery","⌁"]] as const).map(([value,label,icon]) =>
-            <button key={value} onClick={() => setOrderType(value)} className={"min-w-0 flex-1 rounded-xl px-2 py-3 text-[11px] font-extrabold transition sm:px-4 sm:text-sm " + (orderType === value ? "bg-orange-400 text-slate-950 shadow-lg shadow-orange-500/10" : "text-slate-400 hover:bg-white/5 hover:text-white")}>
+            <button key={value} onClick={() => setOrderType(value)} className={"min-w-0 flex-1 rounded-lg px-2 py-2 text-[11px] font-bold transition sm:px-4 sm:py-2.5 sm:text-xs " + (orderType === value ? "bg-slate-900 text-white shadow-sm" : "text-slate-500 hover:bg-slate-100 hover:text-slate-900")}>
               <span className="mr-1.5 sm:mr-2">{icon}</span>{label}
             </button>
           )}
         </div>
 
-        <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center">
-          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search menu items..." className="min-h-11 min-w-0 flex-1 rounded-xl border border-white/10 bg-white/[.035] px-3.5 py-3 text-sm outline-none transition focus:border-orange-400/50 sm:px-4" />
-          <span className="text-[10px] font-semibold text-slate-500 sm:self-center sm:text-xs">{visibleProducts.length} items available</span>
+        <div className="pos-search-row flex flex-col gap-2 sm:flex-row sm:items-center">
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search menu items..." className="min-h-10 min-w-0 flex-1 rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[13px] outline-none transition placeholder:text-slate-400 focus:border-orange-300 focus:ring-2 focus:ring-orange-100 sm:px-4" />
+          <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-2 text-[10px] font-bold text-slate-500 shadow-sm sm:self-center sm:text-[11px]"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>{visibleProducts.length} items available</span>
         </div>
-        <div className="pos-category-strip flex gap-2 overflow-x-auto pb-1">
-          <button onClick={() => setActiveCategory("all")} className={"shrink-0 rounded-full px-4 py-2 text-xs font-bold " + (activeCategory === "all" ? "bg-white text-slate-950" : "border border-white/10 text-slate-400")}>All items</button>
-          {categories.map((c) => <button key={c.id} onClick={() => setActiveCategory(c.id)} className={"shrink-0 rounded-full px-4 py-2 text-xs font-bold " + (activeCategory === c.id ? "bg-white text-slate-950" : "border border-white/10 text-slate-400")}>{c.name}</button>)}
+        <div className="pos-category-strip flex items-center gap-1.5 overflow-x-auto py-0.5">
+          <button onClick={() => setActiveCategory("all")} className={"shrink-0 rounded-lg px-3 py-2 text-[10px] font-bold transition sm:text-[11px] " + (activeCategory === "all" ? "bg-orange-50 text-orange-700 ring-1 ring-inset ring-orange-200" : "text-slate-500 hover:bg-white hover:text-slate-900")}>All items</button>
+          {categories.map((c) => <button key={c.id} onClick={() => setActiveCategory(c.id)} className={"shrink-0 rounded-lg px-3 py-2 text-[10px] font-bold transition sm:text-[11px] " + (activeCategory === c.id ? "bg-orange-50 text-orange-700 ring-1 ring-inset ring-orange-200" : "text-slate-500 hover:bg-white hover:text-slate-900")}>{c.name}</button>)}
         </div>
         </div>
 
