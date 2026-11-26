@@ -62,17 +62,19 @@ export default function AdminSidebar({ restaurant, role }: { restaurant: string;
         })}
       </nav>
 
-      <div className={`sidebar-upgrade mt-3 hidden rounded-2xl border border-orange-400/15 bg-gradient-to-br from-orange-400/[.10] to-transparent p-4 md:block ${collapsed ? "md:hidden" : ""}`}>
-        <div className="mb-2 flex items-center gap-2 text-orange-300"><Sparkles size={14}/><span className="text-[10px] font-extrabold uppercase tracking-[.13em]">In sync</span></div>
-        <p className="text-xs font-bold">Your restaurant, in rhythm.</p>
-        <p className="mt-1 text-[10px] leading-5 text-slate-500">Orders, tables and kitchen updates in one live workspace.</p>
-      </div>
-
       <form action={logout} className="mt-3 shrink-0">
         <button title={collapsed ? "Sign out" : undefined} className={`nav-link w-full text-left text-slate-400 ${collapsed ? "md:justify-center md:px-0" : ""}`}>
           <LogOut className="h-[17px] w-[17px] shrink-0" strokeWidth={1.9}/><span className={collapsed ? "md:hidden" : ""}>Sign out</span>
         </button>
       </form>
+
+      <div className={`sidebar-live-note mt-2 flex items-center gap-2 px-3 py-2 ${collapsed ? "md:justify-center md:px-0" : ""}`} title="Orders, tables and kitchen updates are live">
+        <span className="sidebar-live-spark"><Sparkles size={12}/></span>
+        <span className={`min-w-0 ${collapsed ? "md:hidden" : ""}`}>
+          <span className="block text-[10px] font-bold leading-4 text-slate-300">In sync</span>
+          <span className="block truncate text-[9px] leading-3 text-slate-500">Orders · tables · kitchen live</span>
+        </span>
+      </div>
     </aside>
   );
 }
