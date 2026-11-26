@@ -46,16 +46,20 @@ export default async function Page({searchParams}:{searchParams:Promise<{error?:
       <div className="min-w-0"><p className="truncate text-xs font-semibold text-slate-700">{u?.full_name||"Owner not linked"}</p><p className="truncate text-[10px] text-slate-400">{u?.email||r.email||"—"}</p></div>
       <div><span className="text-xs font-semibold text-slate-700">{sub?.subscription_plans?.name||"No plan"}</span></div>
       <div><span className={`inline-flex rounded-full px-2.5 py-1 text-[9px] font-extrabold ${r.status==="ACTIVE"?"bg-emerald-50 text-emerald-700":r.status==="SUSPENDED"?"bg-rose-50 text-rose-700":"bg-amber-50 text-amber-700"}`}>{r.status}</span></div>
-      <div className="flex justify-start md:justify-end"><details className="relative"><summary className="cursor-pointer list-none rounded-lg border border-slate-200 px-3 py-2 text-[10px] font-bold text-slate-600 hover:bg-slate-50">Manage⌄</summary><div className="absolute right-0 z-20 mt-2 w-[min(88vw,420px)] rounded-xl border border-slate-200 bg-white p-4 shadow-xl">
-       <form action={updateRestaurantAccess} className="grid gap-3 sm:grid-cols-2"><input type="hidden" name="restaurant_id" value={r.id}/>
+      <div className="flex justify-start md:justify-end"><span className="text-[10px] text-slate-400">Workspace controls below</span></div>
+     </div>
+     <details className="group border-t border-slate-100 bg-slate-50/70">
+      <summary className="flex cursor-pointer list-none items-center justify-end gap-2 px-5 py-3 text-[11px] font-bold text-slate-600 hover:bg-slate-100 [&::-webkit-details-marker]:hidden"><span>Manage workspace</span><span className="transition-transform group-open:rotate-180">⌄</span></summary>
+      <div className="border-t border-slate-200 bg-white p-4 sm:p-5">
+       <form action={updateRestaurantAccess} className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4"><input type="hidden" name="restaurant_id" value={r.id}/>
         <label className={label}>Workspace status<select name="status" defaultValue={r.status} className={field}>{["ACTIVE","SUSPENDED","CLOSED","PENDING"].map(x=><option key={x}>{x}</option>)}</select></label>
         <label className={label}>Package<select name="plan_id" defaultValue={sub?.subscription_plans?.id||""} className={field}><option value="">Keep current</option>{ps.map((p:any)=><option key={p.id} value={p.id}>{p.name}</option>)}</select></label>
         <label className={label}>Subscription<select name="subscription_status" defaultValue={sub?.status||"ACTIVE"} className={field}>{["TRIALING","ACTIVE","PAST_DUE","CANCELED","EXPIRED"].map(x=><option key={x}>{x}</option>)}</select></label>
         <div className="flex items-end"><button className={button+" w-full"}>Save changes</button></div>
        </form>
-       <div className="mt-3 flex flex-wrap justify-between gap-2 border-t border-slate-100 pt-3">{u?.email&&<form action={resendOwnerSetupEmail}><input type="hidden" name="restaurant_id" value={r.id}/><input type="hidden" name="owner_email" value={u.email}/><button className="rounded-lg border border-orange-200 px-3 py-2 text-[10px] font-bold text-orange-700 hover:bg-orange-50">Resend setup email</button></form>}<DeleteRestaurantButton restaurantId={r.id} restaurantName={r.name}/></div>
-      </div></details></div>
-     </div>
+       <div className="mt-4 flex flex-wrap justify-between gap-2 border-t border-slate-100 pt-3">{u?.email&&<form action={resendOwnerSetupEmail}><input type="hidden" name="restaurant_id" value={r.id}/><input type="hidden" name="owner_email" value={u.email}/><button className="rounded-lg border border-orange-200 px-3 py-2 text-[10px] font-bold text-orange-700 hover:bg-orange-50">Resend setup email</button></form>}<DeleteRestaurantButton restaurantId={r.id} restaurantName={r.name}/></div>
+      </div>
+     </details>
     </article>})}
     {!rs.length&&<p className="p-10 text-center text-sm text-slate-400">No restaurant accounts yet.</p>}
    </div>
