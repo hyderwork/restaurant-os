@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { createPosOrder } from "@/app/admin/actions";
+import { Monitor, Maximize2, Minimize2, ArrowUpRight, UtensilsCrossed, ShoppingBag, Bike, Search, Plus, Utensils } from "lucide-react";
 
 type Category = { id: string; name: string };
 type Product = { id: string; name: string; description: string | null; image_url: string | null; base_price: number; category_id: string; vegetarian: boolean; prep_minutes: number };
@@ -97,24 +98,24 @@ export default function POSClient({ categories, products, tables, restaurantId, 
   const labelClass = "text-[11px] font-bold uppercase tracking-wider text-slate-400";
 
   return <div ref={posRootRef} className="pos-workspace flex min-w-0 flex-col gap-4 md:h-full md:min-h-0 sm:gap-6">
-    <div className="pos-header flex flex-col gap-3 rounded-2xl border border-white/[.08] bg-gradient-to-r from-[#111c2e] via-[#101a2b] to-[#172235] p-3.5 shadow-[0_12px_36px_rgba(0,0,0,.16)] sm:flex-row sm:items-center sm:justify-between sm:px-5 sm:py-4">
-      <div className="flex min-w-0 items-center gap-3"><div className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-orange-300/20 bg-orange-400/10 text-xl text-orange-300 shadow-inner">▦</div><div className="min-w-0"><div className="flex flex-wrap items-center gap-2"><p className="text-[10px] font-black uppercase tracking-[.2em] text-orange-300">Restaurant counter</p><span className="rounded-full border border-emerald-400/20 bg-emerald-400/10 px-2 py-0.5 text-[9px] font-extrabold uppercase tracking-wider text-emerald-300">POS ready</span></div><h1 className="mt-0.5 text-xl font-black tracking-tight sm:text-2xl">Point of sale</h1><p className="mt-0.5 hidden text-xs text-slate-400 sm:block">Fast order entry · Dine in · Takeaway · Delivery</p></div></div>
-      <div className="flex flex-wrap items-center gap-2"><a href="/admin/orders" className="inline-flex min-h-10 flex-1 items-center justify-center rounded-xl border border-white/10 px-3.5 py-2 text-xs font-bold text-slate-200 transition hover:bg-white/5 sm:flex-none sm:text-sm">Order history <span className="ml-2 text-orange-300">↗</span></a><button type="button" onClick={toggleFullscreen} className="inline-flex min-h-10 flex-1 items-center justify-center gap-2 rounded-xl border border-orange-300/25 bg-orange-400 px-4 py-2 text-xs font-black text-slate-950 shadow-lg shadow-orange-500/10 transition hover:bg-orange-300 sm:flex-none sm:text-sm"><span className="text-base">{isFullscreen ? "⤢" : "⛶"}</span>{isFullscreen ? "Exit fullscreen" : "Full screen"}</button></div>
+    <div className="pos-header flex flex-col gap-4 rounded-[22px] border border-slate-200/80 bg-white p-4 shadow-[0_10px_32px_rgba(15,23,42,.055)] sm:flex-row sm:items-center sm:justify-between sm:px-6 sm:py-5">
+      <div className="flex min-w-0 items-center gap-3.5"><div className="relative grid h-12 w-12 shrink-0 place-items-center rounded-[17px] bg-[#17263d] text-white shadow-[0_7px_16px_rgba(23,38,61,.18)]"><Monitor size={23} strokeWidth={1.8}/><span className="absolute -right-1 -top-1 h-3 w-3 rounded-full border-2 border-white bg-emerald-500"/></div><div className="min-w-0"><div className="flex flex-wrap items-center gap-2"><p className="text-[10px] font-extrabold uppercase tracking-[.19em] text-slate-500">Restaurant workspace</p><span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-200 bg-emerald-50 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-[.12em] text-emerald-700"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500"/>Live</span></div><h1 className="mt-0.5 text-[21px] font-extrabold tracking-[-.04em] text-slate-900 sm:text-[25px]">Point of sale</h1><p className="mt-1 hidden text-xs font-medium text-slate-500 sm:block">A faster way to manage dine-in, takeaway and delivery orders.</p></div></div>
+      <div className="flex flex-wrap items-center gap-2"><a href="/admin/orders" className="inline-flex min-h-10 flex-1 items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 sm:flex-none sm:text-sm">Order history <ArrowUpRight size={15} className="text-slate-400"/></a><button type="button" onClick={toggleFullscreen} className="inline-flex min-h-10 flex-1 items-center justify-center gap-2 rounded-xl bg-[#17263d] px-4 py-2 text-xs font-bold text-white shadow-[0_5px_14px_rgba(23,38,61,.16)] transition hover:bg-[#223754] sm:flex-none sm:text-sm">{isFullscreen ? <Minimize2 size={15}/> : <Maximize2 size={15}/ >}{isFullscreen ? "Exit fullscreen" : "Full screen"}</button></div>
     </div>
 
     <div className="pos-columns grid min-w-0 gap-4 lg:gap-5 xl:min-h-0 xl:flex-1 xl:grid-cols-[minmax(0,1fr)_360px] 2xl:grid-cols-[minmax(0,1fr)_390px]">
       <section className="pos-menu-column order-2 min-w-0 space-y-3.5 sm:space-y-4 xl:order-1">
         <div className="pos-menu-toolbar sticky top-0 z-30 -mx-2 mb-1 space-y-2.5 border-b border-slate-200/80 bg-slate-50/95 px-2 pb-3 pt-2 backdrop-blur-xl sm:space-y-3 sm:pb-3.5">
         <div className="pos-order-type-switch flex w-full max-w-[520px] gap-1 rounded-xl border border-slate-200 bg-white p-1 shadow-sm sm:gap-1.5">
-          {([["DINE_IN","Dine in","▦"],["TAKEAWAY","Takeaway","↗"],["DELIVERY","Delivery","⌁"]] as const).map(([value,label,icon]) =>
-            <button key={value} onClick={() => setOrderType(value)} className={"min-w-0 flex-1 rounded-lg px-2 py-2 text-[11px] font-bold transition sm:px-4 sm:py-2.5 sm:text-xs " + (orderType === value ? "bg-slate-900 text-white shadow-sm" : "text-slate-500 hover:bg-slate-100 hover:text-slate-900")}>
-              <span className="mr-1.5 sm:mr-2">{icon}</span>{label}
+          {([["DINE_IN","Dine in",UtensilsCrossed],["TAKEAWAY","Takeaway",ShoppingBag],["DELIVERY","Delivery",Bike]] as const).map(([value,label,Icon]) =>
+            <button key={value} onClick={() => setOrderType(value)} className={"inline-flex min-w-0 flex-1 items-center justify-center gap-1.5 rounded-[10px] px-2 py-2.5 text-[11px] font-bold transition sm:gap-2 sm:px-4 sm:py-2.5 sm:text-xs " + (orderType === value ? "bg-[#17263d] text-white shadow-[0_3px_9px_rgba(23,38,61,.16)]" : "text-slate-500 hover:bg-slate-100 hover:text-slate-900")}>
+              <Icon size={15} strokeWidth={2}/>{label}
             </button>
           )}
         </div>
 
         <div className="pos-search-row flex flex-col gap-2 sm:flex-row sm:items-center">
-          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search menu items..." className="min-h-10 min-w-0 flex-1 rounded-xl border border-slate-200 bg-white px-3.5 py-2.5 text-[13px] outline-none transition placeholder:text-slate-400 focus:border-orange-300 focus:ring-2 focus:ring-orange-100 sm:px-4" />
+          <div className="relative min-w-0 flex-1"><Search size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"/><input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search menu items..." className="min-h-11 w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-4 text-[13px] font-medium text-slate-800 outline-none transition placeholder:text-slate-400 focus:border-orange-300 focus:ring-2 focus:ring-orange-100" /></div>
           <span className="inline-flex w-fit items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-2 text-[10px] font-bold text-slate-500 shadow-sm sm:self-center sm:text-[11px]"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>{visibleProducts.length} items available</span>
         </div>
         <div className="pos-category-strip flex items-center gap-1.5 overflow-x-auto py-0.5">
@@ -126,14 +127,14 @@ export default function POSClient({ categories, products, tables, restaurantId, 
         {visibleProducts.length ? <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-3 2xl:grid-cols-3">
           {visibleProducts.map((p) => <article key={p.id} className="group flex min-w-0 items-stretch overflow-hidden rounded-2xl border border-white/10 bg-white/[.025] transition hover:border-orange-400/30 hover:bg-white/[.045] sm:block">
             <div className="relative h-auto min-h-[112px] w-[104px] shrink-0 overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900 sm:h-32 sm:min-h-0 sm:w-auto">
-              {p.image_url ? <img src={p.image_url} alt={p.name} className="h-full w-full object-cover transition duration-300 group-hover:scale-105" /> : <div className="grid h-full place-items-center text-3xl text-slate-600">✦</div>}
+              {p.image_url ? <img src={p.image_url} alt={p.name} className="h-full w-full object-cover transition duration-300 group-hover:scale-105" /> : <div className="grid h-full place-items-center text-slate-400"><Utensils size={25} strokeWidth={1.5}/></div>}
               {p.vegetarian && <span className="absolute left-3 top-3 rounded-full bg-emerald-500/90 px-2 py-1 text-[9px] font-black text-white">VEG</span>}
               <span className="absolute bottom-2 right-2 rounded-full bg-black/65 px-2 py-1 text-[10px] text-white">{p.prep_minutes} min</span>
             </div>
             <div className="flex min-w-0 flex-1 flex-col justify-between p-3 sm:block sm:p-3.5">
-              <div className="flex min-w-0 flex-col items-start justify-between gap-1 sm:min-h-10 sm:flex-row sm:gap-2"><h3 className="line-clamp-2 text-sm font-bold leading-5">{p.name}</h3><span className="shrink-0 text-xs font-black text-orange-300 sm:text-sm">Rs. {Number(p.base_price).toLocaleString("en-PK")}</span></div>
+              <div className="flex min-w-0 flex-col items-start justify-between gap-1 sm:min-h-10 sm:flex-row sm:gap-2"><h3 className="line-clamp-2 text-sm font-bold leading-5">{p.name}</h3><span className="shrink-0 text-xs font-extrabold text-slate-900 sm:text-sm">Rs. {Number(p.base_price).toLocaleString("en-PK")}</span></div>
               {p.description && <p className="mt-1 hidden min-h-8 line-clamp-2 text-[11px] leading-4 text-slate-500 sm:block">{p.description}</p>}
-              <button onClick={() => changeQty(p.id, 1)} className="mt-2 min-h-9 w-full rounded-lg border border-orange-400/25 bg-orange-400/10 py-2 text-[10px] font-extrabold text-orange-200 transition hover:bg-orange-400 hover:text-slate-950 sm:mt-3 sm:text-xs">+ Add to order</button>
+              <button onClick={() => changeQty(p.id, 1)} className="mt-2 inline-flex min-h-9 w-full items-center justify-center gap-1.5 rounded-lg border border-orange-200 bg-orange-50 py-2 text-[10px] font-extrabold text-orange-700 transition hover:border-orange-300 hover:bg-orange-100 sm:mt-3 sm:text-xs"><Plus size={13}/> Add to order</button>
             </div>
           </article>)}
         </div> : <div className="rounded-2xl border border-dashed border-white/10 p-12 text-center text-sm text-slate-500">No matching products found.</div>}
