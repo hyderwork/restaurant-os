@@ -1236,3 +1236,92 @@ html[data-theme="light"] .superadmin-page .sa-primary-btn{color:#fff!important}
  .pos-workspace:fullscreen .pos-order-column>section{padding:9px 11px}
  .pos-workspace:fullscreen .pos-order-column>section+section{gap:8px}
 }
+
+
+/* POS-only light counter theme: keep the rest of the admin dashboard unchanged */
+.pos-workspace{
+  color:#1e293b;
+  color-scheme:light;
+}
+.pos-workspace .pos-header{
+  color:#172033!important;
+  border-color:#e2e8f0!important;
+  background:linear-gradient(110deg,#ffffff 0%,#f8fafc 58%,#fff7ed 100%)!important;
+  box-shadow:0 8px 24px rgba(15,23,42,.06)!important;
+}
+.pos-workspace .pos-header [class*="text-white"],
+.pos-workspace .pos-header [class*="text-slate-"]{color:#334155!important}
+.pos-workspace .pos-header [class*="text-orange-"]{color:#c2410c!important}
+.pos-workspace .pos-header .rounded-full{border-color:#bbf7d0!important;background:#ecfdf5!important;color:#047857!important}
+.pos-workspace .pos-menu-toolbar{
+  background:rgba(248,250,252,.96)!important;
+  border-radius:14px;
+}
+.pos-workspace .pos-menu-toolbar>div:first-child,
+.pos-workspace .pos-menu-column article,
+.pos-workspace .pos-order-column>section{
+  border-color:#e2e8f0!important;
+  background:#fff!important;
+  box-shadow:0 5px 18px rgba(15,23,42,.045)!important;
+}
+.pos-workspace .pos-menu-toolbar input,
+.pos-workspace .pos-order-column input,
+.pos-workspace .pos-order-column select,
+.pos-workspace .pos-order-column textarea{
+  color:#1e293b!important;
+  background:#fff!important;
+  border-color:#cbd5e1!important;
+}
+.pos-workspace .pos-menu-toolbar input::placeholder,
+.pos-workspace .pos-order-column input::placeholder,
+.pos-workspace .pos-order-column textarea::placeholder{color:#94a3b8!important}
+.pos-workspace .pos-menu-toolbar [class*="text-slate-"],
+.pos-workspace .pos-menu-column [class*="text-slate-"],
+.pos-workspace .pos-order-column [class*="text-slate-"]{color:#64748b!important}
+.pos-workspace .pos-menu-column [class*="text-white"],
+.pos-workspace .pos-order-column [class*="text-white"]{color:#1e293b!important}
+.pos-workspace .pos-menu-column [class*="border-white"],
+.pos-workspace .pos-order-column [class*="border-white"]{border-color:#e2e8f0!important}
+.pos-workspace .pos-menu-column [class*="bg-white/"],
+.pos-workspace .pos-order-column [class*="bg-white/"]{background:#fff!important}
+.pos-workspace .pos-order-column>section:first-child{
+  background:linear-gradient(145deg,#fff 0%,#fffaf5 100%)!important;
+  border-color:#fed7aa!important;
+}
+.pos-workspace .pos-order-column>section:first-child>div.mt-5{border-color:#e2e8f0!important}
+.pos-workspace .pos-order-column .border-b{border-color:#eef2f7!important}
+.pos-workspace .pos-order-column button:not([class*="bg-orange-"]){background:#f8fafc;color:#334155}
+.pos-workspace .pos-menu-column article button{
+  border-color:#fed7aa!important;background:#fff7ed!important;color:#c2410c!important;
+}
+.pos-workspace .pos-menu-column article button:hover{background:#fb923c!important;color:#fff!important}
+.pos-workspace .pos-menu-toolbar button:not([class*="bg-orange-"]){
+  color:#64748b!important;border-color:#e2e8f0!important;background:#fff!important;
+}
+.pos-workspace .pos-menu-toolbar button.bg-white{background:#172033!important;color:#fff!important}
+.pos-workspace .pos-order-column button.w-full{
+  background:#f59e0b!important;color:#fff!important;
+}
+.pos-workspace .pos-order-column .text-orange-300,
+.pos-workspace .pos-order-column .text-orange-200{color:#c2410c!important}
+.pos-workspace .pos-order-column .bg-orange-400{background:#f59e0b!important}
+.pos-workspace .pos-order-column .bg-orange-400\/10{background:#fff7ed!important}
+.pos-workspace .pos-order-column .border-orange-300\/15{border-color:#fed7aa!important}
+.pos-workspace .pos-order-column .border-orange-400\/25{border-color:#fed7aa!important}
+.pos-workspace .pos-order-column .text-slate-950{color:#172033!important}
+.pos-workspace:fullscreen{
+  background:#f1f5f9!important;color:#1e293b!important;
+}
+.pos-workspace:fullscreen .pos-menu-toolbar{background:rgba(248,250,252,.96)!important}
+.pos-workspace:fullscreen .pos-order-column>section{
+  background:#fff!important;border-color:#e2e8f0!important;
+}
+.pos-workspace:fullscreen .pos-menu-column article{
+  background:#fff!important;border-color:#e2e8f0!important;
+}
+@media(min-width:1280px){
+  .pos-workspace .pos-menu-column,
+  .pos-workspace .pos-order-column{scrollbar-color:#cbd5e1 transparent}
+  .pos-workspace .pos-menu-column::-webkit-scrollbar-thumb,
+  .pos-workspace .pos-order-column::-webkit-scrollbar-thumb{background:#cbd5e1}
+}
