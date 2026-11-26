@@ -13,7 +13,8 @@ export default function SalesReportClient({orders,starter=false}:{orders:Order[]
  const [to,setTo]=useState(today());
  const [customFrom,setCustomFrom]=useState(startDays(6));
  const [customTo,setCustomTo]=useState(today());
- const [customReady,setCustomReady]=useState(false);\n const availablePresets=starter?presets.filter(([,value])=>["today","yesterday","7"].includes(value)):presets;
+ const [customReady,setCustomReady]=useState(false);
+ const availablePresets=starter?presets.filter(([,value])=>["today","yesterday","7"].includes(value)):presets;
  const dateRange=useMemo(()=>{
   const t=today();
   if(preset==="today")return [t,t];
