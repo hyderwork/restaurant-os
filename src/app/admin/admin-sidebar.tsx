@@ -53,6 +53,7 @@ export default function AdminSidebar({ restaurant, role, logoUrl }: { restaurant
       </div>
 
       <div className={`sidebar-section-label mb-2 mt-8 px-3 text-[9px] font-extrabold uppercase tracking-[.2em] text-slate-600 ${collapsed ? "md:hidden" : ""}`}>Workspace menu</div>
+      <div className="admin-mobile-dock">
       <nav aria-label="Main navigation" className={`admin-sidebar-nav flex min-h-0 gap-1.5 overflow-x-auto pb-2 md:flex-1 md:flex-col md:overflow-x-hidden md:overflow-y-auto md:overscroll-contain ${collapsed ? "md:items-center" : ""}`}>
         {nav.map(({ href, label, icon: Icon }) => {
           const active = href === "/admin" ? pathname === href : pathname === href || pathname.startsWith(href + "/");
@@ -66,11 +67,12 @@ export default function AdminSidebar({ restaurant, role, logoUrl }: { restaurant
         })}
       </nav>
 
-      <form action={logout} className="mt-3 shrink-0">
+      <form action={logout} className="admin-sidebar-logout mt-3 shrink-0">
         <button title={collapsed ? "Sign out" : undefined} className={`nav-link w-full text-left text-slate-400 ${collapsed ? "md:justify-center md:px-0" : ""}`}>
           <LogOut className="h-[17px] w-[17px] shrink-0" strokeWidth={1.9}/><span className={collapsed ? "md:hidden" : ""}>Sign out</span>
         </button>
       </form>
+      </div>
 
       <div className={`sidebar-live-note mt-2 flex items-center gap-2 px-3 py-2 ${collapsed ? "md:justify-center md:px-0" : ""}`} title="Orders, tables and kitchen updates are live">
         <span className="sidebar-live-spark"><Sparkles size={12}/></span>
