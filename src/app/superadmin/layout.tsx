@@ -10,10 +10,12 @@ export default async function Layout({children}:{children:React.ReactNode}) {
     <aside className="admin-sidebar superadmin-sidebar w-full shrink-0 border-b border-white/10 bg-[#090d17] p-5 md:sticky md:top-0 md:h-dvh md:w-[260px] md:overflow-y-auto md:overscroll-contain md:border-b-0 md:border-r">
       <Link href="/superadmin" className="flex items-center gap-3 text-xl font-black"><span className="brand-mark">R</span><span>Restaurant<span className="text-orange-400">OS</span></span></Link>
       <p className="mt-2 text-[10px] font-bold tracking-[.2em] text-orange-300">PLATFORM CONTROL CENTER</p>
-      <div className="mt-8 rounded-2xl border border-white/10 bg-white/[.04] p-3">
-        <p className="text-[10px] font-bold uppercase tracking-[.18em] text-slate-500">Access level</p>
-        <p className="mt-1 text-sm font-bold">Super Administrator</p>
-        <p className="mt-1 text-[11px] text-slate-500">Global platform management</p>
+      <div className="mt-6 flex items-center gap-3 rounded-xl border border-orange-400/15 bg-gradient-to-r from-orange-400/[.10] to-white/[.03] px-3 py-2.5">
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-orange-400/15 text-sm text-orange-300">✦</span>
+        <div className="min-w-0">
+          <p className="text-xs font-bold tracking-tight text-slate-100">RestaurantOS Platform</p>
+          <p className="mt-0.5 text-[10px] leading-4 text-slate-400">Workspaces · access · plans</p>
+        </div>
       </div>
       <p className="mb-2 mt-8 px-3 text-[10px] font-bold uppercase tracking-[.2em] text-slate-600">Platform</p>
       <nav className="flex gap-2 overflow-x-auto md:flex-col">
