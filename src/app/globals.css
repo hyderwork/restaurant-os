@@ -984,3 +984,19 @@ html[data-theme="light"] .restaurant-dashboard .dash-foot-stats>a:hover{box-shad
 @media(prefers-reduced-motion:reduce){
   .nav-link,.panel,.stat-card,.restaurant-dashboard .dash-metric-card,.restaurant-dashboard .dash-card{transition:none!important}
 }
+
+
+/* Compact sidebar live-status footer */
+.sidebar-live-note{
+  border-top:1px solid rgba(148,163,184,.10);
+  padding-top:12px!important;
+}
+.sidebar-live-spark{
+  display:grid;place-items:center;flex:none;width:25px;height:25px;
+  border-radius:9px;color:#f7ad76;
+  background:rgba(249,154,87,.10);
+}
+.sidebar-live-note>span:last-child{min-width:0}
+html[data-theme="light"] .sidebar-live-note{border-top-color:rgba(100,116,139,.14)}
+html[data-theme="light"] .sidebar-live-note .text-slate-300{color:#334155}
+html[data-theme="light"] .sidebar-live-note .text-slate-500{color:#8290a3}
