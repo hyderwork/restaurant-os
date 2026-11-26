@@ -1080,3 +1080,18 @@ html[data-theme="dark"] .superadmin-page input,html[data-theme="dark"] .superadm
 }
 html[data-theme="light"] .superadmin-page .sa-primary-btn{color:#fff!important}
 @media(prefers-reduced-motion:reduce){.sa-nav-link,.sa-primary-btn,.sa-signout{transition:none!important}}
+
+
+/* POS layout: keep the order panel in normal document flow and optimize compact screens */
+.pos-workspace{min-width:0}
+.pos-workspace .pos-category-strip{scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.pos-workspace .pos-category-strip::-webkit-scrollbar{display:none}
+.pos-workspace input,.pos-workspace textarea,.pos-workspace select{min-width:0}
+.pos-workspace button{-webkit-tap-highlight-color:transparent}
+@media(max-width:639px){
+ .pos-workspace{padding-bottom:calc(12px + env(safe-area-inset-bottom))}
+ .pos-workspace .pos-order-column{scroll-margin-top:12px}
+ .pos-workspace .pos-menu-column{scroll-margin-top:12px}
+ .pos-workspace article{border-radius:16px}
+ .pos-workspace .pos-order-column>section{border-radius:18px}
+}
