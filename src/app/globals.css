@@ -1095,3 +1095,28 @@ html[data-theme="light"] .superadmin-page .sa-primary-btn{color:#fff!important}
  .pos-workspace article{border-radius:16px}
  .pos-workspace .pos-order-column>section{border-radius:18px}
 }
+
+
+/* POS desktop: independent menu and order scroll regions */
+@media(min-width:1280px){
+ .pos-workspace{overflow:hidden}
+ .pos-workspace .pos-columns{height:0;min-height:0;overflow:hidden}
+ .pos-workspace .pos-menu-column,
+ .pos-workspace .pos-order-column{
+   min-height:0;height:100%;overflow-y:auto;overscroll-behavior:contain;
+   scrollbar-width:thin;scrollbar-color:rgba(148,163,184,.28) transparent;
+   padding-right:5px;
+ }
+ .pos-workspace .pos-menu-column::-webkit-scrollbar,
+ .pos-workspace .pos-order-column::-webkit-scrollbar{width:6px}
+ .pos-workspace .pos-menu-column::-webkit-scrollbar-track,
+ .pos-workspace .pos-order-column::-webkit-scrollbar-track{background:transparent}
+ .pos-workspace .pos-menu-column::-webkit-scrollbar-thumb,
+ .pos-workspace .pos-order-column::-webkit-scrollbar-thumb{border-radius:20px;background:rgba(148,163,184,.25)}
+ .pos-workspace .pos-menu-column:hover::-webkit-scrollbar-thumb,
+ .pos-workspace .pos-order-column:hover::-webkit-scrollbar-thumb{background:rgba(249,154,87,.55)}
+}
+@media(max-width:1279px){
+ .pos-workspace .pos-columns{overflow:visible}
+ .pos-workspace .pos-menu-column,.pos-workspace .pos-order-column{height:auto;overflow:visible}
+}
