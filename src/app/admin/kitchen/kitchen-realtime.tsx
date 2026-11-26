@@ -131,7 +131,7 @@ export default function KitchenRealtime({restaurantId,initialOrders,updateOrderS
       const id=String(payload.new?.order_id||payload.old?.order_id||"");
       if(!id)return;
       const {data,error}=await supabase.current.from("orders")
-       .select("id,order_number,status,created_at,customer_name,notes,restaurant_tables(number,name),order_items(product_name,quantity,special_instructions,is_addon)")
+       .select("id,order_number,status,created_at,customer_name,order_type,notes,restaurant_tables(number,name),order_items(product_name,quantity,special_instructions,is_addon)")
        .eq("id",id).eq("restaurant_id",restaurantId).maybeSingle();
       if(!active||error||!data)return;
       if(["SERVED","CANCELLED"].includes(data.status)){
