@@ -1,7 +1,7 @@
 import {requirePlatformAdmin} from "@/lib/auth/tenant";
 import {createRestaurant,updateRestaurantAccess,savePackage,resendOwnerSetupEmail} from "./actions";
 import DeleteRestaurantButton from "./delete-restaurant-button";
-import {Activity,ArrowRight,Building2,CalendarDays,CheckCircle2,ChevronDown,Clock3,Crown,Mail,Package,Plus,RefreshCw,Settings2,ShieldCheck,Store,Wallet} from "lucide-react";
+import {Activity,ArrowRight,Building2,CheckCircle2,ChevronDown,Clock3,Crown,Mail,Package,Plus,RefreshCw,Settings2,Store,Wallet} from "lucide-react";
 
 const field="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-xs text-slate-800 outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-100";
 const label="block text-[10px] font-bold uppercase tracking-wide text-slate-500";
@@ -19,10 +19,6 @@ export default async function Page({searchParams}:{searchParams:Promise<{error?:
  const mrr=rs.reduce((n:number,r:any)=>{const s=r.subscriptions?.[0];return n+(s?.status==="ACTIVE"?Number(s?.subscription_plans?.monthly_price||0):0)},0);
  const stats=[["Workspaces",rs.length,"Registered accounts"],["Active",active,"Operational"],["On trial",trialing,"Trial subscriptions"],["Monthly revenue",`PKR ${mrr.toLocaleString("en-PK")}`,"From active plans"]];
  return <div className="superadmin-page space-y-7 text-slate-800">
-  <section className="sa-hero relative overflow-hidden rounded-[26px] p-6 sm:p-8">
-   <div className="relative z-10"><div className="mb-3 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1.5 text-[9px] font-extrabold uppercase tracking-[.18em] text-orange-200"><span className="h-1.5 w-1.5 rounded-full bg-emerald-400"/> Platform control center</div><h1 className="text-3xl font-black tracking-[-.05em] text-white md:text-4xl">Good to see you.</h1><p className="mt-2 text-sm text-slate-300">Your command center for restaurant workspaces, subscriptions and platform health.</p><div className="mt-6 flex flex-wrap gap-5 border-t border-white/10 pt-4 text-[10px] font-semibold text-slate-300"><span className="inline-flex items-center gap-2"><ShieldCheck size={13} className="text-emerald-400"/> Platform protected</span><span className="inline-flex items-center gap-2"><Activity size={13} className="text-orange-300"/> Live workspace overview</span><span className="inline-flex items-center gap-2"><CalendarDays size={13}/> Operations dashboard</span></div></div>
-   <a href="#create-workspace" className="relative z-10 inline-flex items-center gap-2 rounded-xl bg-orange-500 px-4 py-3 text-xs font-extrabold text-white shadow-xl shadow-orange-950/30 transition hover:-translate-y-0.5 hover:bg-orange-400"><Plus size={15}/> Add restaurant <ArrowRight size={14}/></a><div className="sa-hero-orb"/>
-  </section>
   {params.error&&<div role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">{params.error}</div>}
   {params.success&&<div role="status" className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-700">{params.success}</div>}
   <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
