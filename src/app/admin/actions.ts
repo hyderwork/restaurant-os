@@ -50,3 +50,56 @@ export async function markOrderPaid(fd:FormData){
  if(error)throw new Error(error.message);
  refresh("/admin/orders","/admin/reports","/admin");
 }
+
+
+export async function createPosOrder(input: {
+  restaurantId: string;
+  orderType: "DINE_IN" | "TAKEAWAY" | "DELIVERY";
+  tableId: string | null;
+  customerName: string;
+  customerPhone: string;
+  notes: string;
+  deliveryAddress: string;
+  deliveryArea: string;
+  deliveryFee: number;
+  discount: number;
+  items: { productId: string; quantity: number }[];
+  paid: boolean;
+  paymentMethod: string;
+}) {
+  try {
+    const m = await requireRestaurant();
+    const allowed = ["OWNER", "ADMIN", "MANAGER", "CASHIER", "WAITER"];
+    if (!allowed.includes(String(m.role))) return { success: false, error: "Aapke account ko POS order create karne ki permission nahi hai." };
+    if (input.restaurantId !== m.restaurant_id) return { success: false, error: "Invalid restaurant workspace." };
+    if (!["DINE_IN", "TAKEAWAY", "DELIVERY"].includes(input.orderType)) return { success: false, error: "Invalid order type." };
+    if (!Array.isArray(input.items) || input.items.length < 1 || input.items.length > 30) return { success: false, error: "Cart mein 1 se 30 product lines honi chahiye." };
+    if (input.items.some((item) => !/^[0-9a-f-]{36}$/i.test(item.productId) || !Number.isInteger(item.quantity) || item.quantity < 1 || item.quantity > 20)) return { success: false, error: "Cart item details invalid hain." };
+    if (input.customerName.trim().length < 2 || input.customerName.trim().length > 120) return { success: false, error: "Customer name required hai." };
+    if (input.customerPhone.replace(/[^0-9]/g, "").length < 7 || input.customerPhone.length > 40) return { success: false, error: "Valid phone number required hai." };
+    if (input.orderType === "DINE_IN" && !input.tableId) return { success: false, error: "Dine-in ke liye table select karein." };
+    if (input.orderType === "DELIVERY" && input.deliveryAddress.trim().length < 6) return { success: false, error: "Complete delivery address required hai." };
+    if (!Number.isFinite(input.deliveryFee) || input.deliveryFee < 0 || !Number.isFinite(input.discount) || input.discount < 0) return { success: false, error: "Delivery fee ya discount invalid hai." };
+    if (input.paid && !["OWNER", "ADMIN", "MANAGER", "CASHIER"].includes(String(m.role))) return { success: false, error: "Payment confirm karne ki permission nahi hai." };
+    const { data, error } = await m.supabase.rpc("create_staff_order", {
+      p_restaurant_id: m.restaurant_id,
+      p_order_type: input.orderType,
+      p_table_id: input.tableId,
+      p_customer_name: input.customerName.trim(),
+      p_customer_phone: input.customerPhone.trim(),
+      p_notes: input.notes.trim(),
+      p_delivery_address: input.deliveryAddress.trim(),
+      p_delivery_area: input.deliveryArea.trim(),
+      p_delivery_fee: input.deliveryFee,
+      p_discount: input.discount,
+      p_items: input.items.map((item) => ({ product_id: item.productId, quantity: item.quantity })),
+      p_paid: input.paid,
+      p_payment_method: input.paid ? input.paymentMethod : null,
+    });
+    if (error) return { success: false, error: error.message };
+    refresh("/admin/orders", "/admin/kitchen", "/admin", "/admin/reports", "/admin/tables");
+    return { success: true, orderNumber: data?.order_number, orderId: data?.order_id };
+  } catch (error) {
+    return { success: false, error: error instanceof Error ? error.message : "Order create nahi ho saka." };
+  }
+}
