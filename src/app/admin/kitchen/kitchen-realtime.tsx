@@ -7,7 +7,7 @@ import {BellRing,Check,Volume2,VolumeX,ChefHat,Clock3, X,Radio} from "lucide-rea
 
 type Order=any;
 type Props={restaurantId:string;initialOrders:Order[];updateOrderStatus:(formData:FormData)=>void|Promise<void>;mode?:"ADMIN"|"CHEF"};
-const cols=[{key:"NEW",title:"New orders"},{key:"ACCEPTED",title:"Accepted"},{key:"COOKING",title:"Preparing"},{key:"READY",title:"Ready to serve"}];
+const cols=[{key:"NEW",title:"New orders"},{key:"ACCEPTED",title:"Accepted"},{key:"COOKING",title:"Preparing"},{key:"READY",title:"Ready for pickup / serve"}];
 
 export default function KitchenRealtime({restaurantId,initialOrders,updateOrderStatus,mode="ADMIN"}:Props){
  const [orders,setOrders]=useState<Order[]>(initialOrders||[]);
@@ -119,7 +119,7 @@ export default function KitchenRealtime({restaurantId,initialOrders,updateOrderS
       const id=String(payload.new?.id||"");
       if(!id||seenRef.current.has(id))return;
       const {data,error}=await supabase.current.from("orders")
-       .select("id,order_number,status,created_at,customer_name,notes,restaurant_tables(number,name),order_items(product_name,quantity,special_instructions,is_addon)")
+       .select("id,order_number,status,created_at,customer_name,order_type,notes,restaurant_tables(number,name),order_items(product_name,quantity,special_instructions,is_addon)")
        .eq("id",id).eq("restaurant_id",restaurantId).maybeSingle();
       if(!active||error||!data||seenRef.current.has(id))return;
       seenRef.current.add(id);
