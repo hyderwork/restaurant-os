@@ -5,7 +5,7 @@ import {Activity,ArrowRight,Building2,CalendarDays,CheckCircle2,ChevronDown,Cloc
 
 const field="mt-1.5 w-full rounded-lg border border-slate-200 bg-white px-3 py-2.5 text-xs text-slate-800 outline-none transition focus:border-orange-400 focus:ring-2 focus:ring-orange-100";
 const label="block text-[10px] font-bold uppercase tracking-wide text-slate-500";
-const button="rounded-lg bg-slate-900 px-4 py-2.5 text-xs font-bold text-white transition hover:bg-orange-600";
+const button="sa-primary-btn";
 export default async function Page({searchParams}:{searchParams:Promise<{error?:string;success?:string}>}){
  const params=await searchParams; const {supabase}=await requirePlatformAdmin();
  const [a,b]=await Promise.all([
@@ -34,7 +34,7 @@ export default async function Page({searchParams}:{searchParams:Promise<{error?:
     {([[ "name","Restaurant name","text"],["slug","URL slug","text"],["owner_email","Owner email","email"],["owner_name","Owner full name","text"],["phone","Phone / WhatsApp","text"],["address","Restaurant address","text"]] as const).map(([n,l,t])=><label key={n} className={label}>{l}<input required={n==="name"||n==="owner_email"} name={n} type={t} placeholder={n==="slug"?"e.g. spicy-dera":n==="owner_email"?"owner@example.com":""} className={field}/></label>)}
     <label className={label}>Subscription plan<select name="plan_id" required className={field}>{ps.map((p:any)=><option key={p.id} value={p.id}>{p.name} · PKR {p.monthly_price}</option>)}</select></label>
     <label className={label}>Trial days<input name="trial_days" type="number" min="0" max="90" defaultValue="14" className={field}/></label>
-    <div className="flex items-end sm:col-span-2 xl:col-span-4"><button className={button}>Create workspace & invite owner <span aria-hidden="true">→</span></button></div>
+    <div className="flex items-end sm:col-span-2 xl:col-span-4"><button className={button}><Plus size={15}/> Create workspace <ArrowRight size={14}/></button></div>
    </form>
   </section>
   <section id="restaurant-accounts" className="scroll-mt-5 space-y-4">
