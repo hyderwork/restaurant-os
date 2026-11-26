@@ -732,7 +732,7 @@ html[data-theme="dark"] .restaurant-dashboard{--dash-bg:#101827;--dash-card:#111
 @media(max-width:900px){.marketing-header .theme-toggle{min-height:35px;padding:0 10px;font-size:9px}.marketing-header .header-actions{gap:10px}}
 @media(max-width:640px){.marketing-header .theme-toggle{min-height:32px;padding:0 9px;gap:5px}.marketing-header .theme-toggle svg{width:14px;height:14px}.marketing-header .header-actions{gap:8px}}
 /* Landing page light theme variables and key surfaces */
-html[data-theme="light"] .marketing-page{--mk-bg:#f5f7fb;--mk-panel:#fff;--mk-line:#dfe6ef;--mk-muted:#65758e;background:var(--mk-bg);color:#17243b}
+html[data-theme="light"] .marketing-page{--mk-bg:#f5f7fb;--mk-panel:#fff;--mk-line:#dfe6ef;--mk-muted:#65758e;background:var(--mk-bg);color:#ffffff}
 html[data-theme="light"] .marketing-header{border-bottom-color:#e2e8f0}
 html[data-theme="light"] .marketing-header nav a,html[data-theme="light"] .login-link{color:#52627b}
 html[data-theme="light"] .marketing-header nav a:hover,html[data-theme="light"] .login-link:hover{color:#17243b}
@@ -1349,4 +1349,68 @@ html[data-theme="light"] .pos-workspace .pos-order-type-button.is-active {
 }
 html[data-theme="light"] .pos-workspace .pos-submit-button {
   background-color:#e9892e!important;
+}
+
+
+/* Fullscreen POS search: stable sizing and alignment inside the compact toolbar */
+.pos-workspace:fullscreen .pos-menu-toolbar .pos-search-row{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:10px!important;
+  width:100%;
+  min-width:0;
+}
+.pos-workspace:fullscreen .pos-menu-toolbar .pos-search-row>div{
+  display:block;
+  width:100%;
+  min-width:0;
+  flex:initial;
+}
+.pos-workspace:fullscreen .pos-menu-toolbar .pos-search-row input{
+  display:block;
+  box-sizing:border-box;
+  width:100%!important;
+  min-width:0!important;
+  height:40px;
+  min-height:40px!important;
+  margin:0!important;
+  padding:0 14px 0 40px!important;
+  border:1px solid #dfe5ed!important;
+  border-radius:11px!important;
+  background:#fff!important;
+  color:#172033!important;
+  font-size:12px!important;
+  line-height:1.2!important;
+  box-shadow:0 1px 3px rgba(15,23,42,.035)!important;
+}
+.pos-workspace:fullscreen .pos-menu-toolbar .pos-search-row input::placeholder{color:#98a2b3!important;opacity:1}
+.pos-workspace:fullscreen .pos-menu-toolbar .pos-search-row input:focus{
+  border-color:#f59e0b!important;
+  outline:0;
+  box-shadow:0 0 0 3px rgba(245,158,11,.13)!important;
+}
+.pos-workspace:fullscreen .pos-menu-toolbar .pos-search-row>span{
+  display:inline-flex;
+  align-items:center;
+  justify-self:end;
+  min-height:36px;
+  width:max-content;
+  white-space:nowrap;
+  padding:0 11px!important;
+  border:1px solid #e2e8f0;
+  border-radius:999px;
+  background:#fff;
+  color:#64748b!important;
+  font-size:10px!important;
+  line-height:1!important;
+}
+.pos-workspace:fullscreen .pos-menu-toolbar .pos-search-row>span>span{flex:none}
+.pos-workspace:fullscreen .pos-menu-toolbar .pos-search-row svg{z-index:1}
+@media(max-width:899px){
+  .pos-workspace:fullscreen .pos-menu-toolbar .pos-search-row{grid-template-columns:minmax(0,1fr) auto}
+}
+@media(max-width:520px){
+  .pos-workspace:fullscreen .pos-menu-toolbar .pos-search-row{grid-template-columns:minmax(0,1fr);gap:7px!important}
+  .pos-workspace:fullscreen .pos-menu-toolbar .pos-search-row>span{justify-self:start}
 }
