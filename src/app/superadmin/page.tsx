@@ -19,6 +19,16 @@ export default async function Page({searchParams}:{searchParams:Promise<{error?:
  const mrr=rs.reduce((n:number,r:any)=>{const s=r.subscriptions?.[0];return n+(s?.status==="ACTIVE"?Number(s?.subscription_plans?.monthly_price||0):0)},0);
  const stats=[["Workspaces",rs.length,"Registered accounts"],["Active",active,"Operational"],["On trial",trialing,"Trial subscriptions"],["Monthly revenue",`PKR ${mrr.toLocaleString("en-PK")}`,"From active plans"]];
  return <div className="superadmin-page space-y-7 text-slate-800">
+  <section className="flex flex-wrap items-end justify-between gap-4">
+   <div>
+    <h1 className="text-2xl font-black tracking-tight text-slate-950 sm:text-3xl">Good to see you.</h1>
+    <p className="mt-2 text-sm text-slate-500">Your command center for restaurant workspaces, subscriptions and platform health.</p>
+   </div>
+   <div className="flex flex-wrap items-center gap-2">
+    <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-2 text-[10px] font-bold text-emerald-700"><span className="h-1.5 w-1.5 rounded-full bg-emerald-500"/> Platform protected</span>
+    <span className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-2 text-[10px] font-bold text-slate-600"><Activity size={12}/> Live workspace overview</span>
+   </div>
+  </section>
   {params.error&&<div role="alert" className="rounded-xl border border-red-200 bg-red-50 p-3 text-sm text-red-700">{params.error}</div>}
   {params.success&&<div role="status" className="rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-700">{params.success}</div>}
   <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
