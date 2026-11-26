@@ -56,7 +56,7 @@ export default function AdminSidebar({ restaurant, role }: { restaurant: string;
             <Link key={href} href={href} title={collapsed ? label : undefined} aria-current={active ? "page" : undefined} className={`nav-link shrink-0 ${active ? "nav-link-active" : ""} ${collapsed ? "md:w-12 md:justify-center md:gap-0 md:px-0" : ""}`}>
               <Icon className="nav-icon h-[17px] w-[17px] shrink-0" strokeWidth={1.9}/>
               <span className={collapsed ? "md:hidden" : ""}>{label}</span>
-              {active && !collapsed && <span className="nav-active-dot ml-auto h-1.5 w-1.5 rounded-full bg-orange-400 md:block"/>}
+              {active && !collapsed && <i aria-hidden="true" className="nav-active-dot ml-auto h-1.5 w-1.5 rounded-full bg-orange-400 md:block"/>}
             </Link>
           );
         })}
