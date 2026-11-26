@@ -81,49 +81,49 @@ export default function POSClient({ categories, products, tables, restaurantId, 
   const inputClass = "mt-1.5 w-full rounded-xl border border-white/10 bg-[#101827] px-3 py-2.5 text-sm text-white outline-none transition focus:border-orange-400/60";
   const labelClass = "text-[11px] font-bold uppercase tracking-wider text-slate-400";
 
-  return <div className="space-y-6">
-    <div className="flex flex-wrap items-end justify-between gap-3">
-      <div><p className="text-xs font-bold uppercase tracking-[.2em] text-orange-300">Point of sale</p><h1 className="mt-2 text-3xl font-black">Create order</h1><p className="mt-2 text-sm text-slate-400">Counter orders, table orders and home delivery — all in one place.</p></div>
-      <a href="/admin/orders" className="rounded-xl border border-white/10 px-4 py-2.5 text-sm font-semibold hover:bg-white/5">View all orders ↗</a>
+  return <div className="pos-workspace space-y-4 sm:space-y-6">
+    <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-end sm:justify-between">
+      <div className="min-w-0"><p className="text-[10px] font-extrabold uppercase tracking-[.2em] text-orange-300">Point of sale</p><h1 className="mt-1.5 text-[clamp(26px,5vw,34px)] font-black tracking-tight">Create order</h1><p className="mt-1.5 max-w-xl text-xs leading-5 text-slate-400 sm:text-sm">Counter orders, table orders and home delivery — all in one place.</p></div>
+      <a href="/admin/orders" className="inline-flex min-h-10 w-fit items-center rounded-xl border border-white/10 px-3.5 py-2 text-xs font-bold text-slate-200 transition hover:bg-white/5 sm:text-sm">View all orders <span className="ml-2 text-orange-300">↗</span></a>
     </div>
 
-    <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_380px]">
-      <section className="min-w-0 space-y-4">
-        <div className="flex flex-wrap gap-2 rounded-2xl border border-white/10 bg-white/[.025] p-2">
+    <div className="grid min-w-0 gap-4 lg:gap-5 xl:grid-cols-[minmax(0,1fr)_360px] 2xl:grid-cols-[minmax(0,1fr)_390px]">
+      <section className="pos-menu-column order-2 min-w-0 space-y-3.5 sm:space-y-4 xl:order-1">
+        <div className="flex gap-1.5 rounded-2xl border border-white/10 bg-white/[.025] p-1.5 sm:gap-2 sm:p-2">
           {([["DINE_IN","Dine in","▦"],["TAKEAWAY","Takeaway","↗"],["DELIVERY","Delivery","⌁"]] as const).map(([value,label,icon]) =>
-            <button key={value} onClick={() => setOrderType(value)} className={"flex-1 rounded-xl px-4 py-3 text-sm font-bold transition " + (orderType === value ? "bg-orange-400 text-slate-950 shadow-lg shadow-orange-500/10" : "text-slate-400 hover:bg-white/5 hover:text-white")}>
-              <span className="mr-2">{icon}</span>{label}
+            <button key={value} onClick={() => setOrderType(value)} className={"min-w-0 flex-1 rounded-xl px-2 py-3 text-[11px] font-extrabold transition sm:px-4 sm:text-sm " + (orderType === value ? "bg-orange-400 text-slate-950 shadow-lg shadow-orange-500/10" : "text-slate-400 hover:bg-white/5 hover:text-white")}>
+              <span className="mr-1.5 sm:mr-2">{icon}</span>{label}
             </button>
           )}
         </div>
 
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search menu items..." className="min-w-0 flex-1 rounded-xl border border-white/10 bg-white/[.035] px-4 py-3 text-sm outline-none focus:border-orange-400/50" />
-          <span className="self-center text-xs text-slate-500">{visibleProducts.length} items available</span>
+        <div className="flex flex-col gap-2.5 sm:flex-row sm:items-center">
+          <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search menu items..." className="min-h-11 min-w-0 flex-1 rounded-xl border border-white/10 bg-white/[.035] px-3.5 py-3 text-sm outline-none transition focus:border-orange-400/50 sm:px-4" />
+          <span className="text-[10px] font-semibold text-slate-500 sm:self-center sm:text-xs">{visibleProducts.length} items available</span>
         </div>
-        <div className="flex gap-2 overflow-x-auto pb-1">
+        <div className="pos-category-strip flex gap-2 overflow-x-auto pb-1">
           <button onClick={() => setActiveCategory("all")} className={"shrink-0 rounded-full px-4 py-2 text-xs font-bold " + (activeCategory === "all" ? "bg-white text-slate-950" : "border border-white/10 text-slate-400")}>All items</button>
           {categories.map((c) => <button key={c.id} onClick={() => setActiveCategory(c.id)} className={"shrink-0 rounded-full px-4 py-2 text-xs font-bold " + (activeCategory === c.id ? "bg-white text-slate-950" : "border border-white/10 text-slate-400")}>{c.name}</button>)}
         </div>
 
-        {visibleProducts.length ? <div className="grid gap-3 sm:grid-cols-2 2xl:grid-cols-3">
-          {visibleProducts.map((p) => <article key={p.id} className="group overflow-hidden rounded-2xl border border-white/10 bg-white/[.025] transition hover:border-orange-400/30 hover:bg-white/[.045]">
-            <div className="relative h-32 overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900">
+        {visibleProducts.length ? <div className="grid grid-cols-2 gap-2.5 sm:gap-3 lg:grid-cols-2 2xl:grid-cols-3">
+          {visibleProducts.map((p) => <article key={p.id} className="group min-w-0 overflow-hidden rounded-2xl border border-white/10 bg-white/[.025] transition hover:border-orange-400/30 hover:bg-white/[.045]">
+            <div className="relative h-24 overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900 sm:h-32">
               {p.image_url ? <img src={p.image_url} alt={p.name} className="h-full w-full object-cover transition duration-300 group-hover:scale-105" /> : <div className="grid h-full place-items-center text-3xl text-slate-600">✦</div>}
               {p.vegetarian && <span className="absolute left-3 top-3 rounded-full bg-emerald-500/90 px-2 py-1 text-[9px] font-black text-white">VEG</span>}
               <span className="absolute bottom-2 right-2 rounded-full bg-black/65 px-2 py-1 text-[10px] text-white">{p.prep_minutes} min</span>
             </div>
-            <div className="p-3.5">
-              <div className="flex min-h-10 items-start justify-between gap-2"><h3 className="text-sm font-bold leading-5">{p.name}</h3><span className="shrink-0 text-sm font-black text-orange-300">Rs. {Number(p.base_price).toLocaleString("en-PK")}</span></div>
-              {p.description && <p className="mt-1 line-clamp-2 min-h-8 text-[11px] leading-4 text-slate-500">{p.description}</p>}
-              <button onClick={() => changeQty(p.id, 1)} className="mt-3 w-full rounded-lg border border-orange-400/25 bg-orange-400/10 py-2 text-xs font-bold text-orange-200 transition hover:bg-orange-400 hover:text-slate-950">+ Add to order</button>
+            <div className="p-2.5 sm:p-3.5">
+              <div className="flex min-h-0 flex-col items-start justify-between gap-1.5 sm:min-h-10 sm:flex-row sm:gap-2"><h3 className="line-clamp-2 text-xs font-bold leading-4 sm:text-sm sm:leading-5">{p.name}</h3><span className="shrink-0 text-xs font-black text-orange-300 sm:text-sm">Rs. {Number(p.base_price).toLocaleString("en-PK")}</span></div>
+              {p.description && <p className="mt-1 hidden min-h-8 line-clamp-2 text-[11px] leading-4 text-slate-500 sm:block">{p.description}</p>}
+              <button onClick={() => changeQty(p.id, 1)} className="mt-2.5 min-h-9 w-full rounded-lg border border-orange-400/25 bg-orange-400/10 py-2 text-[10px] font-extrabold text-orange-200 transition hover:bg-orange-400 hover:text-slate-950 sm:mt-3 sm:text-xs">+ Add to order</button>
             </div>
           </article>)}
         </div> : <div className="rounded-2xl border border-dashed border-white/10 p-12 text-center text-sm text-slate-500">No matching products found.</div>}
       </section>
 
-      <aside className="h-fit space-y-4 xl:sticky xl:top-4">
-        <section className="rounded-2xl border border-white/10 bg-white/[.035] p-5">
+      <aside className="pos-order-column order-1 h-fit min-w-0 space-y-3.5 xl:order-2 xl:space-y-4">
+        <section className="rounded-2xl border border-orange-300/15 bg-gradient-to-br from-orange-400/[.07] via-white/[.035] to-white/[.02] p-3.5 shadow-[0_14px_40px_rgba(0,0,0,.12)] sm:p-5">
           <div className="flex items-center justify-between"><h2 className="text-lg font-black">Current order</h2><span className="rounded-full bg-orange-400/10 px-2.5 py-1 text-[10px] font-bold text-orange-300">{selected.reduce((n,p)=>n+cart[p.id],0)} items</span></div>
           {selected.length ? <div className="mt-4 max-h-64 space-y-3 overflow-y-auto pr-1">
             {selected.map((p) => <div key={p.id} className="flex items-center justify-between gap-3 border-b border-white/5 pb-3">
@@ -142,7 +142,7 @@ export default function POSClient({ categories, products, tables, restaurantId, 
           </div>
         </section>
 
-        <section className="space-y-3 rounded-2xl border border-white/10 bg-white/[.025] p-5">
+        <section className="space-y-3 rounded-2xl border border-white/10 bg-white/[.025] p-3.5 sm:p-5">
           <h2 className="font-bold">Order details</h2>
           {orderType === "DINE_IN" && <div><label className={labelClass}>Dining table *</label><select value={tableId} onChange={(e)=>setTableId(e.target.value)} className={inputClass}><option value="">Select available table</option>{tables.map((t)=><option key={t.id} value={t.id}>{t.name || "Table "+t.number} · {t.status}</option>)}</select>{!tables.length&&<p className="mt-1 text-[11px] text-amber-300">No available tables right now.</p>}</div>}
           <div><label className={labelClass}>Customer name *</label><input value={customerName} onChange={(e)=>setCustomerName(e.target.value)} maxLength={120} placeholder="Customer name" className={inputClass}/></div>
