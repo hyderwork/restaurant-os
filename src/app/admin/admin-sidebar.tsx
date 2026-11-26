@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
-  LayoutDashboard, ClipboardList, ShoppingBag, ChefHat, Utensils,
+  LayoutDashboard, ClipboardList, Monitor, ChefHat, Utensils,
   Armchair, QrCode, Truck, ChartNoAxesCombined, Users, Settings2,
   UserRoundCog, ChevronLeft, ChevronRight, LogOut, Sparkles
 } from "lucide-react";
@@ -13,7 +13,7 @@ import { logout } from "@/app/admin/actions";
 const nav = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard },
   { href: "/admin/orders", label: "Orders", icon: ClipboardList },
-  { href: "/admin/pos", label: "POS / New order", icon: ShoppingBag },
+  { href: "/admin/pos", label: "POS / New order", icon: Monitor },
   { href: "/admin/kitchen", label: "Kitchen display", icon: ChefHat },
   { href: "/admin/menu", label: "Menu & products", icon: Utensils },
   { href: "/admin/tables", label: "Floors & tables", icon: Armchair },
