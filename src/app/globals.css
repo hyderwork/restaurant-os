@@ -881,3 +881,106 @@ html[data-theme="light"] .sidebar-collapse-btn{background:#fff;color:#334155;bor
 html[data-theme="light"] .sidebar-collapse-btn:hover{background:#f97316;color:#1c120b;border-color:#fb923c}
 html[data-theme="light"] .dashboard-main{scrollbar-color:rgba(100,116,139,.42) transparent}
 html[data-theme="light"] .dashboard-main::-webkit-scrollbar-thumb,html[data-theme="light"] .admin-sidebar-nav::-webkit-scrollbar-thumb{background:rgba(100,116,139,.28);border:2px solid transparent;background-clip:padding-box}
+
+
+/* ===== RestaurantOS premium product design system ===== */
+:root{
+  --ro-bg:#090f1b;
+  --ro-surface:#111c2c;
+  --ro-surface-raised:#162337;
+  --ro-border:rgba(148,163,184,.15);
+  --ro-accent:#f59a55;
+  --ro-accent-strong:#f47f32;
+  --ro-ink:#edf3fb;
+  --ro-muted:#94a3b8;
+}
+html,body{font-family:var(--font-body),"DM Sans",sans-serif}
+body{font-feature-settings:"ss01" on,"cv11" on;letter-spacing:-.012em}
+h1,h2,h3,h4,h5,h6,.page-heading h1,.dash-welcome-row h1,.section-heading h2{
+  font-family:var(--font-display),"Plus Jakarta Sans",sans-serif;
+  letter-spacing:-.045em;
+}
+button,input,select,textarea{font-family:inherit}
+.admin-sidebar{
+  background:linear-gradient(180deg,#101a2a 0%,#0b1321 100%);
+  border-color:rgba(148,163,184,.12);
+}
+.brand-mark{
+  width:38px;height:38px;border-radius:13px;
+  background:linear-gradient(145deg,#ffd0a4 0%,#f99a57 48%,#e96f27 100%);
+  color:#241307;font-family:var(--font-display),sans-serif;font-size:19px;
+  box-shadow:0 8px 22px rgba(244,127,50,.24),inset 0 1px 0 rgba(255,255,255,.45);
+}
+.nav-link{
+  position:relative;min-height:44px;gap:12px;padding:10px 12px;
+  border-radius:13px;color:#9baac0;font-size:12px;font-weight:650;
+  letter-spacing:-.01em;
+}
+.nav-link .nav-icon{color:#8191a8;transition:color .2s,transform .2s}
+.nav-link:hover .nav-icon{color:#ffd0a4;transform:translateX(1px)}
+.nav-link-active{
+  border-color:rgba(249,154,87,.20)!important;
+  background:linear-gradient(100deg,rgba(249,154,87,.16),rgba(249,154,87,.055))!important;
+  color:#fff!important;
+  box-shadow:inset 2px 0 0 #f99a57,0 5px 18px rgba(0,0,0,.10);
+}
+.nav-link-active .nav-icon{color:#ffb77f!important}
+.nav-active-dot{box-shadow:0 0 10px rgba(249,154,87,.8)}
+.workspace-switcher{
+  border-color:rgba(249,154,87,.16)!important;
+  background:linear-gradient(145deg,rgba(249,154,87,.09),rgba(255,255,255,.025))!important;
+}
+.sidebar-collapse-btn{
+  width:29px;height:29px;border-radius:10px;
+  background:#1a293e;color:#cbd5e1;border-color:rgba(148,163,184,.22);
+}
+.admin-topbar{
+  min-height:68px;
+  background:rgba(10,16,28,.82);
+  border-color:rgba(148,163,184,.12);
+  backdrop-filter:blur(22px) saturate(150%);
+}
+.dashboard-main{scrollbar-width:thin;scrollbar-color:rgba(148,163,184,.24) transparent}
+.dashboard-main::-webkit-scrollbar{width:7px}
+.dashboard-main::-webkit-scrollbar-thumb{border:2px solid transparent;border-radius:20px;background:rgba(148,163,184,.22);background-clip:padding-box}
+.restaurant-dashboard .dash-date-label{font-size:9px;letter-spacing:.19em;font-weight:800}
+.restaurant-dashboard .dash-welcome-row h1{font-weight:800;letter-spacing:-.06em}
+.restaurant-dashboard .dash-metric-card,.restaurant-dashboard .dash-card,.restaurant-dashboard .dash-foot-stats>a{
+  border-radius:22px;box-shadow:0 14px 40px rgba(4,12,24,.055);
+  transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease;
+}
+.restaurant-dashboard .dash-metric-card:hover,.restaurant-dashboard .dash-card:hover,.restaurant-dashboard .dash-foot-stats>a:hover{
+  transform:translateY(-2px);border-color:rgba(249,154,87,.34);
+  box-shadow:0 18px 44px rgba(4,12,24,.10);
+}
+.restaurant-dashboard .dash-metric-card{padding:24px;min-height:180px}
+.restaurant-dashboard .dash-card{padding:22px}
+.restaurant-dashboard .dash-section-head h2{font-size:14px;font-weight:800}
+.restaurant-dashboard .dash-order-row{min-height:70px}
+html[data-theme="dark"] .restaurant-dashboard .dash-metric-card,
+html[data-theme="dark"] .restaurant-dashboard .dash-card,
+html[data-theme="dark"] .restaurant-dashboard .dash-foot-stats>a{
+  box-shadow:0 14px 40px rgba(0,0,0,.13);
+}
+html[data-theme="light"] .admin-sidebar{
+  background:linear-gradient(180deg,#fff 0%,#f8fafd 100%);
+}
+html[data-theme="light"] .nav-link-active{
+  color:#9a4a18!important;background:linear-gradient(100deg,#fff0e3,#fff8f1)!important;
+  border-color:#fed7aa!important;box-shadow:inset 2px 0 0 #f59a55,0 5px 18px rgba(15,23,42,.035);
+}
+html[data-theme="light"] .nav-link-active .nav-icon{color:#c4662b!important}
+html[data-theme="light"] .admin-topbar{background:rgba(255,255,255,.86)}
+html[data-theme="light"] .restaurant-dashboard .dash-metric-card:hover,
+html[data-theme="light"] .restaurant-dashboard .dash-card:hover,
+html[data-theme="light"] .restaurant-dashboard .dash-foot-stats>a:hover{box-shadow:0 18px 44px rgba(15,23,42,.08)}
+@media(max-width:767px){
+  .admin-sidebar{background:rgba(12,19,31,.96)!important;border-top-color:rgba(148,163,184,.18)!important}
+  html[data-theme="light"] .admin-sidebar{background:rgba(255,255,255,.96)!important}
+  .admin-sidebar nav .nav-link-active{background:rgba(249,154,87,.13)!important;border-color:rgba(249,154,87,.22)!important;color:#ffd0a4!important}
+  .admin-sidebar nav .nav-link-active .nav-icon{color:#ffb77f!important}
+  html[data-theme="light"] .admin-sidebar nav .nav-link-active{background:#fff0e3!important;color:#9a4a18!important}
+}
+@media(prefers-reduced-motion:reduce){
+  .nav-link,.panel,.stat-card,.restaurant-dashboard .dash-metric-card,.restaurant-dashboard .dash-card{transition:none!important}
+}
