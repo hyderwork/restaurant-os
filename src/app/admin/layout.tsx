@@ -2,12 +2,14 @@ import {getMemberships} from "@/lib/auth/tenant";
 import RealtimeSync from "@/components/realtime-sync";
 import ThemeToggle from "@/components/theme-toggle";
 import AdminSidebar from "./admin-sidebar";
+import {createClient} from "@/lib/supabase/server";
 
 export default async function AdminLayout({children}:{children:React.ReactNode}){
  const memberships=await getMemberships();
  const m:any=memberships[0];
  const restaurant=m?.restaurants?.name||"Set up workspace";
- const {data:restaurantSettings}=m?.restaurant_id?await m.supabase.from("restaurant_settings").select("logo_url").eq("restaurant_id",m.restaurant_id).maybeSingle():{data:null};
+ const supabase=await createClient();
+ const {data:restaurantSettings}=m?.restaurant_id?await supabase.from("restaurant_settings").select("logo_url").eq("restaurant_id",m.restaurant_id).maybeSingle():{data:null};
  const logoUrl=restaurantSettings?.logo_url||null;
  return <div className="dashboard-shell min-h-screen md:flex md:h-dvh md:min-h-0 md:overflow-hidden">
   <AdminSidebar restaurant={restaurant} role={m?.role||"OWNER"} logoUrl={logoUrl}/>
