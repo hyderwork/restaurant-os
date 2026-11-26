@@ -5,7 +5,7 @@ import KitchenRealtime from "./kitchen-realtime";
 export default async function Kitchen(){
  const m=await requireRestaurant();
  const {data,error}=await m.supabase.from("orders")
-  .select("id,order_number,status,created_at,customer_name,order_type,notes,restaurant_tables(number,name),order_items(product_name,quantity,special_instructions,is_addon)")
+  .select("id,order_number,status,created_at,customer_name,order_type,notes,delivery_address,delivery_area,delivery_fee,restaurant_tables(number,name),order_items(product_name,quantity,special_instructions,is_addon)")
   .eq("restaurant_id",m.restaurant_id)
   .in("status",["NEW","ACCEPTED","COOKING","READY"])
   .order("created_at",{ascending:true}).limit(100);
