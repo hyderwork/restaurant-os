@@ -633,7 +633,7 @@ html[data-theme="light"] main.min-h-screen button.bg-orange-400{color:#17243b!im
 
 
 /* Final mobile override: these data-heavy admin tabs must never inherit the dashboard's 2-column grid rule. */
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
   .dashboard-main .admin-menu-page .grid,
   .dashboard-main .admin-floors-page .grid,
   .dashboard-main .admin-qr-page .grid,
@@ -1538,23 +1538,7 @@ html[data-theme="light"] .pos-workspace .pos-submit-button {
 }
 
 
-/* Mobile workspace navigation stays visible while the admin content scrolls. */
-@media (max-width: 767px) {
-  .admin-sidebar {
-    position: sticky;
-    top: 0;
-    z-index: 80;
-    background: rgba(10, 17, 30, .97) !important;
-    -webkit-backdrop-filter: blur(18px);
-    backdrop-filter: blur(18px);
-    box-shadow: 0 10px 28px rgba(2, 6, 23, .18);
-  }
-  html[data-theme="light"] .admin-sidebar {
-    background: rgba(255, 255, 255, .97) !important;
-    box-shadow: 0 10px 28px rgba(15, 23, 42, .08);
-  }
-}
-
+/* Mobile workspace navigation is docked to the bottom, never sticky at the top. */
 
 /* Mobile workspace menu: fixed bottom dock with an always-visible sign-out action. */
 .admin-mobile-dock { min-width:0; }
@@ -1641,6 +1625,6 @@ html[data-theme="light"] .pos-workspace .pos-submit-button {
   }
   .dashboard-main { padding-bottom:calc(88px + env(safe-area-inset-bottom)) !important; }
 }
-@media (min-width: 768px) {
+@media (min-width: 1024px) {
   .admin-mobile-dock { display:contents; }
 }
