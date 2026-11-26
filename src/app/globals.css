@@ -1328,3 +1328,25 @@ html[data-theme="light"] .superadmin-page .sa-primary-btn{color:#fff!important}
  .pos-workspace:fullscreen .pos-menu-column article>div:first-child{height:84px}
  .pos-workspace:fullscreen .pos-order-column>section{padding:9px 11px}
 }
+
+
+/* Keep intentional white foregrounds white despite the app-wide light-theme normalizer. */
+html[data-theme="light"] .pos-workspace .pos-brand-icon,
+html[data-theme="light"] .pos-workspace .pos-fullscreen-button,
+html[data-theme="light"] .pos-workspace .pos-submit-button,
+html[data-theme="light"] .pos-workspace .pos-order-type-button.is-active,
+html[data-theme="light"] .pos-workspace .pos-veg-badge,
+html[data-theme="light"] .pos-workspace .pos-prep-time {
+  color:#fff!important;
+}
+html[data-theme="light"] .pos-workspace .pos-brand-icon svg,
+html[data-theme="light"] .pos-workspace .pos-order-type-button.is-active svg {
+  color:#fff!important;
+}
+html[data-theme="light"] .pos-workspace .pos-fullscreen-button,
+html[data-theme="light"] .pos-workspace .pos-order-type-button.is-active {
+  background-color:#17263d!important;
+}
+html[data-theme="light"] .pos-workspace .pos-submit-button {
+  background-color:#e9892e!important;
+}
