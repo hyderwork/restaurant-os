@@ -1,7 +1,7 @@
 "use client";
 import {useRef} from "react";
 type Item={product_name:string;quantity:number;line_total:number;is_addon?:boolean};
-type ReceiptProps={restaurantName:string;order:{id:string;order_number:number|string;total:number;status:string;created_at:string;order_type?:string|null;customer_name?:string|null;customer_phone?:string|null;notes?:string|null;items:Item[];tableName?:string|null;paymentMethod?:string|null}};
+type ReceiptProps={restaurantName:string;order:{id:string;order_number:number|string;total:number;status:string;created_at:string;order_type?:string|null;customer_name?:string|null;customer_phone?:string|null;notes?:string|null;items:Item[];tableName?:string|null;paymentMethod?:string|null;feedbackRating?:number|null;feedbackComment?:string|null}};
 const esc=(v:unknown)=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]!));
 export default function PrintOrderReceipt({restaurantName,order}:ReceiptProps){
  const frame=useRef<HTMLIFrameElement>(null);
