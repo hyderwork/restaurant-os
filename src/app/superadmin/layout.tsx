@@ -21,10 +21,6 @@ export default async function Layout({children}:{children:React.ReactNode}) {
         <a href="/superadmin#restaurant-accounts" className="nav-link"><span className="w-5 text-center">⌂</span><span>Restaurant accounts</span></a>
         <a href="/superadmin#package-management" className="nav-link"><span className="w-5 text-center">◇</span><span>Package management</span></a>
       </nav>
-      <div className="mt-8 hidden rounded-2xl border border-orange-400/15 bg-orange-400/[.06] p-4 md:block">
-        <p className="text-xs font-bold text-orange-200">RestaurantOS Platform</p>
-        <p className="mt-1 text-[11px] leading-5 text-slate-500">Manage workspaces, access and subscriptions from one place.</p>
-      </div>
       <form action={platformLogout} className="mt-6"><button className="nav-link w-full text-left text-slate-400">↪ Sign out</button></form>
     </aside>
     <section className="dashboard-content min-w-0 flex-1 md:flex md:h-dvh md:min-h-0 md:flex-col md:overflow-hidden">
