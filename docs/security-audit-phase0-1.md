@@ -42,7 +42,7 @@ Supabase reports 23 applied migrations, but the historical SQL files were not fo
 | High | The POS order RPC accepted arbitrary manual discounts from every role allowed to call it. | Added a database guard: manual discounts require OWNER/ADMIN. Delivery-fee overrides require OWNER/ADMIN/MANAGER until branch delivery rules are implemented. |
 | Medium | Menu price changes and staff membership access changes were not automatically written to `audit_logs`. | Added database audit triggers for product base-price changes and membership creation/role/status changes. |
 
-Migration: `supabase/migrations/20261127090000_phase0_1_order_write_hardening.sql`  
+Migration: `supabase/migrations/20261127075755_phase0_1_order_write_hardening.sql`  
 Applied to the connected Supabase project as `phase0_1_order_write_hardening`.
 
 ### Verification performed
