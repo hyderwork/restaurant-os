@@ -51,6 +51,7 @@ Both migrations were applied to the connected Supabase project.
 
 - RLS test as an authenticated Chef account: own tenant returned 18 orders and 19 products; another tenant returned 0 orders, 0 products and 0 restaurant rows.
 - Direct update of an order's total as an authenticated Manager was rejected by the new database trigger.
+- Status-only order update by an authenticated Manager remained allowed, preserving the existing staff workflow.
 - Direct update of order items as an authenticated Manager affected 0 rows after the write policy was removed.
 - Existing Owner POS `create_staff_order` RPC completed successfully inside a rolled-back test transaction.
 - Manager discount override was rejected by the new database guard.
@@ -90,7 +91,7 @@ No production orders, prices, memberships or customer records were intentionally
 
 Supabase Security Advisor currently reports 8 anon-executable and 15 authenticated-executable SECURITY DEFINER functions. Public-facing functions include menu retrieval, QR/takeaway order placement, tracking, feedback, cancellation and add-items. Their anonymous execution is intentional for guest checkout/tracking, but it increases the importance of function-body validation, fixed search paths, token checks, and rate limiting.
 
-The inspected high-impact functions use fixed `search_path` settings (`pg_catalog` or empty) and schema-qualified object references. Public QR menu/order RPCs validate restaurant slug plus the QR token hash. Customer tracking uses a random tracking token whose SHA-256 hash is stored on the order; the order UUID alone is insufficient to retrieve tracking data. Staff/platform RPCs inspected perform role checks in the database.
+Catalog verification found 29 SECURITY DEFINER functions across the public/private application schemas and 0 without an explicit `search_path`. The inspected high-impact functions use fixed `search_path` settings (`pg_catalog` or empty) and schema-qualified object references. Public QR menu/order RPCs validate restaurant slug plus the QR token hash. Customer tracking uses a random tracking token whose SHA-256 hash is stored on the order; the order UUID alone is insufficient to retrieve tracking data. Staff/platform RPCs inspected perform role checks in the database.
 
 Do not revoke anonymous execution from customer-facing RPCs without replacing the public flow with an authenticated server boundary.
 
