@@ -85,7 +85,7 @@ export default function AdminSidebar({ restaurant, role, logoUrl }: { restaurant
       </div>
     </aside>
 
-    {mounted && typeof document !== "undefined" && createPortal(<div className="admin-mobile-dock" role="navigation" aria-label="Mobile navigation">
+    {mounted && typeof document !== "undefined" && createPortal(<div className="admin-mobile-dock" role="navigation" aria-label="Mobile navigation" style={{position:"fixed",left:0,right:0,bottom:0,top:"auto",zIndex:2147483000,width:"100vw",maxWidth:"100vw",margin:0,transform:"none",boxSizing:"border-box"}}>
       <nav className="admin-mobile-tabs">
         {nav.map(({ href, label, icon: Icon }) => {
           const active = href === "/admin" ? pathname === href : pathname === href || pathname.startsWith(href + "/");
