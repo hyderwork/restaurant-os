@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import {
   LayoutDashboard, ClipboardList, Monitor, ChefHat, Utensils,
   Armchair, QrCode, Truck, ChartNoAxesCombined, Users, Settings2,
@@ -27,6 +28,8 @@ const nav = [
 
 export default function AdminSidebar({ restaurant, role, logoUrl }: { restaurant: string; role: string; logoUrl: string | null }) {
   const [collapsed, setCollapsed] = useState(false);
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
   const pathname = usePathname();
 
   return (
@@ -82,7 +85,7 @@ export default function AdminSidebar({ restaurant, role, logoUrl }: { restaurant
       </div>
     </aside>
 
-    <div className="admin-mobile-dock" role="navigation" aria-label="Mobile navigation">
+    {mounted && typeof document !== "undefined" && createPortal(<div className="admin-mobile-dock" role="navigation" aria-label="Mobile navigation">
       <nav className="admin-mobile-tabs">
         {nav.map(({ href, label, icon: Icon }) => {
           const active = href === "/admin" ? pathname === href : pathname === href || pathname.startsWith(href + "/");
@@ -97,7 +100,7 @@ export default function AdminSidebar({ restaurant, role, logoUrl }: { restaurant
       <form action={logout} className="admin-mobile-logout">
         <button type="submit" aria-label="Sign out" title="Sign out"><LogOut size={19}/></button>
       </form>
-    </div>
+    </div>, document.body)}
     </>
   );
 }
