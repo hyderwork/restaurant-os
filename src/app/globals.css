@@ -1740,7 +1740,7 @@ html[data-theme="light"] .pos-workspace .pos-submit-button {
   .pos-workspace .pos-menu-column > .grid,
   .pos-workspace .pos-menu-column > div.grid {
     display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
     gap: 8px !important;
   }
   .pos-workspace .pos-product-card {
