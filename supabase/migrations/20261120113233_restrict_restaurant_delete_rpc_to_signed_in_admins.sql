@@ -1,0 +1,1 @@
+revoke all on function public.platform_delete_restaurant(uuid) from public, anon; grant execute on function public.platform_delete_restaurant(uuid) to authenticated, service_role;
