@@ -40,10 +40,12 @@ Supabase reports 23 applied migrations, but the historical SQL files were not fo
 | High | Staff roles had broad `order_items` ALL access, allowing direct line-item mutation outside approved order workflows. | Removed `order_items_staff_write`; item writes remain through existing database RPC workflows. |
 | High | The broad order UPDATE policy permitted status-authorized staff to submit changes to other order columns. | Added a trigger that restricts direct updates to `status` and `updated_at`; other changes must go through approved database RPCs. |
 | High | The POS order RPC accepted arbitrary manual discounts from every role allowed to call it. | Added a database guard: manual discounts require OWNER/ADMIN. Delivery-fee overrides require OWNER/ADMIN/MANAGER until branch delivery rules are implemented. |
+| High | Every active restaurant member could read the entire `restaurant_settings` row, including the stored `wifi_password`. | Replaced member-wide SELECT with OWNER/ADMIN-only SELECT; public menu still receives only the explicit branding fields returned by its RPC. |
 | Medium | Menu price changes and staff membership access changes were not automatically written to `audit_logs`. | Added database audit triggers for product base-price changes and membership creation/role/status changes. |
 
-Migration: `supabase/migrations/20261127075755_phase0_1_order_write_hardening.sql`  
-Applied to the connected Supabase project as `phase0_1_order_write_hardening`.
+Migration 1: `supabase/migrations/20261127075755_phase0_1_order_write_hardening.sql`  
+Migration 2: `supabase/migrations/20261127080848_phase0_1_restrict_settings_access.sql`  
+Both migrations were applied to the connected Supabase project.
 
 ### Verification performed
 
@@ -53,6 +55,8 @@ Applied to the connected Supabase project as `phase0_1_order_write_hardening`.
 - Existing Owner POS `create_staff_order` RPC completed successfully inside a rolled-back test transaction.
 - Manager discount override was rejected by the new database guard.
 - Public takeaway menu RPC remained callable by `anon` and returned its expected JSON object.
+- Full anonymous takeaway flow (create order → add items → cancel → tracking state) completed inside a rolled-back test transaction.
+- Chef RLS test returned 0 `restaurant_settings` rows; Owner test returned 1 row.
 - Product price audit trigger wrote an audit row in a rolled-back test transaction.
 - Membership access-change audit trigger wrote an audit row in a rolled-back test transaction.
 - Supabase Security Advisor was rerun. Remaining warnings are documented below; public customer RPCs were not blindly disabled because the QR/takeaway customer flow depends on anonymous access.
