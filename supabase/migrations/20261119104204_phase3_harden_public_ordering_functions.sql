@@ -1,0 +1,1 @@
+alter function public.get_public_menu(text,uuid,text) set search_path = pg_catalog; alter function public.place_public_order(text,uuid,text,jsonb,text,text,text) set search_path = pg_catalog;
