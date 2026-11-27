@@ -1,7 +1,7 @@
 -- Phase 0.1 security hardening.
 -- Backward-safe: existing order creation, add-item, payment and status RPCs remain unchanged.
 -- Rollback note: recreate orders_staff_insert and order_items_staff_write from the
--- pre-migration pg_policies snapshot, then drop the three triggers and private functions below.
+-- pre-migration pg_policies snapshot, then drop the four triggers and private functions below.
 begin;
 
 -- Orders must be created through the validated transactional RPCs. Direct INSERT
