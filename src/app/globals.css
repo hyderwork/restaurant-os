@@ -1637,3 +1637,20 @@ html[data-theme="light"] .pos-workspace .pos-submit-button {
 @media (min-width: 1024px) {
   .admin-mobile-dock { display:none !important; }
 }
+
+/* Mobile workspace dock: portal-mounted directly under body, viewport locked. */
+@media (max-width: 1023px) {
+  body > .admin-mobile-dock {
+    position: fixed !important;
+    inset: auto 0 0 0 !important;
+    width: 100vw !important;
+    max-width: 100vw !important;
+    z-index: 2147483000 !important;
+    display: flex !important;
+    margin: 0 !important;
+    transform: none !important;
+    contain: none !important;
+  }
+  body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+}
+@media (min-width: 1024px) { body > .admin-mobile-dock { display: none !important; } }
